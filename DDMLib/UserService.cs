@@ -35,7 +35,6 @@ namespace DDMLib
                 {
                     return "Некорректный email";
                 }
-                // Проверка совпадения паролей
                 if (password != passwordConfirm)
                 {
                     return "Пароли не совпадают";
@@ -67,7 +66,6 @@ namespace DDMLib
                     RegistrationDate = DateTime.UtcNow,
                     IsActive = true
                 };
-                // Сохраняем пользователя
                 var savedUser = _userRepository.Save(user);
                 return "Аккаунт успешно создан!";
             }
