@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{E6FE0A0F-88A3-4351-9445-CA50CEB9A598}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDMLib", "DDMLib\DDMLib.csproj", "{DABB27A7-390A-4A79-A713-88C990A717C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{E6FE0A0F-88A3-4351-9445-CA50CEB9A598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6FE0A0F-88A3-4351-9445-CA50CEB9A598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6FE0A0F-88A3-4351-9445-CA50CEB9A598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DABB27A7-390A-4A79-A713-88C990A717C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DABB27A7-390A-4A79-A713-88C990A717C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DABB27A7-390A-4A79-A713-88C990A717C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DABB27A7-390A-4A79-A713-88C990A717C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
