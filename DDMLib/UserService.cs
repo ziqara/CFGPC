@@ -13,7 +13,7 @@ namespace DDMLib
         {
             _userRepository = userRepository;
         }
-        public string RegisterUser(string email, string password, string passwordConfirm, string fullName, string? phone = null, string? address = null)
+        public string RegisterUser(string email, string password, string passwordConfirm, string fullName, string phone = null, string address = null)
         {
 
             return "Аккаунт успешно создан!";
