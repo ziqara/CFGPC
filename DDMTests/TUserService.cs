@@ -184,5 +184,20 @@ namespace DDMTests
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
+
+        [TestMethod]
+        public void TestLoginUser_WithEmptyFields_ShouldReturnValidationErrorsForBoth()
+        {
+
+            var email = "";
+            var password = "";
+
+            var result = _userService.LoginUser(email, password);
+           
+            var expectedErrors = "Введите email" + Environment.NewLine + "Введите пароль";
+            Assert.AreEqual(expectedErrors, result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
     }
 }
