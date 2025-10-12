@@ -145,5 +145,20 @@ namespace DDMTests
             _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
+
+        [TestMethod]
+        public void TestLoginUser_WithNonExistentEmail_ShouldReturnAccountNotFoundError()
+        {
+
+            var email = "nonexistent.user@example.com";
+            var password = "Passw0rd!";
+            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns((User)null);
+
+            var result = _userService.LoginUser(email, password);
+
+            Assert.AreEqual("Аккаунт не найден", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
     }
 }
