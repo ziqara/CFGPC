@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DDMLib
 {
-    public class Class1
+    public interface IUserRepository
     {
+        User FindByEmail(string email);
+        User Save(User user);
     }
 }
