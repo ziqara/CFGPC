@@ -18,5 +18,11 @@ namespace DDMLib
 
             return "Аккаунт успешно создан!";
         }
+
+       
+        public string LoginUser(string email, string password)
+        {
+            return "Вход выполнен успешно!";
+        }
     }
 }
