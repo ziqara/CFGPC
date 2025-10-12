@@ -16,6 +16,33 @@ namespace DDMLib
         public string RegisterUser(string email, string password, string passwordConfirm, string fullName, string phone = null, string address = null)
         {
 
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@") || !email.Contains(".") || email.IndexOf("@") >= email.LastIndexOf("."))
+                return "Некорректный email";
+            
+            if (password != passwordConfirm)
+                return "Пароли не совпадают";
+            
+            var existing = _userRepository.FindByEmail(email);
+            if (existing != null)
+                return "Email уже зарегистрирован";
+            
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                bool isValidPhone = phone.All(c => char.IsDigit(c) || c == '+' || c == ' ' || c == '-' || c == '(' || c == ')');
+                if (!isValidPhone || phone.Length < 5)
+                    return "Неверный формат телефона";
+            }
+            
+            var user = new User
+            {
+                Email = email,
+                Password = password,
+                FullName = fullName,
+                Phone = phone,
+                Address = address,
+                IsActive = true
+            };
+            _userRepository.Save(user);
             return "Аккаунт успешно создан!";
         }
 
