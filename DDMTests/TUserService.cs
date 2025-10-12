@@ -160,5 +160,29 @@ namespace DDMTests
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
+
+        [TestMethod]
+        public void TestLoginUser_WithExistingEmailButWrongPassword_ShouldReturnWrongPasswordError()
+        {
+            
+            var email = "ivan.petrov@example.com";
+            var correctPassword = "Passw0rd!";
+            var wrongPassword = "WrongPassw0rd!";
+            var user = new User
+            {
+                Email = email,
+                Password = correctPassword,
+                FullName = "Петров Иван Сергеевич",
+                RegistrationDate = DateTime.Now,
+                IsActive = true
+            };
+            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
+           
+            var result = _userService.LoginUser(email, wrongPassword);
+            
+            Assert.AreEqual("Неверный пароль", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
     }
 }
