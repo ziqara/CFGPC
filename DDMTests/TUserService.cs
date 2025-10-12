@@ -108,5 +108,96 @@ namespace DDMTests
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
+
+        [TestMethod]
+        public void TestLoginUser_WithCorrectData_ShouldReturnSuccessMessage()
+        {
+            
+            var email = "ivan.petrov@example.com";
+            var password = "Passw0rd!";
+            var user = new User
+            {
+                Email = email,
+                Password = password,
+                FullName = "Петров Иван Сергеевич",
+                RegistrationDate = DateTime.Now,
+                IsActive = true
+            };
+            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
+
+            var result = _userService.LoginUser(email, password);
+
+            Assert.AreEqual("Вход выполнен успешно!", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestLoginUser_WithInvalidEmailFormat_ShouldReturnInvalidEmailError()
+        {
+            
+            var email = "ivan@@example"; // Некорректный формат
+            var password = "Passw0rd!";
+            
+            var result = _userService.LoginUser(email, password);
+            
+            Assert.AreEqual("Некорректный email", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestLoginUser_WithNonExistentEmail_ShouldReturnAccountNotFoundError()
+        {
+
+            var email = "nonexistent.user@example.com";
+            var password = "Passw0rd!";
+            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns((User)null);
+
+            var result = _userService.LoginUser(email, password);
+
+            Assert.AreEqual("Аккаунт не найден", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestLoginUser_WithExistingEmailButWrongPassword_ShouldReturnWrongPasswordError()
+        {
+            
+            var email = "ivan.petrov@example.com";
+            var correctPassword = "Passw0rd!";
+            var wrongPassword = "WrongPassw0rd!";
+            var user = new User
+            {
+                Email = email,
+                Password = correctPassword,
+                FullName = "Петров Иван Сергеевич",
+                RegistrationDate = DateTime.Now,
+                IsActive = true
+            };
+            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
+           
+            var result = _userService.LoginUser(email, wrongPassword);
+            
+            Assert.AreEqual("Неверный пароль", result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestLoginUser_WithEmptyFields_ShouldReturnValidationErrorsForBoth()
+        {
+
+            var email = "";
+            var password = "";
+
+            var result = _userService.LoginUser(email, password);
+           
+            var expectedErrors = "Введите email" + Environment.NewLine + "Введите пароль";
+            Assert.AreEqual(expectedErrors, result);
+            _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
+            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
     }
 }
