@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
             try
             {
                 connection.Open();
-                var command = new MySqlCommand("SELECT * FROM users WHERE email = @email", connection);
+                var command = new MySqlCommand("SELECT email, password_hash, full_name, phone, address FROM users WHERE email = @email", connection);
                 command.Parameters.AddWithValue("@email", email);
                 using (var reader = command.ExecuteReader())
                 {
@@ -28,7 +28,6 @@ public class UserRepository : IUserRepository
                             FullName = reader.IsDBNull(reader.GetOrdinal("full_name")) ? null : reader.GetString("full_name"),
                             Phone = reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone"),
                             Address = reader.IsDBNull(reader.GetOrdinal("address")) ? null : reader.GetString("address"),
-                            IsActive = reader.GetBoolean("is_active")
                         };
                     }
                     return null; 
@@ -63,7 +62,6 @@ public class UserRepository : IUserRepository
                     command.Parameters.AddWithValue("@full_name", user.FullName ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@phone", user.Phone ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@address", user.Address ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@is_active", user.IsActive);
                     command.ExecuteNonQuery();
 
                     return user;  
