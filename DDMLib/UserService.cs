@@ -86,28 +86,19 @@ namespace DDMLib
             string validationError = ValidateContactInfo(email);
             if (!string.IsNullOrEmpty(validationError))
             {
-                return validationError;  // Вернем ошибку, если email неверный
+                return validationError; 
             }
 
-            try
-            {
                 User user = _userRepository.FindByEmail(email);
                 if (user == null)
                 {
                     return "Аккаунт не найден";
                 }
-
                 if (user.Password != password)
                 {
                     return "Неверный пароль";
                 }
-
                 return string.Empty;  // Успешный логин
-            }
-            catch (Exception ex)
-            {
-                return "Ошибка при поиске аккаунта";
-            }
         }
     }
 }
