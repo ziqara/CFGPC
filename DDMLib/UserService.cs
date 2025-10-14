@@ -16,34 +16,41 @@ namespace DDMLib
             _userRepository = userRepository;
         }
 
-        // Метод для проверки формата email и телефона
-        public string ValidateContactInfo(string email, string phone = null)
+        public string ValidateEmail(string email)
         {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            if (!Regex.IsMatch(email, emailPattern))
+            if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, emailPattern))
             {
                 return "Некорректный email";
             }
+            return string.Empty;  
+        }
 
+        public string ValidatePhone(string phone)
+        {
             if (!string.IsNullOrWhiteSpace(phone))
             {
-                string phonePattern = @"^\+?[\d\s-()]{7,}$";
+                string phonePattern = @"^\+?[\d\s-()]{7,}$";  
                 if (!Regex.IsMatch(phone, phonePattern))
                 {
                     return "Неверный формат телефона";
                 }
             }
-
-            return string.Empty;
+            return string.Empty;  
         }
 
         public string RegisterUser(User user, string passwordConfirm)
         {
-            
-            string validationError = ValidateContactInfo(user.Email, user.Phone);
-            if (!string.IsNullOrEmpty(validationError))
+            string emailError = ValidateEmail(user.Email);
+            if (!string.IsNullOrEmpty(emailError))
             {
-                return validationError;  // Вернем ошибку, если формат неверный
+                return emailError;  
+            }
+
+            string phoneError = ValidatePhone(user.Phone);
+            if (!string.IsNullOrEmpty(phoneError))
+            {
+                return phoneError;  
             }
 
             if (user.Password != passwordConfirm)
@@ -59,13 +66,11 @@ namespace DDMLib
 
             try
             {
-                user.IsActive = true;
-                _userRepository.Save(user);  
+                _userRepository.Save(user);
                 return "Аккаунт успешно создан!";
             }
             catch (Exception ex)
             {
-                
                 return "Ошибка при регистрации аккаунта.";
             }
         }
@@ -82,23 +87,22 @@ namespace DDMLib
                 return "Введите пароль";
             }
 
-           
-            string validationError = ValidateContactInfo(email);
-            if (!string.IsNullOrEmpty(validationError))
+            string emailError = ValidateEmail(email);
+            if (!string.IsNullOrEmpty(emailError))
             {
-                return validationError; 
+                return emailError;  
             }
 
-                User user = _userRepository.FindByEmail(email);
-                if (user == null)
-                {
-                    return "Аккаунт не найден";
-                }
-                if (user.Password != password)
-                {
-                    return "Неверный пароль";
-                }
-                return string.Empty;  // Успешный логин
+            User user = _userRepository.FindByEmail(email);
+            if (user == null)
+            {
+                return "Аккаунт не найден";
+            }
+            if (user.Password != password)  
+            {
+                return "Неверный пароль";
+            }
+            return string.Empty;  
         }
     }
 }
