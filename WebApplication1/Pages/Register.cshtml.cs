@@ -14,7 +14,7 @@ namespace WebApplication1.Pages
             _userService = userService;
         }
         [BindProperty]
-        public User NewUser { get; set; }  // Прямое использование класса User
+        public User NewUser { get; set; }
         [BindProperty]
         [Required(ErrorMessage = "Подтверждение пароля обязательно")]
         [Compare(nameof(NewUser.Password), ErrorMessage = "Пароли не совпадают")]
@@ -22,19 +22,19 @@ namespace WebApplication1.Pages
         public string Message { get; set; }  // Для отображения сообщений
         public void OnGet()
         {
-            NewUser = new User();  // Инициализируем экземпляр User
+            NewUser = new User();  
         }
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
-                return Page();  // Показать ошибки
+                return Page();  
             }
             // Вызываем RegisterUser, передавая свойства из User
             string result = _userService.RegisterUser(
                 NewUser.Email,
-                NewUser.Password,  // Из User
-                ConfirmPassword,   // Отдельное поле, как в UserService
+                NewUser.Password,  
+                ConfirmPassword,   
                 NewUser.FullName,
                 NewUser.Phone,
                 NewUser.Address
@@ -42,9 +42,9 @@ namespace WebApplication1.Pages
             Message = result;  // Сохраняем результат
             if (result == "Аккаунт успешно создан!")
             {
-                return RedirectToPage("/Index");  // Перенаправление при успехе
+                return RedirectToPage("/Index");
             }
-            return Page();  // Оставляем на странице с сообщением
+            return Page(); 
         }
     }
 }
