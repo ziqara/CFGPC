@@ -35,8 +35,8 @@ public class UserRepository : IUserRepository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in FindByEmail: {ex.Message}");
-                throw;  
+                ErrorLogger.LogError("FindByEmail", ex.Message);
+                throw;
             }
         }
     }
@@ -64,7 +64,7 @@ public class UserRepository : IUserRepository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in Save: {ex.Message}");
+                ErrorLogger.LogError("Save", ex.Message);
                 throw;
             }
         }
