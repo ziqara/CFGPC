@@ -25,8 +25,8 @@ public class UserRepository : IUserRepository
                         {
                             Email = reader.GetString("email"),
                             Password = reader.GetString("password_hash"), 
-                            FullName = reader.IsDBNull(reader.GetOrdinal("full_name")) ? null : reader.GetString("full_name"),
-                            Phone = reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone"),
+                            FullName = reader.GetString("full_name"),
+                            Phone = reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone"), //GetOrdinal - для проверки на Null
                             Address = reader.IsDBNull(reader.GetOrdinal("address")) ? null : reader.GetString("address"),
                         };
                     }
@@ -48,28 +48,19 @@ public class UserRepository : IUserRepository
             try
             {
                 connection.Open();
-                var checkCommand = new MySqlCommand("SELECT COUNT(*) FROM users WHERE email = @email", connection);
-                checkCommand.Parameters.AddWithValue("@email", user.Email);
-                int count = Convert.ToInt32(checkCommand.ExecuteScalar());
-                if (count == 0)
-                {
-                    var command = new MySqlCommand(
-                        "INSERT INTO users (email, password_hash, full_name, phone, address, role, is_active) " +
-                        "VALUES (@email, @password_hash, @full_name, @phone, @address, 'client', @is_active)",
-                        connection);
+                var command = new MySqlCommand(
+                    "INSERT INTO users (email, password_hash, full_name, phone, address) " +
+                    "VALUES (@email, @password_hash, @full_name, @phone, @address)",
+                    connection);
+                command.Parameters.AddWithValue("@email", user.Email);
+                command.Parameters.AddWithValue("@password_hash", HashPassword(user.Password));
+                command.Parameters.AddWithValue("@full_name", user.FullName);
+                command.Parameters.AddWithValue("@phone", user.Phone ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@address", user.Address ?? (object)DBNull.Value);
+                command.ExecuteNonQuery();
 
-                    command.Parameters.AddWithValue("@password_hash", HashPassword(user.Password));
-                    command.Parameters.AddWithValue("@full_name", user.FullName ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@phone", user.Phone ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@address", user.Address ?? (object)DBNull.Value);
-                    command.ExecuteNonQuery();
+                return user;
 
-                    return user;  
-                }
-                else
-                {
-                    throw new Exception("Пользователь с таким email уже существует.");
-                }
             }
             catch (Exception ex)
             {
