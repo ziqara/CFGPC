@@ -42,14 +42,7 @@ namespace WebApplication1.Pages
             }
 
             
-            string result = _userService.RegisterUser(
-                NewUser.Email,
-                NewUser.Password,
-                ConfirmPassword,
-                NewUser.FullName,
-                NewUser.Phone,
-                NewUser.Address
-            );
+            string result = _userService.RegisterUser(NewUser, ConfirmPassword);
 
             Message = result;
 
