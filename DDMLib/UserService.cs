@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace DDMLib
 {
@@ -98,7 +99,7 @@ namespace DDMLib
             {
                 return "Аккаунт не найден";
             }
-            if (user.Password != password)  
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 return "Неверный пароль";
             }
