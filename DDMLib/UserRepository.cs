@@ -6,7 +6,7 @@ using DDMLib;
 
 public class UserRepository : IUserRepository
 {
-    private string connectionString = "server=localhost;user=root;password=vertrigo;database=pc_store;";  
+    private string connectionString => Config.ConnectionString;
 
     public User FindByEmail(string email)
     {
