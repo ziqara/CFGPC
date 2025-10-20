@@ -1,29 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.IO;
+using IniParser;
+using IniParser.Model;
+using MySql.Data.MySqlClient;
 
 namespace DDMLib
 {
     public static class Config
     {
-        private static readonly string IniFilePath = "config.ini"; 
+        private static readonly string IniFilePath = "config.ini";
+        private static FileIniDataParser _iniParser;
+
         public static string ConnectionString { get; private set; }
+        public static bool IsDatabaseConnected { get; private set; }
+
         static Config()
         {
-            ConnectionString = ReadIniValue("Database", "ConnectionString", "server=localhost;user=root;password=vertrigo;database=pc_store;");
+            InitializeConfiguration();
+            TestDatabaseConnection();
         }
-        private static string ReadIniValue(string section, string key, string defaultValue)
+
+        private static void InitializeConfiguration()
         {
-            const int bufferSize = 1024;
-            StringBuilder buffer = new StringBuilder(bufferSize);
-            GetPrivateProfileString(section, key, defaultValue, buffer, bufferSize, IniFilePath);
-            return buffer.ToString();
+            if (!File.Exists(IniFilePath))
+            {
+                throw new FileNotFoundException(
+                    $"Конфигурационный файл {IniFilePath} не найден. " +
+                    "Создайте файл config.ini с необходимыми настройками.");
+            }
+
+            try
+            {
+                _iniParser = new FileIniDataParser();
+                var iniData = _iniParser.ReadFile(IniFilePath);
+
+                ConnectionString = GetIniValue(iniData, "Database", "ConnectionString");
+
+                if (string.IsNullOrWhiteSpace(ConnectionString))
+                {
+                    throw new ArgumentException(
+                        "Строка подключения к базе данных не указана в конфигурационном файле.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"Ошибка чтения конфигурационного файла: {ex.Message}", ex);
+            }
         }
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        private static extern int GetPrivateProfileString(
-            string section, string key, string defaultValue, StringBuilder retVal, int size, string filePath);
+
+        private static string GetIniValue(IniData iniData, string section, string key)
+        {
+            var value = iniData[section]?[key];
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException(
+                    $"Отсутствует обязательный параметр [{section}]/{key} в конфигурационном файле.");
+            }
+
+            return value.Trim();
+        }
+
+        private static void TestDatabaseConnection()
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    IsDatabaseConnected = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                IsDatabaseConnected = false;
+                throw new InvalidOperationException(
+                    $"Не удалось установить соединение с базой данных: {ex.Message}", ex);
+            }
+        }
     }
 }
