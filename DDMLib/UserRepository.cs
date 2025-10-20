@@ -6,11 +6,10 @@ using DDMLib;
 
 public class UserRepository : IUserRepository
 {
-    private string connectionString => Config.ConnectionString;
 
     public User FindByEmail(string email)
     {
-        using (var connection = new MySqlConnection(connectionString))
+        using (var connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
@@ -43,7 +42,7 @@ public class UserRepository : IUserRepository
 
     public User Save(User user)
     {
-        using (var connection = new MySqlConnection(connectionString))
+        using (var connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
