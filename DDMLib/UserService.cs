@@ -22,7 +22,7 @@ namespace DDMLib
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, emailPattern))
             {
-                return "Некорректный email";
+                return "Некорректный email. Требуемый формат: username@domain.com";
             }
             return string.Empty;  
         }
