@@ -34,7 +34,7 @@ namespace DDMLib
                 string phonePattern = @"^\+?[\d\s-()]{7,}$";  
                 if (!Regex.IsMatch(phone, phonePattern))
                 {
-                    return "Неверный формат телефона";
+                    return "Неверный формат телефона. Требуемый формат: +7 (XXX) XXX-XX-XX";
                 }
             }
             return string.Empty;  
