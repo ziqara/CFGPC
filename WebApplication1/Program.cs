@@ -25,3 +25,5 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.Run();
+
+/// http://localhost:5078/
