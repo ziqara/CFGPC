@@ -10,14 +10,12 @@ namespace DDMLib
     public static class Config
     {
         private static readonly string IniFilePath = "config.ini";
-        private static FileIniDataParser _iniParser;
 
         public static string ConnectionString { get; private set; }
 
         static Config()
         {
             InitializeConfiguration();
-            TestDatabaseConnection();
         }
 
         private static void InitializeConfiguration()
@@ -31,10 +29,10 @@ namespace DDMLib
 
             try
             {
-                _iniParser = new FileIniDataParser();
-                var iniData = _iniParser.ReadFile(IniFilePath);
+                var parser = new FileIniDataParser();
+                var iniData = parser.ReadFile(IniFilePath);
 
-                ConnectionString = GetIniValue(iniData, "Database", "ConnectionString");
+                ConnectionString = iniData["Database"]?["ConnectionString"]?.Trim();
 
                 if (string.IsNullOrWhiteSpace(ConnectionString))
                 {
@@ -47,19 +45,6 @@ namespace DDMLib
                 throw new InvalidOperationException(
                     $"Ошибка чтения конфигурационного файла: {ex.Message}", ex);
             }
-        }
-
-        private static string GetIniValue(IniData iniData, string section, string key)
-        {
-            var value = iniData[section]?[key];
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException(
-                    $"Отсутствует обязательный параметр [{section}]/{key} в конфигурационном файле.");
-            }
-
-            return value.Trim();
         }
 
         private static bool TestDatabaseConnection()
