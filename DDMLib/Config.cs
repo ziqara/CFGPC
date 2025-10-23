@@ -13,7 +13,6 @@ namespace DDMLib
         private static FileIniDataParser _iniParser;
 
         public static string ConnectionString { get; private set; }
-        public static bool IsDatabaseConnected { get; private set; }
 
         static Config()
         {
@@ -63,21 +62,19 @@ namespace DDMLib
             return value.Trim();
         }
 
-        private static void TestDatabaseConnection()
+        private static bool TestDatabaseConnection()
         {
             try
             {
                 using (var connection = new MySqlConnection(ConnectionString))
                 {
                     connection.Open();
-                    IsDatabaseConnected = true;
+                    return true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                IsDatabaseConnected = false;
-                throw new InvalidOperationException(
-                    $"Не удалось установить соединение с базой данных: {ex.Message}", ex);
+                return false;
             }
         }
     }
