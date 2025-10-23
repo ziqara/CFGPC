@@ -9,6 +9,10 @@ public class UserRepository : IUserRepository
 
     public User FindByEmail(string email)
     {
+        if (!Config.TestDatabaseConnection())
+        {
+            ErrorLogger.LogError("FindByEmail", "Не удалось подключиться к базе данных.");
+        }
         using (var connection = new MySqlConnection(Config.ConnectionString))
         {
             try
@@ -42,6 +46,10 @@ public class UserRepository : IUserRepository
 
     public User Save(User user)
     {
+        if (!Config.TestDatabaseConnection())
+        {
+            ErrorLogger.LogError("FindByEmail", "Не удалось подключиться к базе данных.");
+        }
         using (var connection = new MySqlConnection(Config.ConnectionString))
         {
             try

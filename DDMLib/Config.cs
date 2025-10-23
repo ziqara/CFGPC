@@ -47,7 +47,7 @@ namespace DDMLib
             }
         }
 
-        private static bool TestDatabaseConnection()
+        public static bool TestDatabaseConnection()
         {
             try
             {
