@@ -1,0 +1,406 @@
+-- ===================================================================
+-- Полный SQL скрипт: БД pc_store (обновлённая версия с исправлениями)
+-- ===================================================================
+
+-- 0) Создание базы и выбор (utf8mb4)
+CREATE DATABASE IF NOT EXISTS pc_store
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+USE pc_store;
+
+-- ===================================================================
+-- 1) Таблицы
+-- ===================================================================
+
+-- 1.1 suppliers (исправлено: name VARCHAR(191) для индекса)
+CREATE TABLE IF NOT EXISTS suppliers (
+  supplier_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(191) NOT NULL,  -- Изменено с 255 на 191
+  contact_email VARCHAR(255),
+  phone VARCHAR(20),
+  address TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.2 users (email PK, исправлено: VARCHAR(191) для избежания ошибки #1071)
+CREATE TABLE IF NOT EXISTS users (
+  email VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci PRIMARY KEY,  -- Изменено с 255 на 191
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255),
+  phone VARCHAR(20),
+  address TEXT,
+  registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  is_active TINYINT(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.3 components (общие данные)
+CREATE TABLE IF NOT EXISTS components (
+  component_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  brand VARCHAR(100),
+  model VARCHAR(100),
+  type ENUM('cpu','motherboard','ram','gpu','storage','psu','case','cooling') NOT NULL,
+  price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  stock_quantity INT NOT NULL DEFAULT 0,
+  description TEXT,
+  is_available TINYINT(1) NOT NULL DEFAULT 1,
+  photo_url VARCHAR(500),
+  supplier_id INT,
+  CONSTRAINT fk_components_supplier FOREIGN KEY (supplier_id)
+    REFERENCES suppliers (supplier_id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT chk_component_type CHECK (type IN ('cpu','motherboard','ram','gpu','storage','psu','case','cooling'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.4 Подтипы компонентов (спецификации)
+CREATE TABLE IF NOT EXISTS cpus (
+  component_id INT PRIMARY KEY,
+  socket VARCHAR(50),
+  cores INT,
+  tdp INT,
+  CONSTRAINT fk_cpus_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS motherboards (
+  component_id INT PRIMARY KEY,
+  socket VARCHAR(50),
+  chipset VARCHAR(50),
+  ram_type ENUM('DDR4','DDR5'),
+  pcie_version ENUM('3.0','4.0','5.0'),
+  form_factor VARCHAR(20),
+  CONSTRAINT fk_mb_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS rams (
+  component_id INT PRIMARY KEY,
+  type ENUM('DDR4','DDR5'),
+  capacity_gb INT,
+  speed_mhz INT,
+  slots_needed INT,
+  CONSTRAINT fk_rams_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS gpus (
+  component_id INT PRIMARY KEY,
+  pcie_version ENUM('3.0','4.0'),  -- Исправлено: было tcie_version
+  tdp INT,
+  vram_gb INT,
+  CONSTRAINT fk_gpus_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS storages (
+  component_id INT PRIMARY KEY,
+  interface ENUM('SATA','NVMe'),
+  capacity_gb INT,
+  CONSTRAINT fk_storages_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS psus (
+  component_id INT PRIMARY KEY,
+  wattage INT,
+  efficiency_rating VARCHAR(10),
+  CONSTRAINT fk_psus_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cases (
+  component_id INT PRIMARY KEY,
+  form_factor VARCHAR(20),
+  size ENUM('full_tower','mid_tower','compact') NOT NULL,
+  CONSTRAINT fk_cases_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS coolings (
+  component_id INT PRIMARY KEY,
+  cooler_type ENUM('air','liquid') NOT NULL,
+  tdp_support INT,
+  fan_rpm INT,
+  size ENUM('full_tower','mid_tower','compact'),
+  is_rgb TINYINT(1) DEFAULT 0,
+  CONSTRAINT fk_coolings_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 1.5 configurations
+CREATE TABLE IF NOT EXISTS configurations (
+  config_id INT AUTO_INCREMENT PRIMARY KEY,
+  config_name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  description TEXT,
+  total_price DECIMAL(10,2) DEFAULT 0.00,
+  target_use ENUM('gaming','professional','office','student'),
+  status ENUM('draft','validated','in_cart','ordered') NOT NULL DEFAULT 'draft',
+  is_preset TINYINT(1) NOT NULL DEFAULT 0,
+  created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  user_email VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,  -- Изменено на 191 для согласованности
+  rgb TINYINT(1) DEFAULT 0,
+  other_options TEXT,
+  CONSTRAINT fk_config_user FOREIGN KEY (user_email)
+    REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.6 config_components (связь конфигурация <-> компонент)
+CREATE TABLE IF NOT EXISTS config_components (
+  config_component_id INT AUTO_INCREMENT PRIMARY KEY,
+  config_id INT NOT NULL,
+  component_id INT NOT NULL,
+  quantity INT NOT NULL DEFAULT 1,
+  CONSTRAINT fk_cc_config FOREIGN KEY (config_id)
+    REFERENCES configurations (config_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_cc_component FOREIGN KEY (component_id)
+    REFERENCES components (component_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  UNIQUE KEY ux_cc_config_component (config_id, component_id),
+  INDEX ix_cc_component (component_id),
+  INDEX ix_cc_config (config_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.7 orders
+CREATE TABLE IF NOT EXISTS orders (
+  order_id INT AUTO_INCREMENT PRIMARY KEY,
+  config_id INT NOT NULL,
+  user_email VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,  -- Изменено на 191
+  order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('pending','processing','assembled','shipped','delivered','cancelled') NOT NULL DEFAULT 'pending',
+  total_price DECIMAL(10,2) DEFAULT 0.00,
+  delivery_address TEXT,
+  delivery_method ENUM('courier','pickup','self') DEFAULT 'courier',
+  delivery_terms INT,
+  payment_method ENUM('card','cash_on_delivery','bank_transfer') DEFAULT 'card',
+  assembly_terms INT,
+  is_paid TINYINT(1) DEFAULT 0,
+  CONSTRAINT fk_orders_config FOREIGN KEY (config_id)
+    REFERENCES configurations (config_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_orders_user FOREIGN KEY (user_email)
+    REFERENCES users (email) ON DELETE RESTRICT ON UPDATE CASCADE,
+  INDEX ix_orders_user (user_email),
+  INDEX ix_orders_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.8 reviews
+CREATE TABLE IF NOT EXISTS reviews (
+  order_id INT PRIMARY KEY,
+  user_email VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,  -- Изменено на 191
+  rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  text TEXT,
+  photo_url VARCHAR(500),
+  created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_reviews_order FOREIGN KEY (order_id)
+    REFERENCES orders (order_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_reviews_user FOREIGN KEY (user_email)
+    REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 1.9 warranties
+CREATE TABLE IF NOT EXISTS warranties (
+  warranty_id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  duration_months INT,
+  issue_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  download_url VARCHAR(500),
+  CONSTRAINT fk_warranty_order FOREIGN KEY (order_id)
+    REFERENCES orders (order_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE KEY ux_warranty_order (order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===================================================================
+-- 2) Ограничения и индексы доп.
+-- ===================================================================
+
+-- 2.1 Неотрицательные остатки (CHECK) и настройка типа столбца
+ALTER TABLE components
+  MODIFY stock_quantity INT NOT NULL DEFAULT 0,
+  ADD CONSTRAINT chk_stock_nonneg CHECK (stock_quantity >= 0);
+
+-- Индексы
+ALTER TABLE components ADD INDEX ix_components_type (type);
+ALTER TABLE configurations ADD INDEX ix_config_user (user_email);
+ALTER TABLE suppliers ADD INDEX ix_suppliers_name (name);
+
+-- ===================================================================
+-- 3) МИГРАЦИЯ: объединение дубликатов в config_components (опционально)
+--    РЕКОМЕНДУЮ выполнить в тесте и/или в maintenance window
+-- ===================================================================
+
+-- Аггрегирование дубликатов: создаём временную таблицу с суммами
+CREATE TABLE IF NOT EXISTS tmp_cc_agg AS
+SELECT config_id, component_id, SUM(quantity) AS quantity
+FROM config_components
+GROUP BY config_id, component_id;
+
+-- Очистка оригинала и вставка агрегированных записей
+TRUNCATE TABLE config_components;
+
+INSERT INTO config_components (config_id, component_id, quantity)
+SELECT config_id, component_id, quantity FROM tmp_cc_agg;
+
+DROP TABLE IF EXISTS tmp_cc_agg;
+
+-- ===================================================================
+-- 4) Триггеры: защита и списание/возврат (агрегированные операции)
+--    Триггеры — дополнительный уровень защиты. Основная логика
+--    рекомендована в хранимой процедуре create_order.
+-- ===================================================================
+
+DELIMITER $$
+
+-- Удаляем старые триггеры, если есть
+DROP TRIGGER IF EXISTS trg_orders_before_insert$$
+DROP TRIGGER IF EXISTS trg_orders_after_insert$$
+DROP TRIGGER IF EXISTS trg_orders_after_update$$
+
+-- BEFORE INSERT: агрегированная проверка остатков
+CREATE TRIGGER trg_orders_before_insert
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+  DECLARE v_insufficient INT DEFAULT 0;
+
+  SELECT COUNT(*) INTO v_insufficient
+  FROM (
+    SELECT cc.component_id
+    FROM config_components cc
+    JOIN components c ON cc.component_id = c.component_id
+    WHERE cc.config_id = NEW.config_id
+    GROUP BY cc.component_id
+    HAVING SUM(cc.quantity) > MAX(c.stock_quantity)
+  ) AS t;
+
+  IF v_insufficient > 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient stock for one or more components in the configuration.';
+  END IF;
+END$$
+
+-- AFTER INSERT: списываем запасы агрегированно
+CREATE TRIGGER trg_orders_after_insert
+AFTER INSERT ON orders
+FOR EACH ROW
+BEGIN
+  UPDATE components c
+  JOIN (
+    SELECT component_id, SUM(quantity) AS req_qty
+    FROM config_components
+    WHERE config_id = NEW.config_id
+    GROUP BY component_id
+  ) AS req ON c.component_id = req.component_id
+  SET c.stock_quantity = c.stock_quantity - req.req_qty;
+END$$
+
+-- AFTER UPDATE: при отмене заказа возвращаем запасы (аггрегированно)
+CREATE TRIGGER trg_orders_after_update
+AFTER UPDATE ON orders
+FOR EACH ROW
+BEGIN
+  IF OLD.status <> 'cancelled' AND NEW.status = 'cancelled' THEN
+    UPDATE components c
+    JOIN (
+      SELECT component_id, SUM(quantity) AS req_qty
+      FROM config_components
+      WHERE config_id = NEW.config_id
+      GROUP BY component_id
+    ) AS req ON c.component_id = req.component_id
+    SET c.stock_quantity = c.stock_quantity + req.req_qty;
+  END IF;
+END$$
+
+DELIMITER ;
+
+-- ===================================================================
+-- 5) Хранимая процедура: create_order (рекомендованный путь)
+--    Создаёт заказ в транзакции: проверяет, блокирует, списывает, создает запись.
+-- ===================================================================
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS create_order$$
+
+CREATE PROCEDURE create_order(
+  IN p_config_id INT,
+  IN p_user_email VARCHAR(191),  -- Изменено на 191 для согласованности
+  IN p_delivery_address TEXT,
+  IN p_delivery_method VARCHAR(20),    -- 'courier'|'pickup'|'self'
+  IN p_payment_method VARCHAR(20),     -- 'card'|'cash_on_delivery'|'bank_transfer'
+  IN p_assembly_terms INT,
+  OUT p_order_id INT
+)
+BEGIN
+  DECLARE v_insufficient INT DEFAULT 0;
+  DECLARE v_total_price DECIMAL(10,2) DEFAULT 0.00;
+
+  START TRANSACTION;
+
+  -- Проверки: существование конфигурации и активность пользователя
+  IF NOT EXISTS (SELECT 1 FROM configurations WHERE config_id = p_config_id) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Configuration does not exist.';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM users WHERE email = p_user_email AND is_active = 1) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User is not active.';
+  END IF;
+
+  -- Считаем суммарную стоимость конфигурации
+  SELECT IFNULL(SUM(c.price * cc.quantity),0.00) INTO v_total_price
+  FROM config_components cc
+  JOIN components c ON cc.component_id = c.component_id
+  WHERE cc.config_id = p_config_id;
+
+  -- Временная таблица с требованием по компонентам
+  CREATE TEMPORARY TABLE IF NOT EXISTS tmp_req (
+    component_id INT PRIMARY KEY,
+    req_qty INT NOT NULL
+  ) ENGINE=MEMORY;
+
+  INSERT INTO tmp_req (component_id, req_qty)
+  SELECT component_id, SUM(quantity) AS req_qty
+  FROM config_components
+  WHERE config_id = p_config_id
+  GROUP BY component_id;
+
+  -- Блокируем строки components для предотвращения гонок
+  SELECT c.component_id
+  FROM components c
+  JOIN tmp_req r ON c.component_id = r.component_id
+  FOR UPDATE;
+
+  -- Проверяем доступность
+  SELECT COUNT(*) INTO v_insufficient
+  FROM tmp_req r
+  JOIN components c ON r.component_id = c.component_id
+  WHERE c.stock_quantity < r.req_qty;
+
+  IF v_insufficient > 0 THEN
+    DROP TEMPORARY TABLE IF EXISTS tmp_req;
+    ROLLBACK;
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient stock for one or more components (transactional check).';
+  ELSE
+    -- Вставляем заказ с рассчитанной суммой
+    INSERT INTO orders (config_id, user_email, total_price, delivery_address, delivery_method, payment_method, assembly_terms, is_paid, status)
+    VALUES (p_config_id, p_user_email, v_total_price, p_delivery_address, p_delivery_method, p_payment_method, p_assembly_terms, 0, 'pending');
+
+    SET p_order_id = LAST_INSERT_ID();
+
+    -- Списываем запасы агрегированно
+    UPDATE components c
+    JOIN tmp_req r ON c.component_id = r.component_id
+    SET c.stock_quantity = c.stock_quantity - r.req_qty;
+
+    DROP TEMPORARY TABLE IF EXISTS tmp_req;
+
+    COMMIT;
+  END IF;
+
+END$$
+DELIMITER ;
+
+-- ===================================================================
+-- 6) Рекомендации/пояснения (коротко)
+-- ===================================================================
+-- 1) Используйте create_order(...) вместо прямого INSERT INTO orders в приложении,
+--    чтобы избежать race conditions и получить атомарное поведение.
+-- 2) Triggers оставлены как дополнительная защита, но основная логика в процедуре.
+-- 3) Перед миграцией/внедрением выполнить тесты конкурентного создания заказов.
+-- 4) Сделайте бэкап перед изменением ENUM в production — если в coolings есть значения,
+--    не входящие в ('full_tower','mid_tower','compact'), сначала приведите их к допустимым
+--    или удалите/архивируйте записи.
+
+-- Конец скрипта
