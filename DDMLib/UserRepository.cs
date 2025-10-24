@@ -48,7 +48,7 @@ public class UserRepository : IUserRepository
     {
         if (!Config.TestDatabaseConnection())
         {
-            ErrorLogger.LogError("FindByEmail", "Не удалось подключиться к базе данных.");
+            ErrorLogger.LogError("Save", "Не удалось подключиться к базе данных.");
         }
         using (var connection = new MySqlConnection(Config.ConnectionString))
         {

@@ -1,0 +1,20 @@
+2025-10-24 09:02:48 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:02:48 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:09:34 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:09:34 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:10:26 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:10:26 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:12:58 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:12:58 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:20:49 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:20:49 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:23:41 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:23:41 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:24:17 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:24:17 | FindByEmail | Could not load file or assembly 'System.Security.Permissions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. Не удается найти указанный файл.
+2025-10-24 09:25:46 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:25:46 | FindByEmail | The type initializer for 'MySql.Data.MySqlClient.Replication.ReplicationManager' threw an exception.
+2025-10-24 09:26:51 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:26:51 | FindByEmail | The type initializer for 'MySql.Data.MySqlClient.Replication.ReplicationManager' threw an exception.
+2025-10-24 09:27:06 | FindByEmail | Не удалось подключиться к базе данных.
+2025-10-24 09:27:06 | FindByEmail | The type initializer for 'MySql.Data.MySqlClient.Replication.ReplicationManager' threw an exception.

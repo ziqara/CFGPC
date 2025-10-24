@@ -34,21 +34,16 @@ namespace WebApplication1.Pages
                 return Page(); 
             }
 
-            // Ручная проверка паролей
+            
             if (string.IsNullOrEmpty(ConfirmPassword) || NewUser.Password != ConfirmPassword)
             {
                 ModelState.AddModelError("ConfirmPassword", "Пароли не совпадают");
-                return Page();  // Вернуться с ошибкой
+                return Page();  
             }
 
             
             string result = _userService.RegisterUser(
-                NewUser.Email,
-                NewUser.Password,
-                ConfirmPassword,
-                NewUser.FullName,
-                NewUser.Phone,
-                NewUser.Address
+                NewUser, ConfirmPassword
             );
 
             Message = result;

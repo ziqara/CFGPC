@@ -121,7 +121,6 @@ namespace DDMTests
                 Password = password,
                 FullName = "Петров Иван Сергеевич",
                 RegistrationDate = DateTime.Now,
-                IsActive = true
             };
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
 
