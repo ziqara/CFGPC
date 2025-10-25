@@ -1,4 +1,4 @@
-using DDMLib;  // Убедитесь, что этот using есть
+using DDMLib;  
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +8,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<UserService>();  // Это ключевой шаг!
+builder.Services.AddScoped<UserService>();  
 
 
 var app = builder.Build();
