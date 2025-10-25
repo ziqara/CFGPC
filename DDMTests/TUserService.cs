@@ -1,7 +1,9 @@
-﻿using System;
-using DDMLib;
+﻿using DDMLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
+using System.Net;
+using System.Security.Policy;
 
 namespace DDMTests
 {
@@ -26,10 +28,16 @@ namespace DDMTests
             var fullName = "Петров Иван Сергеевич";
             var phone = "+7 (999) 123-45-67";
             var address = "г. Москва, ул. Ленина, д. 10, кв. 5";
+            User user = new User();
+            user.Email = email;
+            user.Password = password;
+            user.Address = address;
+            user.FullName = fullName;
+            user.Phone = phone;
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns((User)null);
             _userRepositoryMock.Setup(r => r.Save(It.IsAny<User>())).Returns<User>(u => u);
 
-            var result = _userService.RegisterUser(email, password, passwordConfirm, fullName, phone, address);
+            var result = _userService.RegisterUser(user, passwordConfirm);   
 
             Assert.AreEqual("Аккаунт успешно создан!", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
@@ -38,7 +46,6 @@ namespace DDMTests
                 u.FullName == fullName &&
                 u.Phone == phone &&
                 u.Address == address &&
-                u.IsActive == true &&
                 u.Password == password
             )), Times.Once);
         }
@@ -50,9 +57,13 @@ namespace DDMTests
             var password = "Passw0rd!";
             var passwordConfirm = "Passw0rd!";
             var fullName = "Иванов Иван Иванович";
+            User user = new User();
+            user.Email = email;
+            user.Password = password;
+            user.FullName = fullName;
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(new User { Email = email });
 
-            var result = _userService.RegisterUser(email, password, passwordConfirm, fullName, "", "");
+            var result = _userService.RegisterUser(user, passwordConfirm);
 
             Assert.AreEqual("Email уже зарегистрирован", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
@@ -68,8 +79,13 @@ namespace DDMTests
             var fullName = "Сидоров Пётр Алексеевич";
             var phone = "+7 (999) 000-00-00";
             var address = "г. СПб, ул. Невский, д. 1";
-
-            var result = _userService.RegisterUser(email, password, passwordConfirm, fullName, phone, address);
+            User user = new User();
+            user.Email = email;
+            user.Password = password;
+            user.Address = address;
+            user.FullName = fullName;
+            user.Phone = phone;
+            var result = _userService.RegisterUser(user, passwordConfirm);
 
             Assert.AreEqual("Пароли не совпадают", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
@@ -83,8 +99,12 @@ namespace DDMTests
             var password = "Passw0rd!";
             var passwordConfirm = "Passw0rd!";
             var fullName = "Петров Иван Сергеевич";
+            User user = new User();
+            user.Email = email;
+            user.Password = password;
+            user.FullName = fullName;
 
-            var result = _userService.RegisterUser(email, password, passwordConfirm, fullName, "", "");
+            var result = _userService.RegisterUser(user, passwordConfirm);
 
             Assert.AreEqual("Некорректный email", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
@@ -100,9 +120,16 @@ namespace DDMTests
             var fullName = "Иванов Иван Иванович";
             var phone = "invalid-phone-text";
             var address = "г. Москва, ул. Тверская, д. 1";
+            User user = new User();
+            user.Email = email;
+            user.Password = password;
+            user.Address = address;
+            user.FullName = fullName;
+            user.Phone = phone;
+
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns((User)null);
 
-            var result = _userService.RegisterUser(email, password, passwordConfirm, fullName, phone, address);
+            var result = _userService.RegisterUser(user, passwordConfirm);
 
             Assert.AreEqual("Неверный формат телефона", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
@@ -173,7 +200,6 @@ namespace DDMTests
                 Password = correctPassword,
                 FullName = "Петров Иван Сергеевич",
                 RegistrationDate = DateTime.Now,
-                IsActive = true
             };
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
            
