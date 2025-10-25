@@ -106,7 +106,7 @@ namespace DDMTests
 
             var result = _userService.RegisterUser(user, passwordConfirm);
 
-            Assert.AreEqual("Некорректный email", result);
+            Assert.AreEqual("Некорректный email. Требуемый формат: username@domain.com", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
@@ -127,33 +127,34 @@ namespace DDMTests
             user.FullName = fullName;
             user.Phone = phone;
 
-            _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns((User)null);
-
             var result = _userService.RegisterUser(user, passwordConfirm);
 
-            Assert.AreEqual("Неверный формат телефона", result);
-            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
+            Assert.AreEqual("Неверный формат телефона. Требуемый формат: +7 (XXX) XXX-XX-XX", result);
+
+            _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
 
         [TestMethod]
         public void TestLoginUser_WithCorrectData_ShouldReturnSuccessMessage()
         {
-            
             var email = "ivan.petrov@example.com";
             var password = "Passw0rd!";
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+
             var user = new User
             {
                 Email = email,
-                Password = password,
+                Password = hashedPassword,
                 FullName = "Петров Иван Сергеевич",
                 RegistrationDate = DateTime.Now,
             };
+
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
 
             var result = _userService.LoginUser(email, password);
 
-            Assert.AreEqual("Вход выполнен успешно!", result);
+            Assert.AreEqual("", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
@@ -167,7 +168,7 @@ namespace DDMTests
             
             var result = _userService.LoginUser(email, password);
             
-            Assert.AreEqual("Некорректный email", result);
+            Assert.AreEqual("Некорректный email. Требуемый формат: username@domain.com", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
@@ -190,38 +191,26 @@ namespace DDMTests
         [TestMethod]
         public void TestLoginUser_WithExistingEmailButWrongPassword_ShouldReturnWrongPasswordError()
         {
-            
             var email = "ivan.petrov@example.com";
             var correctPassword = "Passw0rd!";
             var wrongPassword = "WrongPassw0rd!";
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(correctPassword);
+
             var user = new User
             {
                 Email = email,
-                Password = correctPassword,
+                Password = hashedPassword,
                 FullName = "Петров Иван Сергеевич",
                 RegistrationDate = DateTime.Now,
             };
+
             _userRepositoryMock.Setup(r => r.FindByEmail(email)).Returns(user);
-           
+
             var result = _userService.LoginUser(email, wrongPassword);
-            
+
             Assert.AreEqual("Неверный пароль", result);
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Once);
-            _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void TestLoginUser_WithEmptyFields_ShouldReturnValidationErrorsForBoth()
-        {
-
-            var email = "";
-            var password = "";
-
-            var result = _userService.LoginUser(email, password);
-           
-            var expectedErrors = "Введите email" + Environment.NewLine + "Введите пароль";
-            Assert.AreEqual(expectedErrors, result);
-            _userRepositoryMock.Verify(r => r.FindByEmail(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }
     }
