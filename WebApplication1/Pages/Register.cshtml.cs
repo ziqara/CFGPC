@@ -69,7 +69,7 @@ namespace WebApplication1.Pages
                 ModelState.AddModelError(string.Empty, result);
             }
 
-            return Page();
+            return RedirectToPage("/Login");
         }
 
     }
