@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Окт 26 2025 г., 11:03
+-- Время создания: Окт 26 2025 г., 20:21
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.1.26
 
@@ -158,9 +158,7 @@ CREATE TABLE `orders` (
   `total_price` decimal(10,2) DEFAULT '0.00',
   `delivery_address` text COLLATE utf8mb4_unicode_ci,
   `delivery_method` enum('courier','pickup','self') COLLATE utf8mb4_unicode_ci DEFAULT 'courier',
-  `delivery_terms` int(11) DEFAULT NULL,
   `payment_method` enum('card','cash_on_delivery','bank_transfer') COLLATE utf8mb4_unicode_ci DEFAULT 'card',
-  `assembly_terms` int(11) DEFAULT NULL,
   `is_paid` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -297,6 +295,21 @@ CREATE TABLE `users` (
   `address` text COLLATE utf8mb4_unicode_ci,
   `registration_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`email`, `password_hash`, `full_name`, `phone`, `address`, `registration_date`) VALUES
+('1@mail.com', '$2a$11$lpfv6Zp451Aflju4X4fcpu0Vxn0mqj5JWkIRRiBEZmGfBiHhrkCoW', '12@mail.com', NULL, NULL, '2025-10-26 16:39:58'),
+('10@mail.com', '$2a$11$jjIhOe0zyh3Bqwbv37El0.vQGEMFOrkQOt3YvIoIjKHaxRJxiG4Cy', '10@mail.com', NULL, NULL, '2025-10-26 16:44:25'),
+('12@mail.com', '$2a$11$vUJwNmCE5oSBAS74CQp6geDGse6mWq3KsRahR/xmfSjKmMelPhzfu', NULL, NULL, NULL, '2025-10-26 14:09:24'),
+('12322@mail.com', '$2a$11$KHRjKuwzSNBP5JffXhDox.qufroZWfuzIsGBUWvSUrjzGrhzrAm0G', 'Егор', NULL, NULL, '2025-10-26 15:03:07'),
+('2323@mail.ru', '$2a$11$9yT366IEWX5r1kH/TD01ZOZM1jLyFkxIpxEFlre/CzQvwUn2m0cZG', 'Егор', NULL, NULL, '2025-10-26 15:05:36'),
+('322@mail.com', '$2a$11$vJfCSuLKMDeiXMtwUHUQ2u/mLaN9NvtvXUZ3ufoIcRtJgKw0MlfXO', 'Егор', NULL, NULL, '2025-10-26 14:47:39'),
+('45454@mail.com', '$2a$11$O4ErKpzjHzahVxk9bWJaTO90HL5n5J3cwIvpera7qgxOg3ygGpXzK', '2334Ц3', NULL, NULL, '2025-10-26 15:42:06'),
+('5@mail.ru', '$2a$11$mBq.LnI//OuCQ35KpiU3o.LBQpe/AVKKluTC8ZZpgfcdyiITLJ2.i', '5', NULL, NULL, '2025-10-26 14:46:04'),
+('damir@mail.ru', '$2a$11$MUYH1VT5OUQ1W0t8mvwA7u.pyFgXhRkPdHfSuXbbEIqE.jwB7.oNK', 'Егор', NULL, NULL, '2025-10-26 16:24:46');
 
 -- --------------------------------------------------------
 
