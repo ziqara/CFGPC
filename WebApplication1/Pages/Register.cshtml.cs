@@ -15,9 +15,12 @@ namespace WebApplication1.Pages
         }
 
         [BindProperty]
-        public User NewUser { get; set; }  // Используем класс User
+        public User NewUser { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Подтверждение пароля обязательно")]
+        [DataType(DataType.Password)]
+        [Compare("NewUser.Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
         public string Message { get; set; }
@@ -29,6 +32,20 @@ namespace WebApplication1.Pages
 
         public IActionResult OnPost()
         {
+            if (string.IsNullOrEmpty(NewUser.FullName))
+            {
+                ModelState.AddModelError("NewUser.FullName", "Полное имя обязательно");
+            }
+
+            if (!string.IsNullOrEmpty(NewUser.Phone))
+            {
+                var phoneAttr = new PhoneAttribute();
+                if (!phoneAttr.IsValid(NewUser.Phone))
+                {
+                    ModelState.AddModelError("NewUser.Phone", phoneAttr.ErrorMessage);
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page(); 
