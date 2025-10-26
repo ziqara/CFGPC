@@ -52,16 +52,10 @@ namespace WebApplication1.Pages
                 }
             }
 
+
             if (!ModelState.IsValid)
             {
                 return Page(); 
-            }
-
-            
-            if (string.IsNullOrEmpty(ConfirmPassword) || NewUser.Password != ConfirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "Пароли не совпадают");
-                return Page();  
             }
 
             NewUser.Password = Password;

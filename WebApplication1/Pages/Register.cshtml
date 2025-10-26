@@ -15,19 +15,20 @@
         <span asp-validation-for="NewUser.Email" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="NewUser.Password">Пароль:</label>
-        <input asp-for="NewUser.Password" type="password" class="form-control" />
-        <span asp-validation-for="NewUser.Password" class="text-danger"></span>
+        <label asp-for="NewUser.FullName">Полное имя:</label>
+        <input asp-for="NewUser.FullName" class="form-control" />
+
+        <span asp-validation-for="NewUser.FullName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Пароль:</label> 
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="ConfirmPassword">Подтвердите пароль:</label>
         <input asp-for="ConfirmPassword" type="password" class="form-control" />
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NewUser.FullName">Полное имя:</label>
-        <input asp-for="NewUser.FullName" class="form-control" />
-        <span asp-validation-for="NewUser.FullName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="NewUser.Phone">Телефон (опционально):</label>
