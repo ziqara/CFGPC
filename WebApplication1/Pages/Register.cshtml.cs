@@ -15,7 +15,7 @@ namespace WebApplication1.Pages
         }
 
         [BindProperty]
-        public User NewUser { get; set; }
+        public UserValidation NewUser { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Пароль обязателен")]
@@ -33,45 +33,44 @@ namespace WebApplication1.Pages
 
         public void OnGet()
         {
-            NewUser = new User();
+            if (NewUser == null)
+                NewUser = new UserValidation();
         }
 
         public IActionResult OnPost()
         {
-            if (string.IsNullOrEmpty(NewUser.FullName))
-            {
-                ModelState.AddModelError("NewUser.FullName", "Полное имя обязательно");
-            }
-
-            if (!string.IsNullOrEmpty(NewUser.Phone))
-            {
-                var phoneAttr = new PhoneAttribute();
-                if (!phoneAttr.IsValid(NewUser.Phone))
-                {
-                    ModelState.AddModelError("NewUser.Phone", phoneAttr.ErrorMessage);
-                }
-            }
-
-
             if (!ModelState.IsValid)
-            {
-                return Page(); 
-            }
+                return Page();
 
-            NewUser.Password = Password;
-
-            string result = _userService.RegisterUser(
-                NewUser, ConfirmPassword
+            var result = _userService.RegisterUser(
+                new User
+                {
+                    Email = NewUser.Email,
+                    FullName = NewUser.FullName,
+                    Phone = NewUser.Phone,
+                    Address = NewUser.Address,
+                    Password = Password
+                },
+                ConfirmPassword
             );
-
-            Message = result;
 
             if (result == "Аккаунт успешно создан!")
             {
-                return RedirectToPage("/Index");
+                Message = result;
+                return Page();
+            }
+
+            if (result == "Email уже зарегистрирован")
+            {
+                ModelState.AddModelError("NewUser.Email", result);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result);
             }
 
             return Page();
         }
+
     }
 }
