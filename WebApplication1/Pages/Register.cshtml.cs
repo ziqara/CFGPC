@@ -18,9 +18,15 @@ namespace WebApplication1.Pages
         public User NewUser { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Пароль обязателен")]
+        [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Пароль должен быть от 6 до 20 символов")]
+        public string Password { get; set; }
+
+        [BindProperty]
         [Required(ErrorMessage = "Подтверждение пароля обязательно")]
         [DataType(DataType.Password)]
-        [Compare("NewUser.Password", ErrorMessage = "Пароли не совпадают")]
+        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
         public string Message { get; set; }
@@ -58,7 +64,8 @@ namespace WebApplication1.Pages
                 return Page();  
             }
 
-            
+            NewUser.Password = Password;
+
             string result = _userService.RegisterUser(
                 NewUser, ConfirmPassword
             );
