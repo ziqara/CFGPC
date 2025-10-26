@@ -19,3 +19,5 @@
 2025-10-24 09:27:06 | FindByEmail | Не удалось подключиться к базе данных.
 2025-10-24 09:27:06 | FindByEmail | The type initializer for 'MySql.Data.MySqlClient.Replication.ReplicationManager' threw an exception.
 2025-10-25 09:26:14 | Save | Data too long for column 'phone' at row 1
+2025-10-26 16:26:54 | FindByEmail | Data is Null. This method or property cannot be called on Null values.
+2025-10-26 16:28:43 | FindByEmail | Data is Null. This method or property cannot be called on Null values.

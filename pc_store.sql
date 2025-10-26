@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Окт 25 2025 г., 06:21
+-- Время создания: Окт 26 2025 г., 20:21
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.1.26
 
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `cases` (
   `component_id` int(11) NOT NULL,
   `form_factor` varchar(20) DEFAULT NULL,
-  `size` enum('full_tower','mid_tower','compact') DEFAULT NULL
+  `size` enum('full_tower','mid_tower','compact') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -50,7 +50,8 @@ CREATE TABLE `components` (
   `stock_quantity` int(11) NOT NULL DEFAULT '0',
   `description` text COLLATE utf8mb4_unicode_ci,
   `is_available` tinyint(1) NOT NULL DEFAULT '1',
-  `photo_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `photo_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -61,15 +62,16 @@ CREATE TABLE `components` (
 
 CREATE TABLE `configurations` (
   `config_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `config_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `total_price` decimal(10,2) DEFAULT '0.00',
-  `budget_range` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `target_use` enum('gaming','professional','office','student') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('draft','validated','in_cart','ordered') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `is_preset` tinyint(1) NOT NULL DEFAULT '0',
   `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_id` int(11) DEFAULT NULL
+  `user_email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `rgb` tinyint(1) DEFAULT '0',
+  `other_options` text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -82,49 +84,8 @@ CREATE TABLE `config_components` (
   `config_component_id` int(11) NOT NULL,
   `config_id` int(11) NOT NULL,
   `component_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT '1',
-  `component_type` enum('cpu','motherboard','ram','gpu','storage','psu','case','cooling') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Триггеры `config_components`
---
-DELIMITER $$
-CREATE TRIGGER `trg_cc_before_insert` BEFORE INSERT ON `config_components` FOR EACH ROW BEGIN
-  DECLARE v_type VARCHAR(20);
-  SELECT type INTO v_type FROM components WHERE component_id = NEW.component_id;
-  IF v_type IS NULL THEN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Component not found for config_components';
-  END IF;
-  SET NEW.component_type = v_type;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_cc_before_update` BEFORE UPDATE ON `config_components` FOR EACH ROW BEGIN
-  DECLARE v_type VARCHAR(20);
-  SELECT type INTO v_type FROM components WHERE component_id = NEW.component_id;
-  IF v_type IS NULL THEN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Component not found for config_components';
-  END IF;
-  SET NEW.component_type = v_type;
-END
-$$
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `config_prefs`
---
-
-CREATE TABLE `config_prefs` (
-  `pref_id` int(11) NOT NULL,
-  `config_id` int(11) NOT NULL,
-  `rgb` tinyint(1) DEFAULT '0',
-  `cooling_level` enum('basic','advanced','custom') DEFAULT 'basic',
-  `other_options` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `quantity` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -137,9 +98,8 @@ CREATE TABLE `coolings` (
   `cooler_type` enum('air','liquid') NOT NULL,
   `tdp_support` int(11) DEFAULT NULL,
   `fan_rpm` int(11) DEFAULT NULL,
-  `radiator_size` varchar(50) DEFAULT NULL,
-  `is_rgb` tinyint(1) DEFAULT '0',
-  `compatibility_sockets` text
+  `size` enum('full_tower','mid_tower','compact') DEFAULT NULL,
+  `is_rgb` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -192,18 +152,15 @@ CREATE TABLE `motherboards` (
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `config_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `user_email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `order_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('pending','processing','assembled','shipped','delivered','cancelled') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','processing','assembled','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `total_price` decimal(10,2) DEFAULT '0.00',
-  `delivery_address` text,
-  `delivery_method` enum('courier','pickup','self') DEFAULT 'courier',
-  `delivery_terms` int(11) DEFAULT NULL,
-  `payment_method` enum('card','cash_on_delivery','bank_transfer') DEFAULT 'card',
-  `assembly_terms` int(11) DEFAULT NULL,
-  `tracking_number` varchar(100) DEFAULT NULL,
+  `delivery_address` text COLLATE utf8mb4_unicode_ci,
+  `delivery_method` enum('courier','pickup','self') COLLATE utf8mb4_unicode_ci DEFAULT 'courier',
+  `payment_method` enum('card','cash_on_delivery','bank_transfer') COLLATE utf8mb4_unicode_ci DEFAULT 'card',
   `is_paid` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Триггеры `orders`
@@ -211,9 +168,13 @@ CREATE TABLE `orders` (
 DELIMITER $$
 CREATE TRIGGER `trg_orders_after_insert` AFTER INSERT ON `orders` FOR EACH ROW BEGIN
   UPDATE components c
-  JOIN config_components cc ON c.component_id = cc.component_id
-  SET c.stock_quantity = c.stock_quantity - cc.quantity
-  WHERE cc.config_id = NEW.config_id;
+  JOIN (
+    SELECT component_id, SUM(quantity) AS req_qty
+    FROM config_components
+    WHERE config_id = NEW.config_id
+    GROUP BY component_id
+  ) AS req ON c.component_id = req.component_id
+  SET c.stock_quantity = c.stock_quantity - req.req_qty;
 END
 $$
 DELIMITER ;
@@ -221,9 +182,13 @@ DELIMITER $$
 CREATE TRIGGER `trg_orders_after_update` AFTER UPDATE ON `orders` FOR EACH ROW BEGIN
   IF OLD.status <> 'cancelled' AND NEW.status = 'cancelled' THEN
     UPDATE components c
-    JOIN config_components cc ON c.component_id = cc.component_id
-    SET c.stock_quantity = c.stock_quantity + cc.quantity
-    WHERE cc.config_id = NEW.config_id;
+    JOIN (
+      SELECT component_id, SUM(quantity) AS req_qty
+      FROM config_components
+      WHERE config_id = NEW.config_id
+      GROUP BY component_id
+    ) AS req ON c.component_id = req.component_id
+    SET c.stock_quantity = c.stock_quantity + req.req_qty;
   END IF;
 END
 $$
@@ -231,11 +196,17 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `trg_orders_before_insert` BEFORE INSERT ON `orders` FOR EACH ROW BEGIN
   DECLARE v_insufficient INT DEFAULT 0;
+
   SELECT COUNT(*) INTO v_insufficient
-  FROM config_components cc
+  FROM (
+    SELECT cc.component_id
+    FROM config_components cc
     JOIN components c ON cc.component_id = c.component_id
-  WHERE cc.config_id = NEW.config_id
-    AND c.stock_quantity < cc.quantity;
+    WHERE cc.config_id = NEW.config_id
+    GROUP BY cc.component_id
+    HAVING SUM(cc.quantity) > MAX(c.stock_quantity)
+  ) AS t;
+
   IF v_insufficient > 0 THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient stock for one or more components in the configuration.';
   END IF;
@@ -276,14 +247,13 @@ CREATE TABLE `rams` (
 --
 
 CREATE TABLE `reviews` (
-  `review_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `user_email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rating` int(11) NOT NULL,
-  `text` text,
-  `photo_url` varchar(500) DEFAULT NULL,
+  `text` text COLLATE utf8mb4_unicode_ci,
+  `photo_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -318,15 +288,28 @@ CREATE TABLE `suppliers` (
 --
 
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `full_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8mb4_unicode_ci,
-  `role` enum('client','admin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'client',
   `registration_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`email`, `password_hash`, `full_name`, `phone`, `address`, `registration_date`) VALUES
+('1@mail.com', '$2a$11$lpfv6Zp451Aflju4X4fcpu0Vxn0mqj5JWkIRRiBEZmGfBiHhrkCoW', '12@mail.com', NULL, NULL, '2025-10-26 16:39:58'),
+('10@mail.com', '$2a$11$jjIhOe0zyh3Bqwbv37El0.vQGEMFOrkQOt3YvIoIjKHaxRJxiG4Cy', '10@mail.com', NULL, NULL, '2025-10-26 16:44:25'),
+('12@mail.com', '$2a$11$vUJwNmCE5oSBAS74CQp6geDGse6mWq3KsRahR/xmfSjKmMelPhzfu', NULL, NULL, NULL, '2025-10-26 14:09:24'),
+('12322@mail.com', '$2a$11$KHRjKuwzSNBP5JffXhDox.qufroZWfuzIsGBUWvSUrjzGrhzrAm0G', 'Егор', NULL, NULL, '2025-10-26 15:03:07'),
+('2323@mail.ru', '$2a$11$9yT366IEWX5r1kH/TD01ZOZM1jLyFkxIpxEFlre/CzQvwUn2m0cZG', 'Егор', NULL, NULL, '2025-10-26 15:05:36'),
+('322@mail.com', '$2a$11$vJfCSuLKMDeiXMtwUHUQ2u/mLaN9NvtvXUZ3ufoIcRtJgKw0MlfXO', 'Егор', NULL, NULL, '2025-10-26 14:47:39'),
+('45454@mail.com', '$2a$11$O4ErKpzjHzahVxk9bWJaTO90HL5n5J3cwIvpera7qgxOg3ygGpXzK', '2334Ц3', NULL, NULL, '2025-10-26 15:42:06'),
+('5@mail.ru', '$2a$11$mBq.LnI//OuCQ35KpiU3o.LBQpe/AVKKluTC8ZZpgfcdyiITLJ2.i', '5', NULL, NULL, '2025-10-26 14:46:04'),
+('damir@mail.ru', '$2a$11$MUYH1VT5OUQ1W0t8mvwA7u.pyFgXhRkPdHfSuXbbEIqE.jwB7.oNK', 'Егор', NULL, NULL, '2025-10-26 16:24:46');
 
 -- --------------------------------------------------------
 
@@ -339,8 +322,8 @@ CREATE TABLE `warranties` (
   `order_id` int(11) NOT NULL,
   `duration_months` int(11) DEFAULT NULL,
   `issue_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `download_url` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `download_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Индексы сохранённых таблиц
@@ -357,6 +340,7 @@ ALTER TABLE `cases`
 --
 ALTER TABLE `components`
   ADD PRIMARY KEY (`component_id`),
+  ADD KEY `fk_components_supplier` (`supplier_id`),
   ADD KEY `ix_components_type` (`type`);
 
 --
@@ -364,25 +348,16 @@ ALTER TABLE `components`
 --
 ALTER TABLE `configurations`
   ADD PRIMARY KEY (`config_id`),
-  ADD KEY `ix_config_user` (`user_id`);
+  ADD KEY `ix_config_user` (`user_email`);
 
 --
 -- Индексы таблицы `config_components`
 --
 ALTER TABLE `config_components`
   ADD PRIMARY KEY (`config_component_id`),
-  ADD UNIQUE KEY `ux_config_component_type` (`config_id`,`component_type`),
-  ADD UNIQUE KEY `ux_config_component` (`config_id`,`component_id`),
-  ADD KEY `component_id` (`component_id`),
-  ADD KEY `config_id` (`config_id`),
-  ADD KEY `ix_cc_type` (`component_type`);
-
---
--- Индексы таблицы `config_prefs`
---
-ALTER TABLE `config_prefs`
-  ADD PRIMARY KEY (`pref_id`),
-  ADD KEY `config_id` (`config_id`);
+  ADD UNIQUE KEY `ux_cc_config_component` (`config_id`,`component_id`),
+  ADD KEY `ix_cc_component` (`component_id`),
+  ADD KEY `ix_cc_config` (`config_id`);
 
 --
 -- Индексы таблицы `coolings`
@@ -413,8 +388,9 @@ ALTER TABLE `motherboards`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
-  ADD UNIQUE KEY `ux_orders_config` (`config_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `fk_orders_config` (`config_id`),
+  ADD KEY `ix_orders_user` (`user_email`),
+  ADD KEY `ix_orders_status` (`status`);
 
 --
 -- Индексы таблицы `psus`
@@ -432,9 +408,8 @@ ALTER TABLE `rams`
 -- Индексы таблицы `reviews`
 --
 ALTER TABLE `reviews`
-  ADD PRIMARY KEY (`review_id`),
-  ADD UNIQUE KEY `ux_reviews_order` (`order_id`),
-  ADD KEY `fk_reviews_user` (`user_id`);
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `fk_reviews_user` (`user_email`);
 
 --
 -- Индексы таблицы `storages`
@@ -446,14 +421,14 @@ ALTER TABLE `storages`
 -- Индексы таблицы `suppliers`
 --
 ALTER TABLE `suppliers`
-  ADD PRIMARY KEY (`supplier_id`);
+  ADD PRIMARY KEY (`supplier_id`),
+  ADD KEY `ix_suppliers_name` (`name`);
 
 --
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`email`);
 
 --
 -- Индексы таблицы `warranties`
@@ -485,34 +460,16 @@ ALTER TABLE `config_components`
   MODIFY `config_component_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `config_prefs`
---
-ALTER TABLE `config_prefs`
-  MODIFY `pref_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
   MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `reviews`
---
-ALTER TABLE `reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT для таблицы `suppliers`
 --
 ALTER TABLE `suppliers`
   MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `warranties`
@@ -531,10 +488,16 @@ ALTER TABLE `cases`
   ADD CONSTRAINT `fk_cases_component` FOREIGN KEY (`component_id`) REFERENCES `components` (`component_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Ограничения внешнего ключа таблицы `components`
+--
+ALTER TABLE `components`
+  ADD CONSTRAINT `fk_components_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Ограничения внешнего ключа таблицы `configurations`
 --
 ALTER TABLE `configurations`
-  ADD CONSTRAINT `fk_config_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_config_user` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `config_components`
@@ -542,12 +505,6 @@ ALTER TABLE `configurations`
 ALTER TABLE `config_components`
   ADD CONSTRAINT `fk_cc_component` FOREIGN KEY (`component_id`) REFERENCES `components` (`component_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_cc_config` FOREIGN KEY (`config_id`) REFERENCES `configurations` (`config_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `config_prefs`
---
-ALTER TABLE `config_prefs`
-  ADD CONSTRAINT `fk_prefs_config` FOREIGN KEY (`config_id`) REFERENCES `configurations` (`config_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `coolings`
@@ -578,7 +535,7 @@ ALTER TABLE `motherboards`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_config` FOREIGN KEY (`config_id`) REFERENCES `configurations` (`config_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_orders_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_orders_user` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `psus`
@@ -597,7 +554,7 @@ ALTER TABLE `rams`
 --
 ALTER TABLE `reviews`
   ADD CONSTRAINT `fk_reviews_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_reviews_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_reviews_user` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `storages`

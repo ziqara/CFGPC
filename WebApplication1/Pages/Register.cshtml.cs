@@ -15,45 +15,62 @@ namespace WebApplication1.Pages
         }
 
         [BindProperty]
-        public User NewUser { get; set; }  // Используем класс User
+        public UserValidation NewUser { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Пароль обязателен")]
+        [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Пароль должен быть от 6 до 20 символов")]
+        public string Password { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Подтверждение пароля обязательно")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
         public string Message { get; set; }
 
         public void OnGet()
         {
-            NewUser = new User();
+            if (NewUser == null)
+                NewUser = new UserValidation();
         }
 
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
-            {
-                return Page(); 
-            }
+                return Page();
 
-            
-            if (string.IsNullOrEmpty(ConfirmPassword) || NewUser.Password != ConfirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "Пароли не совпадают");
-                return Page();  
-            }
-
-            
-            string result = _userService.RegisterUser(
-                NewUser, ConfirmPassword
+            var result = _userService.RegisterUser(
+                new User
+                {
+                    Email = NewUser.Email,
+                    FullName = NewUser.FullName,
+                    Phone = NewUser.Phone,
+                    Address = NewUser.Address,
+                    Password = Password
+                },
+                ConfirmPassword
             );
-
-            Message = result;
 
             if (result == "Аккаунт успешно создан!")
             {
-                return RedirectToPage("/Index");
+                Message = result;
+                return Page();
             }
 
-            return Page();
+            if (result == "Email уже зарегистрирован")
+            {
+                ModelState.AddModelError("NewUser.Email", result);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result);
+            }
+
+            return RedirectToPage("/Login");
         }
+
     }
 }

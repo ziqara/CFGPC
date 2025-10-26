@@ -118,18 +118,21 @@ namespace DDMTests
             var password = "Passw0rd!";
             var passwordConfirm = "Passw0rd!";
             var fullName = "Иванов Иван Иванович";
-            var phone = "invalid-phone-text";
+            var phone = "invalid-phone-text"; // заведомо неверный формат
             var address = "г. Москва, ул. Тверская, д. 1";
-            User user = new User();
-            user.Email = email;
-            user.Password = password;
-            user.Address = address;
-            user.FullName = fullName;
-            user.Phone = phone;
+
+            var user = new User
+            {
+                Email = email,
+                Password = password,
+                FullName = fullName,
+                Phone = phone,
+                Address = address
+            };
 
             var result = _userService.RegisterUser(user, passwordConfirm);
 
-            Assert.AreEqual("Неверный формат телефона. Требуемый формат: +7 (XXX) XXX-XX-XX", result);
+            Assert.AreEqual("Неверный формат телефона. Пример: +7 (999) 123-45-67", result);
 
             _userRepositoryMock.Verify(r => r.FindByEmail(email), Times.Never);
             _userRepositoryMock.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
