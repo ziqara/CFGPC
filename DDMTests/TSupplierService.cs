@@ -249,6 +249,24 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
             }
 
+            // Телефон — недопустимые символы
+            [TestMethod]
+            public void AddSupplier_PhoneHasLetters_ShouldFail_InvalidPhone()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ООО Невалид",
+                    ContactEmail = "ok@example.com",
+                    Phone = "ext:+7-999-ABC-12-34"
+                };
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Некорректный номер телефона");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
 
 }
