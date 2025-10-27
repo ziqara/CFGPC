@@ -12,5 +12,10 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public string UpdateProfile(string email, string fullName, string phone, string address)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
