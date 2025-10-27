@@ -15,6 +15,7 @@ namespace DDMTests
         private Mock<IUserRepository> _userRepoMock;
         private AccountService _accountService;
         private Mock<IConfigurationRepository> _configRepoMock;
+        private Mock<IOrderRepository> _orderRepoMock;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,6 +23,7 @@ namespace DDMTests
             _userRepoMock = new Mock<IUserRepository>();
             _accountService = new AccountService();
             _configRepoMock = new Mock<IConfigurationRepository>();
+            _orderRepoMock = new Mock<IOrderRepository>();
         }
 
         [TestMethod]
@@ -201,6 +203,28 @@ namespace DDMTests
 
             Assert.AreEqual("Вы не можете удалить данную сборку, так как на неё оформлен заказ", result);
             _configRepoMock.Verify(repo => repo.DeleteConfiguration(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestGetUserOrders_WithExistingOrders_ReturnsUserOrders()
+        {
+            var email = "user1@example.com";
+            var mockOrders = new List<OrderCard>
+            {
+                new OrderCard { OrderId = 1, UserEmail = email, Status = "pending", TotalPrice = 125000.00m },
+                new OrderCard { OrderId = 2, UserEmail = email, Status = "processing", TotalPrice = 210000.00m },
+                new OrderCard { OrderId = 3, UserEmail = email, Status = "completed", TotalPrice = 180000.00m }
+            };
+            _orderRepoMock.Setup(repo => repo.GetUserOrders(email)).Returns(mockOrders);
+
+            var result = _accountService.GetUserOrders(email);
+
+            Assert.AreEqual(3, result.Count);
+            foreach (var order in result)
+            {
+                Assert.AreEqual(email, order.UserEmail);
+            }
+            _orderRepoMock.Verify(repo => repo.GetUserOrders(email), Times.Once);
         }
     }
 }
