@@ -204,6 +204,26 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
             }
 
+            // Дубликат email
+            [TestMethod]
+            public void AddSupplier_DuplicateEmail_ShouldFail_WithDuplicateMessage()
+            {
+                var dto = new SupplierDto
+                {
+                Name = "ООО Дубликат",
+                ContactEmail = "dup@example.com"
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail(dto.ContactEmail)).Returns(true);
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Email уже используется");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
+
 }
 
