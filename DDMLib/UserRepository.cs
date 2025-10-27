@@ -107,4 +107,9 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public bool UpdatePasswordHash(User user, string newPassword)
+    {
+        throw new NotImplementedException();
+    }
 }
