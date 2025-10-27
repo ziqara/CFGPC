@@ -96,7 +96,7 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void ChangePassword_WithWrongCurrentPassword_ReturnsError()
+        public void TestChangePassword_WithWrongCurrentPassword_ReturnsError()
         {
             var email = "user1@example.com";
             var user = new User { Email = email };
@@ -106,6 +106,20 @@ namespace DDMTests
             var result = _accountService.ChangePassword(email, "WrongPass!", "BetterP4ss!", "BetterP4ss!");
 
             Assert.AreEqual("Неверный пароль", result);
+            _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestChangePassword_WithWeakNewPassword_ReturnsError()
+        {
+            var email = "user1@example.com";
+            var user = new User { Email = email };
+            _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
+            _userRepoMock.Setup(repo => repo.VerifyPassword(user, It.IsAny<string>())).Returns(true);
+
+            var result = _accountService.ChangePassword(email, "OldPassw0rd!", "12345", "12345");
+
+            Assert.AreEqual("Пароль недостаточно надёжный (минимум 6 символов)", result);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
         }
 
