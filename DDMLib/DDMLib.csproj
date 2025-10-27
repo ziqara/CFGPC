@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="AccountService.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="ConfigurationCard.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="User.cs" />
