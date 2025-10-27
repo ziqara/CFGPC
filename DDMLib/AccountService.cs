@@ -17,5 +17,10 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
