@@ -186,5 +186,21 @@ namespace DDMTests
             Assert.AreEqual("Сборка удалена", result);
             _configRepoMock.Verify(repo => repo.DeleteConfiguration(configId, userEmail), Times.Once);
         }
+
+        [TestMethod]
+        public void TestDeleteConfiguration_WithRelatedOrders_ReturnsError()
+        {
+            var configId = 11;
+            var userEmail = "user1@example.com";
+            var config = new ConfigurationCard { ConfigId = configId, UserEmail = userEmail };
+
+            _configRepoMock.Setup(repo => repo.GetConfigurationById(configId)).Returns(config);
+            _configRepoMock.Setup(repo => repo.HasRelatedOrders(configId)).Returns(true);
+
+            var result = _accountService.DeleteConfiguration(configId, userEmail);
+
+            Assert.AreEqual("Вы не можете удалить данную сборку, так как на неё оформлен заказ", result);
+            _configRepoMock.Verify(repo => repo.DeleteConfiguration(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+        }
     }
 }
