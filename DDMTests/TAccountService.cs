@@ -76,5 +76,23 @@ namespace DDMTests
             _userRepoMock.Verify(repo => repo.UpdateProfile(It.IsAny<User>()), Times.Never);
         }
 
+        [TestMethod]
+        public void ChangePassword_WithValidData_ChangesPasswordSuccessfully()
+        {
+            var email = "user1@example.com";
+            var currentPassword = "OldPassw0rd!";
+            var newPassword = "BetterP4ss!";
+            var repeatPassword = "BetterP4ss!";
+
+            var user = new User { Email = email, Password = "hashed_old_password" };
+            _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
+            _userRepoMock.Setup(repo => repo.UpdatePasswordHash(user, newPassword)).Returns(true);
+
+            var result = _accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
+
+            Assert.AreEqual("Пароль обновлён", result);
+            _userRepoMock.Verify(repo => repo.UpdatePasswordHash(user, newPassword), Times.Once);
+        }
+
     }
 }
