@@ -102,4 +102,9 @@ public class UserRepository : IUserRepository
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
+
+    public bool UpdateProfile(User user)
+    {
+        throw new NotImplementedException();
+    }
 }
