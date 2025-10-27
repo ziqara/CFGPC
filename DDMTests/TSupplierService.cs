@@ -26,6 +26,38 @@ namespace DDMTests
             {
                 return new string('А', len); // кириллица для проверки длины
             }
+
+            // Корректные данные
+            [TestMethod]
+            public void AddSupplier_MinimalValidData_ShouldPass_And_SaveDtoWithNulls()
+            {
+                var dto = new SupplierDto
+                {
+                Name = "ООО Альфа",
+                ContactEmail = "alpha.supply@example.com",
+                Phone = "",       
+                Address = ""      
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail("alpha.supply@example.com")).Returns(false);
+                _repoMock.Setup(r => r.ExistsByNameInsensitive("ООО Альфа")).Returns(false);
+                _repoMock.Setup(r => r.Save(It.IsAny<Supplier>()))
+                                      .Returns<Supplier>(s => s);
+
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsTrue(result.IsValid);
+                Assert.AreEqual(0, result.Errors.Count);
+                _repoMock.Verify(r => r.ExistsByEmail("alpha.supply@example.com"), Times.Once);
+                _repoMock.Verify(r => r.ExistsByNameInsensitive("ООО Альфа"), Times.Once);
+                _repoMock.Verify(r => r.Save(It.Is<Supplier>(s =>
+                                s.Name == "ООО Альфа" &&
+                                s.ContactEmail == "alpha.supply@example.com" &&
+                                s.Phone == null &&
+                                s.Address == null
+                                )), Times.Once);
+            }
+
         }
 }
 
