@@ -32,5 +32,10 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public List<OrderCard> GetUserOrders(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
