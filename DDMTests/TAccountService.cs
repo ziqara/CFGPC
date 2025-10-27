@@ -86,6 +86,7 @@ namespace DDMTests
 
             var user = new User { Email = email, Password = "hashed_old_password" };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
+            _userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
             _userRepoMock.Setup(repo => repo.UpdatePasswordHash(user, newPassword)).Returns(true);
 
             var result = _accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
