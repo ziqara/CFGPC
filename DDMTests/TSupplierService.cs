@@ -267,6 +267,24 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
+            // Телефон — слишком мало цифр (<7)
+            [TestMethod]
+            public void AddSupplier_PhoneTooFewDigits_ShouldFail()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ООО Короткий",
+                    ContactEmail = "ok@example.com",
+                    Phone = "123-45"
+                };
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Некорректный номер телефона");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
 
 }
