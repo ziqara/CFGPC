@@ -12,5 +12,20 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public ConfigurationCard GetConfigurationById(int configId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasRelatedOrders(int configId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteConfiguration(int configId, string userEmail)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

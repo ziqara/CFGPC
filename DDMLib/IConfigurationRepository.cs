@@ -9,5 +9,8 @@ namespace DDMLib
     public interface IConfigurationRepository
     {
         List<ConfigurationCard> GetUserConfigurations(string userEmail);
+        ConfigurationCard GetConfigurationById(int configId);
+        bool HasRelatedOrders(int configId);
+        bool DeleteConfiguration(int configId, string userEmail);
     }
 }
