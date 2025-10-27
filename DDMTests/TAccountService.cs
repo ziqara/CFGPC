@@ -158,5 +158,16 @@ namespace DDMTests
             }
             _configRepoMock.Verify(repo => repo.GetUserConfigurations(email), Times.Once);
         }
+
+        [TestMethod]
+        public void TestGetUserConfigurations_WithNoConfigs_ReturnsEmptyList()
+        {
+            var email = "user1@example.com";
+            _configRepoMock.Setup(repo => repo.GetUserConfigurations(email)).Returns(new List<ConfigurationCard>());
+
+            var result = _accountService.GetUserConfigurations(email);
+
+            Assert.AreEqual(0, result.Count);
+        }
     }
 }
