@@ -223,6 +223,32 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
+            // Телефон — валидные символы и длина
+            [DataTestMethod]
+            [DataRow("+7 (999) 123-45-67")]
+            [DataRow("8 999 123 45 67")]
+            [DataRow("+1 (234) 567 8901")]
+            [DataRow("123 4567")]
+            public void AddSupplier_PhoneAllowedCharsAndLength_ShouldPass(string phone)
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ООО ТелефонОк",
+                    ContactEmail = "ok@example.com",
+                    Phone = phone
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail(dto.ContactEmail)).Returns(false);
+                _repoMock.Setup(r => r.ExistsByNameInsensitive(dto.Name)).Returns(false);
+                _repoMock.Setup(r => r.Save(It.IsAny<Supplier>()))
+                                      .Returns<Supplier>(s => s);
+
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsTrue(result.IsValid, $"Ожидалась валидность, но получили ошибки: {string.Join(", ", result.Errors)}");
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
+            }
+
         }
 
 }
