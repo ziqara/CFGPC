@@ -276,7 +276,7 @@ CREATE TABLE `storages` (
 CREATE TABLE `suppliers` (
   `supplier_id` int(11) NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL;
+  `contact_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
