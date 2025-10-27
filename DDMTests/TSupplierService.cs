@@ -326,6 +326,26 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
             }
 
+            // Уникальность name — без учёта регистра
+            [TestMethod]
+            public void AddSupplier_DuplicateNameInsensitive_ShouldFail()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ооо ромашка",
+                    ContactEmail = "ok@example.com"
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail(dto.ContactEmail)).Returns(false);
+                _repoMock.Setup(r => r.ExistsByNameInsensitive("ооо ромашка")).Returns(true);
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Поставщик с таким названием уже есть");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
 
 }
