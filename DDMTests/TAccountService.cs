@@ -77,7 +77,7 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void ChangePassword_WithValidData_ChangesPasswordSuccessfully()
+        public void TestChangePassword_WithValidData_ChangesPasswordSuccessfully()
         {
             var email = "user1@example.com";
             var currentPassword = "OldPassw0rd!";
@@ -93,6 +93,8 @@ namespace DDMTests
             Assert.AreEqual("Пароль обновлён", result);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(user, newPassword), Times.Once);
         }
+
+
 
     }
 }

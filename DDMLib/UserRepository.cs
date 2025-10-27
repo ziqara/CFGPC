@@ -112,4 +112,9 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public bool VerifyPassword(User user, string password)
+    {
+        throw new NotImplementedException();
+    }
 }
