@@ -64,5 +64,17 @@ namespace DDMTests
                 u.FullName == fullName && u.Phone == phone && u.Address == address)), Times.Once);
         }
 
+        [TestMethod]
+        public void TestUpdateProfile_WithTooLongFullName_ReturnsValidationError()
+        {
+            var email = "user1@example.com";
+            var longName = new string('a', 256);
+
+            var result = _accountService.UpdateProfile(email, longName, "+79991234567", "г. Москва");
+
+            Assert.AreEqual("Превышена допустимая длина ФИО (≤ 255)", result);
+            _userRepoMock.Verify(repo => repo.UpdateProfile(It.IsAny<User>()), Times.Never);
+        }
+
     }
 }
