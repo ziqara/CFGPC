@@ -145,6 +145,26 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
+            // Обязательность contact_email — пусто/пробелы
+            [TestMethod]
+            public void AddSupplier_EmptyOrWhitespaceEmail_ShouldFail_WithRequiredMessage()
+            {
+                foreach (var badEmail in new[] { "", "   " })
+                {
+                    var dto = new SupplierDto
+                    {
+                    Name = "ООО БезПочты",
+                    ContactEmail = badEmail
+                    };
+
+                    var result = _service.AddSupplier(dto);
+
+                    CollectionAssert.Contains(result.Errors, "Email обязателен");
+                    Assert.IsFalse(result.IsValid);
+                    _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+                }
+            }
+
         }
 }
 
