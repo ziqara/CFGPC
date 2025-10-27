@@ -86,6 +86,26 @@ namespace DDMTests
                                       )), Times.Once);
             }
 
+            // Обязательность name — пустое/пробелы
+            [TestMethod]
+            public void AddSupplier_EmptyOrWhitespaceName_ShouldFail_WithRequiredMessage()
+            {
+                foreach (var badName in new[] { "", "   " })
+                {
+                    var dto = new SupplierDto
+                    {
+                        Name = badName,
+                        ContactEmail = "valid@example.com"
+                    };
+
+                    var result = _service.AddSupplier(dto);
+
+                    CollectionAssert.Contains(result.Errors, "Название обязательно");
+                    Assert.IsFalse(result.IsValid);
+                    _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+                }
+            }
+
         }
 }
 
