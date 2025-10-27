@@ -23,7 +23,7 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void GetUserProfile_WithValidEmail_ReturnsUserProfile()
+        public void TestGetUserProfile_WithValidEmail_ReturnsUserProfile()
         {
             var email = "user1@example.com";
             var mockUser = new User
@@ -43,6 +43,25 @@ namespace DDMTests
             Assert.AreEqual(mockUser.Phone, result.Phone);
             Assert.AreEqual(mockUser.Address, result.Address);
             _userRepoMock.Verify(repo => repo.FindByEmail(email), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestUpdateProfile_WithValidData_UpdatesProfileSuccessfully()
+        {
+            var email = "user1@example.com";
+            var fullName = "Иван Петрович";
+            var phone = "+79990000000";
+            var address = "г. Санкт-Петербург, Невский пр., 10";
+
+            var existingUser = new User { Email = email };
+            _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
+            _userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>())).Returns(true);
+
+            var result = _accountService.UpdateProfile(email, fullName, phone, address);
+
+            Assert.AreEqual("Профиль обновлён", result);
+            _userRepoMock.Verify(repo => repo.UpdateProfile(It.Is<User>(u =>
+                u.FullName == fullName && u.Phone == phone && u.Address == address)), Times.Once);
         }
 
     }
