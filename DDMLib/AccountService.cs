@@ -27,5 +27,10 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public string DeleteConfiguration(int configId, string userEmail)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
