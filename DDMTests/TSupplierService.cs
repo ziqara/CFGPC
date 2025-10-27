@@ -57,6 +57,34 @@ namespace DDMTests
                                 s.Address == null
                                 )), Times.Once);
             }
+            // --- Корректные данные (все поля)
+            [TestMethod]
+            public void AddSupplier_AllFieldsValid_ShouldPass_And_Save()
+            {
+                var dto = new SupplierDto
+                {
+                Name = "ИП Васильев",
+                ContactEmail = "supply@vasiliev.biz",
+                Phone = "+7 (999) 123-45-67",
+                Address = "г. Москва, ул. Примерная, д. 1"
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail(dto.ContactEmail)).Returns(false);
+                _repoMock.Setup(r => r.ExistsByNameInsensitive(dto.Name)).Returns(false);
+                _repoMock.Setup(r => r.Save(It.IsAny<Supplier>()))
+                                      .Returns<Supplier>(s => s);
+
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsTrue(result.IsValid);
+                Assert.AreEqual(0, result.Errors.Count);
+                _repoMock.Verify(r => r.Save(It.Is<Supplier>(s =>
+                                      s.Name == dto.Name &&
+                                      s.ContactEmail == dto.ContactEmail &&
+                                      s.Phone == dto.Phone &&
+                                      s.Address == dto.Address
+                                      )), Times.Once);
+            }
 
         }
 }
