@@ -105,6 +105,7 @@ namespace DDMTests
                     _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
                 }
             }
+
             // Граница длины name — 191 валидно
             [TestMethod]
             public void AddSupplier_NameLength191_ShouldPass()
@@ -125,6 +126,23 @@ namespace DDMTests
                 Assert.IsTrue(result.IsValid);
                 Assert.AreEqual(0, result.Errors.Count);
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
+            }
+
+            // Длина name > 191 (невалидно)
+            [TestMethod]
+            public void AddSupplier_NameLength192_ShouldFail_LengthValidation()
+            {
+                var dto = new SupplierDto
+                {
+                Name = MakeString(192),
+                ContactEmail = "valid@example.com"
+                };
+
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsFalse(result.IsValid);
+                Assert.IsTrue(result.Errors.Exists(e => e.Contains("длина") || e.Contains("Превышена")));
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
         }
