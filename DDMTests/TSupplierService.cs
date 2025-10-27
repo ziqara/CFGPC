@@ -285,6 +285,24 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
+            // Телефон — слишком много цифр
+            [TestMethod]
+            public void AddSupplier_PhoneTooManyDigits_ShouldFail()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ООО Длинный",
+                    ContactEmail = "ok@example.com",
+                    Phone = "+999 (123) 456 789 012 345"
+                };
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Некорректный номер телефона");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
 
 }
