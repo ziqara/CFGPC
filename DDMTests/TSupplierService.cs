@@ -303,6 +303,29 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
+            // Адрес — произвольный текст
+            [TestMethod]
+            public void AddSupplier_AddressFreeText_ShouldPass()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "ООО Адрес",
+                    ContactEmail = "ok@example.com",
+                    Address = "Санкт-Петербург, Невский пр., д. 1, лит. А, офис 12"
+                };
+
+                _repoMock.Setup(r => r.ExistsByEmail(dto.ContactEmail)).Returns(false);
+                _repoMock.Setup(r => r.ExistsByNameInsensitive(dto.Name)).Returns(false);
+                _repoMock.Setup(r => r.Save(It.IsAny<Supplier>()))
+                                      .Returns<Supplier>(s => s);
+
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsTrue(result.IsValid);
+                Assert.AreEqual(0, result.Errors.Count);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Once);
+            }
+
         }
 
 }
