@@ -169,5 +169,22 @@ namespace DDMTests
 
             Assert.AreEqual(0, result.Count);
         }
+
+        [TestMethod]
+        public void TestDeleteConfiguration_WithNoRelatedOrders_DeletesSuccessfully()
+        {
+            var configId = 10;
+            var userEmail = "user1@example.com";
+            var config = new ConfigurationCard { ConfigId = configId, UserEmail = userEmail };
+
+            _configRepoMock.Setup(repo => repo.GetConfigurationById(configId)).Returns(config);
+            _configRepoMock.Setup(repo => repo.HasRelatedOrders(configId)).Returns(false);
+            _configRepoMock.Setup(repo => repo.DeleteConfiguration(configId, userEmail)).Returns(true);
+
+            var result = _accountService.DeleteConfiguration(configId, userEmail);
+
+            Assert.AreEqual("Сборка удалена", result);
+            _configRepoMock.Verify(repo => repo.DeleteConfiguration(configId, userEmail), Times.Once);
+        }
     }
 }
