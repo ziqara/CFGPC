@@ -346,7 +346,26 @@ namespace DDMTests
                 _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
             }
 
-        }
+            // Агрегация ошибок (мульти-ошибки)
+            [TestMethod]
+            public void AddSupplier_MultipleErrors_ShouldAggregateAll()
+            {
+                var dto = new SupplierDto
+                {
+                    Name = "",
+                    ContactEmail = "bad@@example",
+                    Phone = "invalid###"
+                };
 
+                var result = _service.AddSupplier(dto);
+
+                Assert.IsFalse(result.IsValid);
+                CollectionAssert.Contains(result.Errors, "Название обязательно");
+                CollectionAssert.Contains(result.Errors, "Некорректный email");
+                CollectionAssert.Contains(result.Errors, "Некорректный номер телефона");
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
+        }
 }
 
