@@ -14,16 +14,12 @@ namespace DDMTests
     {
         private Mock<IUserRepository> _userRepoMock;
         private AccountService _accountService;
-        private Mock<IConfigurationRepository> _configRepoMock;
-        private Mock<IOrderRepository> _orderRepoMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _userRepoMock = new Mock<IUserRepository>();
             _accountService = new AccountService();
-            _configRepoMock = new Mock<IConfigurationRepository>();
-            _orderRepoMock = new Mock<IOrderRepository>();
         }
 
         [TestMethod]
@@ -138,93 +134,6 @@ namespace DDMTests
 
             Assert.AreEqual("Пароли не совпадают", result);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void TestGetUserConfigurations_WithExistingConfigs_ReturnsUserConfigurations()
-        {
-            var email = "user1@example.com";
-            var mockConfigs = new List<ConfigurationCard>
-            {
-                new ConfigurationCard { ConfigId = 10, ConfigName = "Gaming #1", Status = "draft", TotalPrice = 125000.00m, UserEmail = email },
-                new ConfigurationCard { ConfigId = 11, ConfigName = "Workstation", Status = "validated", TotalPrice = 210000.00m, UserEmail = email }
-            };
-            _configRepoMock.Setup(repo => repo.GetUserConfigurations(email)).Returns(mockConfigs);
-
-            var result = _accountService.GetUserConfigurations(email);
-
-            Assert.AreEqual(2, result.Count);
-            foreach (var config in result)
-            {
-                Assert.AreEqual(email, config.UserEmail);
-            }
-            _configRepoMock.Verify(repo => repo.GetUserConfigurations(email), Times.Once);
-        }
-
-        [TestMethod]
-        public void TestGetUserConfigurations_WithNoConfigs_ReturnsEmptyList()
-        {
-            var email = "user1@example.com";
-            _configRepoMock.Setup(repo => repo.GetUserConfigurations(email)).Returns(new List<ConfigurationCard>());
-
-            var result = _accountService.GetUserConfigurations(email);
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void TestDeleteConfiguration_WithNoRelatedOrders_DeletesSuccessfully()
-        {
-            var configId = 10;
-            var userEmail = "user1@example.com";
-            var config = new ConfigurationCard { ConfigId = configId, UserEmail = userEmail };
-
-            _configRepoMock.Setup(repo => repo.GetConfigurationById(configId)).Returns(config);
-            _configRepoMock.Setup(repo => repo.HasRelatedOrders(configId)).Returns(false);
-            _configRepoMock.Setup(repo => repo.DeleteConfiguration(configId, userEmail)).Returns(true);
-
-            var result = _accountService.DeleteConfiguration(configId, userEmail);
-
-            Assert.AreEqual("Сборка удалена", result);
-            _configRepoMock.Verify(repo => repo.DeleteConfiguration(configId, userEmail), Times.Once);
-        }
-
-        [TestMethod]
-        public void TestDeleteConfiguration_WithRelatedOrders_ReturnsError()
-        {
-            var configId = 11;
-            var userEmail = "user1@example.com";
-            var config = new ConfigurationCard { ConfigId = configId, UserEmail = userEmail };
-
-            _configRepoMock.Setup(repo => repo.GetConfigurationById(configId)).Returns(config);
-            _configRepoMock.Setup(repo => repo.HasRelatedOrders(configId)).Returns(true);
-
-            var result = _accountService.DeleteConfiguration(configId, userEmail);
-
-            Assert.AreEqual("Вы не можете удалить данную сборку, так как на неё оформлен заказ", result);
-            _configRepoMock.Verify(repo => repo.DeleteConfiguration(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void TestGetUserOrders_WithExistingOrders_ReturnsUserOrders()
-        {
-            var email = "user1@example.com";
-            var mockOrders = new List<OrderCard>
-            {
-                new OrderCard { OrderId = 1, UserEmail = email, Status = "pending", TotalPrice = 125000.00m },
-                new OrderCard { OrderId = 2, UserEmail = email, Status = "processing", TotalPrice = 210000.00m },
-                new OrderCard { OrderId = 3, UserEmail = email, Status = "completed", TotalPrice = 180000.00m }
-            };
-            _orderRepoMock.Setup(repo => repo.GetUserOrders(email)).Returns(mockOrders);
-
-            var result = _accountService.GetUserOrders(email);
-
-            Assert.AreEqual(3, result.Count);
-            foreach (var order in result)
-            {
-                Assert.AreEqual(email, order.UserEmail);
-            }
-            _orderRepoMock.Verify(repo => repo.GetUserOrders(email), Times.Once);
         }
     }
 }

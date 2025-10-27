@@ -22,20 +22,5 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
-
-        public List<ConfigurationCard> GetUserConfigurations(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string DeleteConfiguration(int configId, string userEmail)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<OrderCard> GetUserOrders(string email)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
