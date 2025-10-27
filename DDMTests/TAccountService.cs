@@ -14,12 +14,14 @@ namespace DDMTests
     {
         private Mock<IUserRepository> _userRepoMock;
         private AccountService _accountService;
+        private Mock<IConfigurationRepository> _configRepoMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _userRepoMock = new Mock<IUserRepository>();
             _accountService = new AccountService();
+            _configRepoMock = new Mock<IConfigurationRepository>();
         }
 
         [TestMethod]
@@ -134,6 +136,27 @@ namespace DDMTests
 
             Assert.AreEqual("Пароли не совпадают", result);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestGetUserConfigurations_WithExistingConfigs_ReturnsUserConfigurations()
+        {
+            var email = "user1@example.com";
+            var mockConfigs = new List<ConfigurationCard>
+            {
+                new ConfigurationCard { ConfigId = 10, ConfigName = "Gaming #1", Status = "draft", TotalPrice = 125000.00m, UserEmail = email },
+                new ConfigurationCard { ConfigId = 11, ConfigName = "Workstation", Status = "validated", TotalPrice = 210000.00m, UserEmail = email }
+            };
+            _configRepoMock.Setup(repo => repo.GetUserConfigurations(email)).Returns(mockConfigs);
+
+            var result = _accountService.GetUserConfigurations(email);
+
+            Assert.AreEqual(2, result.Count);
+            foreach (var config in result)
+            {
+                Assert.AreEqual(email, config.UserEmail);
+            }
+            _configRepoMock.Verify(repo => repo.GetUserConfigurations(email), Times.Once);
         }
     }
 }
