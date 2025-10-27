@@ -165,6 +165,23 @@ namespace DDMTests
                 }
             }
 
+            // Некорректный email (формат)
+            [TestMethod]
+            public void AddSupplier_InvalidEmailFormat_ShouldFail_WithInvalidEmailMessage()
+            {
+                var dto = new SupplierDto
+                {
+                Name = "ООО Тест",
+                ContactEmail = "ivan@@example"
+                };
+
+                var result = _service.AddSupplier(dto);
+
+                CollectionAssert.Contains(result.Errors, "Некорректный email");
+                Assert.IsFalse(result.IsValid);
+                _repoMock.Verify(r => r.Save(It.IsAny<Supplier>()), Times.Never);
+            }
+
         }
 }
 
