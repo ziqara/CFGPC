@@ -110,6 +110,8 @@ namespace DDMTests
             var newPassword = "BetterP4ss!";
             var repeatPassword = "BetterP4ss!";
 
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email, Password = "hashed_old_password" };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             _userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
@@ -118,6 +120,8 @@ namespace DDMTests
             var result = _accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
 
             Assert.AreEqual("Пароль обновлён", result);
+            _sessionManagerMock.Verify(sm => sm.IsUserAuthenticated(), Times.Once);
+            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(user, newPassword), Times.Once);
         }
 
