@@ -52,6 +52,20 @@ namespace DDMTests
         }
 
         [TestMethod]
+        public void TestGetUserProfile_WithInvalidSession_ReturnsNull()
+        {
+            var email = "user1@example.com";
+            _sessionManagerMock.Setup(sm => sm.ValidateSession()).Returns(false);
+
+            var result = _accountService.GetUserProfile(email);
+
+            Assert.IsNull(result);
+            _sessionManagerMock.Verify(sm => sm.ValidateSession(), Times.Once);
+            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Never);
+            _userRepoMock.Verify(repo => repo.FindByEmail(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
         public void TestUpdateProfile_WithValidData_UpdatesProfileSuccessfully()
         {
             var email = "user1@example.com";
