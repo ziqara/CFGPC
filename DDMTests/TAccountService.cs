@@ -161,12 +161,15 @@ namespace DDMTests
         public void TestChangePassword_WithMismatchedPasswords_ReturnsError()
         {
             var email = "user1@example.com";
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
 
             var result = _accountService.ChangePassword(email, "OldPassw0rd!", "BetterP4ss!", "DifferentP4ss!");
 
             Assert.AreEqual("Пароли не совпадают", result);
+            _userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
         }
     }
