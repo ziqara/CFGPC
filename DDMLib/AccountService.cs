@@ -22,5 +22,10 @@ namespace DDMLib
         {
             throw new NotImplementedException();
         }
+
+        public void Logout()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
