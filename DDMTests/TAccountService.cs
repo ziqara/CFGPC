@@ -129,6 +129,8 @@ namespace DDMTests
         public void TestChangePassword_WithWrongCurrentPassword_ReturnsError()
         {
             var email = "user1@example.com";
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             _userRepoMock.Setup(repo => repo.VerifyPassword(user, It.IsAny<string>())).Returns(false);
