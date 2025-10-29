@@ -145,13 +145,15 @@ namespace DDMTests
         public void TestChangePassword_WithWeakNewPassword_ReturnsError()
         {
             var email = "user1@example.com";
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
-            _userRepoMock.Setup(repo => repo.VerifyPassword(user, It.IsAny<string>())).Returns(true);
 
             var result = _accountService.ChangePassword(email, "OldPassw0rd!", "12345", "12345");
 
-            Assert.AreEqual("Пароль недостаточно надёжный (минимум 6 символов)", result);
+            Assert.AreEqual("Пароль недостаточно надёжный (минимум 6 символов, буквы и цифры)", result);
+            _userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
         }
 
