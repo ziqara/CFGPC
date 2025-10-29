@@ -84,7 +84,7 @@ public class SuppliersDisplayTests
     public void Load_NullAndEmptyOptionalFields_ShouldPassValuesAsIs()
     {
         var data = new List<Supplier>
-     {
+        {
             new Supplier
             {
                 SupplierId = 3,
@@ -101,7 +101,7 @@ public class SuppliersDisplayTests
                 Phone = "",
                 Address = ""
             }
-     };
+        };
         _repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
 
         List<Supplier> shown = null;
@@ -118,5 +118,40 @@ public class SuppliersDisplayTests
 
         Assert.AreEqual("", shown[1].Phone);
         Assert.AreEqual("", shown[1].Address);
+    }
+
+    [TestMethod]
+    public void Load_LongAddress_ShouldPassFullAddress_AndShowTooltipOnHover()
+    {
+        var addr = "г. Санкт-Петербург, пр. Тестовый, д. 123, корп. 4, офис 56, этаж 8, помещение 12";
+        var data = new List<Supplier>
+        {
+            new Supplier
+            {
+                SupplierId = 5,
+                Name = "ООО ДлинныйАдрес",
+                ContactEmail = "long@example.com",
+                Phone = "+7 (900) 000-00-00",
+                Address = addr
+            }
+        };
+
+        _repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
+
+        List<Supplier> shown = null;
+        _view.Setup(v => v.ShowTable(It.IsAny<List<Supplier>>()))
+             .Callback<List<Supplier>>(l => shown = l);
+        _view.Setup(v => v.ShowAddressTooltip(It.IsAny<string>()));
+
+        _presenter.Load();
+
+        // Проверяем, что адрес в UI передан
+        Assert.IsNotNull(shown, "Ожидали список для отображения");
+        Assert.AreEqual(1, shown.Count);
+        Assert.AreEqual(addr, shown[0].Address);
+
+        // Имитация наведения на адрес
+        _presenter.OnAddressHover(addr);
+        _view.Verify(v => v.ShowAddressTooltip(addr), Times.Once);
     }
 }
