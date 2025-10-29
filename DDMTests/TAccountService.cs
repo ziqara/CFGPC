@@ -73,6 +73,8 @@ namespace DDMTests
             var phone = "+79990000000";
             var address = "г. Санкт-Петербург, Невский пр., 10";
 
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var existingUser = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
             _userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>())).Returns(true);
@@ -80,6 +82,8 @@ namespace DDMTests
             var result = _accountService.UpdateProfile(email, fullName, phone, address);
 
             Assert.AreEqual("Профиль обновлён", result);
+            _sessionManagerMock.Verify(sm => sm.IsUserAuthenticated(), Times.Once);
+            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.UpdateProfile(It.Is<User>(u =>
                 u.FullName == fullName && u.Phone == phone && u.Address == address)), Times.Once);
         }
