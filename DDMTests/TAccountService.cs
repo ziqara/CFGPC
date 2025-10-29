@@ -93,6 +93,8 @@ namespace DDMTests
         {
             var email = "user1@example.com";
             var longName = new string('a', 256);
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
 
             var result = _accountService.UpdateProfile(email, longName, "+79991234567", "г. Москва");
 
