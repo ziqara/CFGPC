@@ -68,4 +68,15 @@ public class SuppliersDisplayTests
         Assert.IsNull(shown[1].Phone);
         Assert.IsNull(shown[1].Address);
     }
+
+    [TestMethod]
+    public void Load_EmptyList_ShouldShowEmptyState()
+    {
+        _repo.Setup(r => r.ReadAllSuppliers()).Returns(new List<Supplier>());
+
+        _presenter.Load();
+
+        _view.Verify(v => v.ShowEmpty(), Times.Once);
+        _view.Verify(v => v.ShowError(It.IsAny<string>()), Times.Never);
+    }
 }
