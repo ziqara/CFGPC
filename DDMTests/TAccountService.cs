@@ -172,5 +172,15 @@ namespace DDMTests
             _userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
         }
+
+        [TestMethod]
+        public void Logout_WithValidSession_InvalidatesSession()
+        {
+            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
+
+            _accountService.Logout();
+
+            _sessionManagerMock.Verify(sm => sm.InvalidateSession(), Times.Once);
+        }
     }
 }
