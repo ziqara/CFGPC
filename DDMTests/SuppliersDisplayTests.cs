@@ -79,4 +79,44 @@ public class SuppliersDisplayTests
         _view.Verify(v => v.ShowEmpty(), Times.Once);
         _view.Verify(v => v.ShowError(It.IsAny<string>()), Times.Never);
     }
+
+    [TestMethod]
+    public void Load_NullAndEmptyOptionalFields_ShouldPassValuesAsIs()
+    {
+        var data = new List<Supplier>
+     {
+            new Supplier
+            {
+                SupplierId = 3,
+                Name = "ООО ПустоNull",
+                ContactEmail = "null@example.com",
+                Phone = null,
+                Address = null
+            },
+            new Supplier
+            {
+                SupplierId = 4,
+                Name = "ООО ПустоStr",
+                ContactEmail = "empty@example.com",
+                Phone = "",
+                Address = ""
+            }
+     };
+        _repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
+
+        List<Supplier> shown = null;
+        _view.Setup(v => v.ShowTable(It.IsAny<List<Supplier>>()))
+             .Callback<List<Supplier>>(l => shown = l);
+
+        _presenter.Load();
+
+        Assert.IsNotNull(shown, "Ожидали список для отображения");
+        Assert.AreEqual(2, shown.Count);
+
+        Assert.IsNull(shown[0].Phone);
+        Assert.IsNull(shown[0].Address);
+
+        Assert.AreEqual("", shown[1].Phone);
+        Assert.AreEqual("", shown[1].Address);
+    }
 }
