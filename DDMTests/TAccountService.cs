@@ -14,12 +14,14 @@ namespace DDMTests
     {
         private Mock<IUserRepository> _userRepoMock;
         private AccountService _accountService;
+        private Mock<ISessionManager> _sessionManagerMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _userRepoMock = new Mock<IUserRepository>();
             _accountService = new AccountService();
+            _sessionManagerMock = new Mock<ISessionManager>();
         }
 
         [TestMethod]
@@ -33,6 +35,8 @@ namespace DDMTests
                 Phone = "+79991234567",
                 Address = "г. Москва, ул. Арбат, 1"
             };
+            _sessionManagerMock.Setup(sm => sm.ValidateSession()).Returns(true);
+            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(mockUser);
 
             var result = _accountService.GetUserProfile(email);
@@ -42,6 +46,8 @@ namespace DDMTests
             Assert.AreEqual(mockUser.FullName, result.FullName);
             Assert.AreEqual(mockUser.Phone, result.Phone);
             Assert.AreEqual(mockUser.Address, result.Address);
+            _sessionManagerMock.Verify(sm => sm.ValidateSession(), Times.Once);
+            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.FindByEmail(email), Times.Once);
         }
 
