@@ -49,7 +49,7 @@ namespace DDMTests
 
             User existingUser = new User { Email = email };
             userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
-            userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>())).Returns(true);
+
 
             string result = accountService.UpdateProfile(email, fullName, phone, address);
 
