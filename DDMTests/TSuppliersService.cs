@@ -69,5 +69,35 @@ namespace DDMTests
 
             repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
         }
+
+        [TestMethod]
+        public void GetAllSuppliers_SingleRecord_ReturnsExactSingleRow()
+        {
+            // Arrange
+            var repo = new Mock<ISupplierRepository>();
+            var service = new SupplierService(repo.Object);
+
+            List<Supplier> data = new List<Supplier>
+            {
+            new Supplier { Inn=123456789, Name="ООО Альфа", ContactEmail="alpha.supply@example.com",
+                           Phone="+7 (999) 123-45-67", Address="г. Москва, ул. Примерная, д. 1" }
+            };
+
+            repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
+
+            // Act
+            var result = service.GetAllSuppliers();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(123456789, result[0].Inn);
+            Assert.AreEqual("ООО Альфа", result[0].Name);
+            Assert.AreEqual("alpha.supply@example.com", result[0].ContactEmail);
+            Assert.AreEqual("+7 (999) 123-45-67", result[0].Phone);
+            Assert.AreEqual("г. Москва, ул. Примерная, д. 1", result[0].Address);
+
+            repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
+        }
     }
 }
