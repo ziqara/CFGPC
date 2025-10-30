@@ -17,5 +17,10 @@ namespace DDMLib
 
             _repo = repo;
         }
+
+        public List<Supplier> GetAllSuppliers()
+        {
+            return _repo.ReadAllSuppliers();
+        }
     }
 }
