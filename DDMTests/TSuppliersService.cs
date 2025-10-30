@@ -99,5 +99,53 @@ namespace DDMTests
 
             repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
         }
+
+        [TestMethod]
+        public void GetAllSuppliers_MultipleRecords_KeepsOrder_AndExactValues()
+        {
+            // Arrange
+            var repo = new Mock<ISupplierRepository>();
+            var service = new SupplierService(repo.Object);
+
+            List<Supplier> data = new List<Supplier>
+            {
+                new Supplier { Inn=111111111, Name="ООО Бета", ContactEmail="beta@example.com",
+                           Phone="+7 (900) 000-00-01", Address="г. Казань, ул. Примерная, д. 5" },
+                new Supplier { Inn=222222222, Name="ИП Васильев", ContactEmail="supply@vasiliev.biz",
+                           Phone=null, Address="" },
+                new Supplier { Inn=333333333, Name="ООО Гамма", ContactEmail="gamma@example.com",
+                           Phone="+7 (495) 111-22-33", Address="г. Москва, пр. Тестовый, д. 2" }
+            };
+
+            repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
+
+            // Act
+            var result = service.GetAllSuppliers();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+
+            // №1
+            Assert.AreEqual(111111111, result[0].Inn);
+            Assert.AreEqual("ООО Бета", result[0].Name);
+            Assert.AreEqual("beta@example.com", result[0].ContactEmail);
+
+            // №2
+            Assert.AreEqual(222222222, result[1].Inn);
+            Assert.AreEqual("ИП Васильев", result[1].Name);
+            Assert.AreEqual("supply@vasiliev.biz", result[1].ContactEmail);
+            Assert.IsNull(result[1].Phone);
+            Assert.AreEqual("", result[1].Address);
+
+            // №3
+            Assert.AreEqual(333333333, result[2].Inn);
+            Assert.AreEqual("ООО Гамма", result[2].Name);
+            Assert.AreEqual("gamma@example.com", result[2].ContactEmail);
+            Assert.AreEqual("+7 (495) 111-22-33", result[2].Phone);
+            Assert.AreEqual("г. Москва, пр. Тестовый, д. 2", result[2].Address);
+
+            repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
+        }
     }
 }
