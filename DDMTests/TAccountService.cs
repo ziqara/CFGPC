@@ -121,15 +121,36 @@ namespace DDMTests
             string newPassword = "BetterP4ss!";
             string repeatPassword = "BetterP4ss!";
 
-            User user = new User { Email = email, Password = "hashed_old_password" };
+            User user = new User
+            {
+                Email = email,
+                Password = "hashed_old_password",
+                FullName = "Иван Петров",
+                Phone = "+79991234567"
+            };
+
             userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
-            userRepoMock.Setup(repo => repo.UpdatePasswordHash(email, newPassword)).Returns(true);
+
+            string newPasswordHash = null;
+            userRepoMock.Setup(repo => repo.UpdatePasswordHash(email, newPassword))
+                        .Callback<string, string>((userEmail, password) =>
+                        {
+                            newPasswordHash = password;
+                            user.Password = password;
+                        })
+                        .Returns(true);
 
             string result = accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
 
             Assert.AreEqual("Пароль обновлён", result);
+
             userRepoMock.Verify(repo => repo.UpdatePasswordHash(email, newPassword), Times.Once);
+
+            Assert.IsNotNull(newPasswordHash);
+            Assert.AreEqual(newPassword, newPasswordHash);
+
+            Assert.AreEqual(newPassword, user.Password);
         }
 
         [TestMethod]
