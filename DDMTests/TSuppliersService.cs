@@ -10,7 +10,7 @@ using Moq;
 namespace DDMTests
 {
     [TestClass]
-    public class SuppliersServiceOnlyTests
+    public class TSuppliersService
     {
         [TestMethod]
         public void GetAllSuppliers_EmptyList_ReturnsEmptyModel()
