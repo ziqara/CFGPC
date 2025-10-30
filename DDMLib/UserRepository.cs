@@ -108,7 +108,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public bool UpdatePasswordHash(User user, string newPassword)
+    public bool UpdatePasswordHash(string email, string newPassword)
     {
         throw new NotImplementedException();
     }

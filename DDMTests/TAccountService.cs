@@ -85,12 +85,12 @@ namespace DDMTests
             User user = new User { Email = email, Password = "hashed_old_password" };
             userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
-            userRepoMock.Setup(repo => repo.UpdatePasswordHash(user, newPassword)).Returns(true);
+            userRepoMock.Setup(repo => repo.UpdatePasswordHash(email, newPassword)).Returns(true);
 
             string result = accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
 
             Assert.AreEqual("Пароль обновлён", result);
-            userRepoMock.Verify(repo => repo.UpdatePasswordHash(user, newPassword), Times.Once);
+            userRepoMock.Verify(repo => repo.UpdatePasswordHash(email, newPassword), Times.Once);
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace DDMTests
             string result = accountService.ChangePassword(email, "WrongPass!", "BetterP4ss!", "BetterP4ss!");
 
             Assert.AreEqual("Неверный пароль", result);
-            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace DDMTests
 
             Assert.AreEqual("Пароль недостаточно надёжный (минимум 6 символов, буквы и цифры)", result);
             userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
-            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace DDMTests
 
             Assert.AreEqual("Пароли не совпадают", result);
             userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
-            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }
