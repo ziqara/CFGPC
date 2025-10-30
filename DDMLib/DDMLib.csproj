@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
+    <Compile Include="ISupplierRepository.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="User.cs" />
