@@ -121,6 +121,7 @@
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="ISupplierRepository.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="MySqlSupplierRepository.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="SupplierService.cs" />
     <Compile Include="User.cs" />
