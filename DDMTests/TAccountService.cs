@@ -98,20 +98,6 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void TestUpdateProfile_WithTooLongFullName_ReturnsValidationError()
-        {
-            Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
-            string email = "user1@example.com";
-            string longName = new string('a', 256);
-
-            string result = accountService.UpdateProfile(email, longName, "+79991234567", "г. Москва");
-
-            Assert.AreEqual("Превышена допустимая длина ФИО (≤ 255)", result);
-            userRepoMock.Verify(repo => repo.UpdateProfile(It.IsAny<User>()), Times.Never);
-        }
-
-        [TestMethod]
         public void TestChangePassword_WithValidData_ChangesPasswordSuccessfully()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
@@ -199,6 +185,38 @@ namespace DDMTests
             Assert.AreEqual("Пароли не совпадают", result);
             userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
             userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        [DataRow(null, "+79991234567", "г. Москва", "ФИО не может быть пустым")]
+        [DataRow("", "+79991234567", "г. Москва", "ФИО не может быть пустым")]
+        [DataRow("   ", "+79991234567", "г. Москва", "ФИО не может быть пустым")]
+        [DataRow("Очень длинное имя которое превышает допустимую длину в двести пятьдесят пять символов и должно вызвать ошибку валидации потому что " +
+            "это слишком длинная строка для поля ФИО в нашей системе и мы должны ограничивать его размер для корректной работы базы данных и " +
+            "пользовательского интерфейса", "+79991234567", "г. Москва", "Превышена допустимая длина ФИО (≤ 255)")]
+        [DataRow("Иван Петров", "invalid_phone", "г. Москва", "Неверный формат телефона. Пример: +7 (999) 123-45-67")]
+        [DataRow("Иван Петров", "123", "г. Москва", "Неверный формат телефона. Пример: +7 (999) 123-45-67")]
+        public void TestUpdateProfile_WithInvalidData_ReturnsValidationErrors(string fullName, string phone, string address, string expectedError)
+        {
+            Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
+            AccountService accountService = new AccountService();
+
+            string email = "user1@example.com";
+
+            User existingUser = new User
+            {
+                Email = email,
+                FullName = "Иван Петров",
+                Phone = "+79991234567",
+                Address = "г. Москва, ул. Арбат, 1"
+            };
+
+            userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
+
+            string result = accountService.UpdateProfile(email, fullName, phone, address);
+
+            Assert.AreEqual(expectedError, result);
+            userRepoMock.Verify(repo => repo.UpdateProfile(It.IsAny<User>()), Times.Never);
         }
     }
 }
