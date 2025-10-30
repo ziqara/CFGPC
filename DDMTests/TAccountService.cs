@@ -70,15 +70,31 @@ namespace DDMTests
             string phone = "+79990000000";
             string address = "г. Санкт-Петербург, Невский пр., 10";
 
-            User existingUser = new User { Email = email };
+            User existingUser = new User
+            {
+                Email = email,
+                FullName = "Иван Петров", 
+                Phone = "+79991234567",   
+                Address = "г. Москва, ул. Арбат, 1" 
+            };
+
             userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
 
+            User updatedUser = null;
+            userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>()))
+                        .Callback<User>(user => updatedUser = user);
 
             string result = accountService.UpdateProfile(email, fullName, phone, address);
 
             Assert.AreEqual("Профиль обновлён", result);
-            userRepoMock.Verify(repo => repo.UpdateProfile(It.Is<User>(u =>
-                u.FullName == fullName && u.Phone == phone && u.Address == address)), Times.Once);
+
+            userRepoMock.Verify(repo => repo.UpdateProfile(It.IsAny<User>()), Times.Once);
+
+            Assert.IsNotNull(updatedUser);
+            Assert.AreEqual(email, updatedUser.Email);
+            Assert.AreEqual(fullName, updatedUser.FullName);
+            Assert.AreEqual(phone, updatedUser.Phone);
+            Assert.AreEqual(address, updatedUser.Address);
         }
 
         [TestMethod]
