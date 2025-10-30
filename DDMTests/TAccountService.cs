@@ -18,22 +18,45 @@ namespace DDMTests
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
             AccountService accountService = new AccountService();
             string email = "user1@example.com";
-            User mockUser = new User
-            {
-                Email = email,
-                FullName = "Иван Петров",
-                Phone = "+79991234567",
-                Address = "г. Москва, ул. Арбат, 1"
-            };
-            userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(mockUser);
+
+            userRepoMock.Setup(repo => repo.FindByEmail("user1@example.com"))
+                        .Returns(new User
+                        {
+                            Email = "user1@example.com",
+                            FullName = "Иван Петров",
+                            Phone = "+79991234567",
+                            Address = "г. Москва, ул. Арбат, 1"
+                        });
+
+            userRepoMock.Setup(repo => repo.FindByEmail("user2@example.com"))
+                        .Returns(new User
+                        {
+                            Email = "user2@example.com",
+                            FullName = "Петр Сидоров",
+                            Phone = "+79997654321",
+                            Address = "г. Санкт-Петербург, Невский пр., 10"
+                        });
+
+            userRepoMock.Setup(repo => repo.FindByEmail("user3@example.com"))
+                        .Returns(new User
+                        {
+                            Email = "user3@example.com",
+                            FullName = "Мария Иванова",
+                            Phone = "+79995554433",
+                            Address = "г. Казань, ул. Баумана, 5"
+                        });
+
+            userRepoMock.Setup(repo => repo.FindByEmail(It.Is<string>(e =>
+                e != "user1@example.com" && e != "user2@example.com" && e != "user3@example.com")))
+                        .Returns((User)null);
 
             User result = accountService.GetUserProfile(email);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(mockUser.Email, result.Email);
-            Assert.AreEqual(mockUser.FullName, result.FullName);
-            Assert.AreEqual(mockUser.Phone, result.Phone);
-            Assert.AreEqual(mockUser.Address, result.Address);
+            Assert.AreEqual("user1@example.com", result.Email);
+            Assert.AreEqual("Иван Петров", result.FullName);
+            Assert.AreEqual("+79991234567", result.Phone);
+            Assert.AreEqual("г. Москва, ул. Арбат, 1", result.Address);
             userRepoMock.Verify(repo => repo.FindByEmail(email), Times.Once);
         }
 
