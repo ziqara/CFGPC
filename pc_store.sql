@@ -274,11 +274,14 @@ CREATE TABLE `storages` (
 --
 
 CREATE TABLE `suppliers` (
-  `supplier_id` int(11) NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci
+  `inn` INT(9) NOT NULL,
+  `name` VARCHAR(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_email` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` VARCHAR(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` TEXT COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`inn`),
+  UNIQUE KEY `uniq_email` (`contact_email`),
+  UNIQUE KEY `uniq_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
