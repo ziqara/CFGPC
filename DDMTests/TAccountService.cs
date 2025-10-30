@@ -14,14 +14,12 @@ namespace DDMTests
     {
         private Mock<IUserRepository> _userRepoMock;
         private AccountService _accountService;
-        private Mock<ISessionManager> _sessionManagerMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _userRepoMock = new Mock<IUserRepository>();
             _accountService = new AccountService();
-            _sessionManagerMock = new Mock<ISessionManager>();
         }
 
         [TestMethod]
@@ -35,8 +33,6 @@ namespace DDMTests
                 Phone = "+79991234567",
                 Address = "г. Москва, ул. Арбат, 1"
             };
-            _sessionManagerMock.Setup(sm => sm.ValidateSession()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(mockUser);
 
             var result = _accountService.GetUserProfile(email);
@@ -46,23 +42,7 @@ namespace DDMTests
             Assert.AreEqual(mockUser.FullName, result.FullName);
             Assert.AreEqual(mockUser.Phone, result.Phone);
             Assert.AreEqual(mockUser.Address, result.Address);
-            _sessionManagerMock.Verify(sm => sm.ValidateSession(), Times.Once);
-            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.FindByEmail(email), Times.Once);
-        }
-
-        [TestMethod]
-        public void TestGetUserProfile_WithInvalidSession_ReturnsNull()
-        {
-            var email = "user1@example.com";
-            _sessionManagerMock.Setup(sm => sm.ValidateSession()).Returns(false);
-
-            var result = _accountService.GetUserProfile(email);
-
-            Assert.IsNull(result);
-            _sessionManagerMock.Verify(sm => sm.ValidateSession(), Times.Once);
-            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Never);
-            _userRepoMock.Verify(repo => repo.FindByEmail(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -73,8 +53,6 @@ namespace DDMTests
             var phone = "+79990000000";
             var address = "г. Санкт-Петербург, Невский пр., 10";
 
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var existingUser = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
             _userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>())).Returns(true);
@@ -82,8 +60,6 @@ namespace DDMTests
             var result = _accountService.UpdateProfile(email, fullName, phone, address);
 
             Assert.AreEqual("Профиль обновлён", result);
-            _sessionManagerMock.Verify(sm => sm.IsUserAuthenticated(), Times.Once);
-            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.UpdateProfile(It.Is<User>(u =>
                 u.FullName == fullName && u.Phone == phone && u.Address == address)), Times.Once);
         }
@@ -93,8 +69,6 @@ namespace DDMTests
         {
             var email = "user1@example.com";
             var longName = new string('a', 256);
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
 
             var result = _accountService.UpdateProfile(email, longName, "+79991234567", "г. Москва");
 
@@ -110,8 +84,6 @@ namespace DDMTests
             var newPassword = "BetterP4ss!";
             var repeatPassword = "BetterP4ss!";
 
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email, Password = "hashed_old_password" };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             _userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
@@ -120,8 +92,6 @@ namespace DDMTests
             var result = _accountService.ChangePassword(email, currentPassword, newPassword, repeatPassword);
 
             Assert.AreEqual("Пароль обновлён", result);
-            _sessionManagerMock.Verify(sm => sm.IsUserAuthenticated(), Times.Once);
-            _sessionManagerMock.Verify(sm => sm.GetUserEmailFromSession(), Times.Once);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(user, newPassword), Times.Once);
         }
 
@@ -129,8 +99,6 @@ namespace DDMTests
         public void TestChangePassword_WithWrongCurrentPassword_ReturnsError()
         {
             var email = "user1@example.com";
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
             _userRepoMock.Setup(repo => repo.VerifyPassword(user, It.IsAny<string>())).Returns(false);
@@ -145,8 +113,6 @@ namespace DDMTests
         public void TestChangePassword_WithWeakNewPassword_ReturnsError()
         {
             var email = "user1@example.com";
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
 
@@ -161,8 +127,6 @@ namespace DDMTests
         public void TestChangePassword_WithMismatchedPasswords_ReturnsError()
         {
             var email = "user1@example.com";
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-            _sessionManagerMock.Setup(sm => sm.GetUserEmailFromSession()).Returns(email);
             var user = new User { Email = email };
             _userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
 
@@ -171,16 +135,6 @@ namespace DDMTests
             Assert.AreEqual("Пароли не совпадают", result);
             _userRepoMock.Verify(repo => repo.VerifyPassword(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
             _userRepoMock.Verify(repo => repo.UpdatePasswordHash(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void Logout_WithValidSession_InvalidatesSession()
-        {
-            _sessionManagerMock.Setup(sm => sm.IsUserAuthenticated()).Returns(true);
-
-            _accountService.Logout();
-
-            _sessionManagerMock.Verify(sm => sm.InvalidateSession(), Times.Once);
         }
     }
 }

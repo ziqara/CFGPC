@@ -120,7 +120,6 @@
     <Compile Include="AccountService.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
-    <Compile Include="ISessionManager.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
