@@ -114,6 +114,7 @@ namespace DDMTests
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
             AccountService accountService = new AccountService();
+
             string email = "user1@example.com";
             string currentPassword = "OldPassw0rd!";
             string newPassword = "BetterP4ss!";
@@ -127,14 +128,13 @@ namespace DDMTests
                 Phone = "+79991234567"
             };
 
-            userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(user);
+            userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(() => user);
+
             userRepoMock.Setup(repo => repo.VerifyPassword(user, currentPassword)).Returns(true);
 
-            string newPasswordHash = null;
             userRepoMock.Setup(repo => repo.UpdatePasswordHash(email, newPassword))
                         .Callback<string, string>((userEmail, password) =>
                         {
-                            newPasswordHash = password;
                             user.Password = password;
                         })
                         .Returns(true);
@@ -145,10 +145,13 @@ namespace DDMTests
 
             userRepoMock.Verify(repo => repo.UpdatePasswordHash(email, newPassword), Times.Once);
 
-            Assert.IsNotNull(newPasswordHash);
-            Assert.AreEqual(newPassword, newPasswordHash);
+            User updatedUser = userRepoMock.Object.FindByEmail(email);
+            Assert.IsNotNull(updatedUser);
+            Assert.AreEqual(newPassword, updatedUser.Password, "Пароль должен быть обновлен в репозитории");
 
-            Assert.AreEqual(newPassword, user.Password);
+            Assert.AreEqual("Иван Петров", updatedUser.FullName);
+            Assert.AreEqual("+79991234567", updatedUser.Phone);
+            Assert.AreEqual(email, updatedUser.Email);
         }
 
         [TestMethod]
