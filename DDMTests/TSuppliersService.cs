@@ -37,7 +37,11 @@ namespace DDMTests
             SupplierService service = new SupplierService(repo.Object);
             repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
 
+            List<Supplier> result = service.GetAllSuppliers();
 
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEqual(expected, result);
+            repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
 
         }
     }
