@@ -8,19 +8,16 @@ namespace DDMLib
 {
     public class SupplierService
     {
-        private readonly ISupplierRepository _repo;
+        private readonly ISupplierRepository repo_;
 
         public SupplierService(ISupplierRepository repo)
         {
-            if (repo == null)
-                throw new System.ArgumentNullException(nameof(repo));
-
-            _repo = repo;
+            repo_ = repo;
         }
 
         public List<Supplier> GetAllSuppliers()
         {
-            return _repo.ReadAllSuppliers();
+            return repo_.ReadAllSuppliers();
         }
     }
 }
