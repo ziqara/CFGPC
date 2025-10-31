@@ -33,6 +33,12 @@ namespace DDMTests
             }
             List<Supplier> expected = data;
 
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+            repo.Setup(r => r.ReadAllSuppliers()).Returns(data);
+
+
+
         }
     }
 }
