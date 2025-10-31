@@ -17,47 +17,59 @@ namespace DDMTests
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
             AccountService accountService = new AccountService();
-            string email = "user1@example.com";
 
-            userRepoMock.Setup(repo => repo.FindByEmail("user1@example.com"))
-                        .Returns(new User
-                        {
-                            Email = "user1@example.com",
-                            FullName = "Иван Петров",
-                            Phone = "+79991234567",
-                            Address = "г. Москва, ул. Арбат, 1"
-                        });
+            var testUsers = new[]
+            {
+                new User
+                {
+                    Email = "user1@example.com",
+                    FullName = "Иван Петров",
+                    Phone = "+79991234567",
+                    Address = "г. Москва, ул. Арбат, 1"
+                },
+                new User
+                {
+                    Email = "user2@example.com",
+                    FullName = "Петр Сидоров",
+                    Phone = "+79997654321",
+                    Address = "г. Санкт-Петербург, Невский пр., 10"
+                },
+                new User
+                {
+                    Email = "user3@example.com",
+                    FullName = "Мария Иванова",
+                    Phone = "+79995554433",
+                    Address = "г. Казань, ул. Баумана, 5"
+                }
+            };
 
-            userRepoMock.Setup(repo => repo.FindByEmail("user2@example.com"))
-                        .Returns(new User
-                        {
-                            Email = "user2@example.com",
-                            FullName = "Петр Сидоров",
-                            Phone = "+79997654321",
-                            Address = "г. Санкт-Петербург, Невский пр., 10"
-                        });
-
-            userRepoMock.Setup(repo => repo.FindByEmail("user3@example.com"))
-                        .Returns(new User
-                        {
-                            Email = "user3@example.com",
-                            FullName = "Мария Иванова",
-                            Phone = "+79995554433",
-                            Address = "г. Казань, ул. Баумана, 5"
-                        });
+            foreach (var user in testUsers)
+            {
+                userRepoMock.Setup(repo => repo.FindByEmail(user.Email)).Returns(user);
+            }
 
             userRepoMock.Setup(repo => repo.FindByEmail(It.Is<string>(e =>
-                e != "user1@example.com" && e != "user2@example.com" && e != "user3@example.com")))
+                !testUsers.Any(u => u.Email == e))))
                         .Returns((User)null);
 
-            User result = accountService.GetUserProfile(email);
+            foreach (var expectedUser in testUsers)
+            {
+                User result = accountService.GetUserProfile(expectedUser.Email);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual("user1@example.com", result.Email);
-            Assert.AreEqual("Иван Петров", result.FullName);
-            Assert.AreEqual("+79991234567", result.Phone);
-            Assert.AreEqual("г. Москва, ул. Арбат, 1", result.Address);
-            userRepoMock.Verify(repo => repo.FindByEmail(email), Times.Once);
+                Assert.IsNotNull(result, $"Пользователь {expectedUser.Email} не должен быть null");
+                Assert.AreEqual(expectedUser.Email, result.Email, $"Email пользователя {expectedUser.Email} не совпадает");
+                Assert.AreEqual(expectedUser.FullName, result.FullName, $"FullName пользователя {expectedUser.Email} не совпадает");
+                Assert.AreEqual(expectedUser.Phone, result.Phone, $"Phone пользователя {expectedUser.Email} не совпадает");
+                Assert.AreEqual(expectedUser.Address, result.Address, $"Address пользователя {expectedUser.Email} не совпадает");
+
+                userRepoMock.Verify(repo => repo.FindByEmail(expectedUser.Email), Times.Once,
+                    $"Метод FindByEmail должен быть вызван один раз для {expectedUser.Email}");
+            }
+
+            string nonExistentEmail = "nonexistent@example.com";
+            User nonExistentResult = accountService.GetUserProfile(nonExistentEmail);
+            Assert.IsNull(nonExistentResult, "Для несуществующего email должен возвращаться null");
+            userRepoMock.Verify(repo => repo.FindByEmail(nonExistentEmail), Times.Once);
         }
 
         [TestMethod]
