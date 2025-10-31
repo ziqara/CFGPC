@@ -19,6 +19,19 @@ namespace DDMTests
         [DataRow(new int[] { 111111111, 222222222, 333333333 }, new string[] { "ООО Бета", "ИП Васильев", "ООО Гамма" }, new string[] { "beta@example.com", "supply@vasiliev.biz", "gamma@example.com" }, new string[] { "+7 (900) 000-00-01", null, "+7 (495) 111-22-33" }, new string[] { "г. Казань, ул. Примерная, д. 5", "", "г. Москва, пр. Тестовый, д. 2" })] // Multiple records
         public void GetAllSuppliers_Test(int[] inns, string[] names, string[] emails, string[] phones, string[] addresses)
         {
+            List<Supplier> data = new List<Supplier>();
+            for (int i = 0; i < inns.Length; i++)
+            {
+                data.Add(new Supplier
+                {
+                    Inn = inns[i],
+                    Name = names[i],
+                    ContactEmail = emails[i],
+                    Phone = phones[i],
+                    Address = addresses[i]
+                });
+            }
+            List<Supplier> expected = data;
 
         }
     }
