@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DDMLib
 {
-    internal class MySqlSupplierRepository : ISupplierRepository
+    public class MySqlSupplierRepository : ISupplierRepository
     {
         public List<Supplier> ReadAllSuppliers()
         {
