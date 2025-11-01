@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDMLib", "DDMLib\DDMLib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDMTests", "DDMTests\DDMTests.csproj", "{64FD044D-9C7C-4F8F-80EF-7FD2563243F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminAppWpf", "AdminAppWpf\AdminAppWpf.csproj", "{712358FC-ED45-42E4-8446-F4DAE0422E85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{64FD044D-9C7C-4F8F-80EF-7FD2563243F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64FD044D-9C7C-4F8F-80EF-7FD2563243F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64FD044D-9C7C-4F8F-80EF-7FD2563243F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{712358FC-ED45-42E4-8446-F4DAE0422E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{712358FC-ED45-42E4-8446-F4DAE0422E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{712358FC-ED45-42E4-8446-F4DAE0422E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{712358FC-ED45-42E4-8446-F4DAE0422E85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
