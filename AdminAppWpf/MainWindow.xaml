@@ -1,12 +1,342 @@
-﻿<Window x:Class="AdminAppWpf.MainWindow"
+<Window x:Class="AdminAppWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AdminAppWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Панель администратора"
+        Height="700"
+        Width="1080"
+        MinHeight="600"
+        MinWidth="920"
+        Background="{StaticResource WindowBackgroundBrush}">
+    <Border Margin="36"
+            Background="{StaticResource CardBackgroundBrush}"
+            CornerRadius="26">
+        <Border.Effect>
+            <DropShadowEffect Color="#33000000" BlurRadius="28" ShadowDepth="6" />
+        </Border.Effect>
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Панель администратора"
+                               Style="{StaticResource Heading1TextStyle}" />
+                    <TextBlock Text="Управляйте товарами, заказами и пользователями из одного места"
+                               Margin="0,8,0,0"
+                               Style="{StaticResource CaptionTextStyle}" />
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Background="{StaticResource SubtleCardBrush}"
+                        CornerRadius="12"
+                        Padding="18,10"
+                        VerticalAlignment="Top">
+                    <StackPanel>
+                        <TextBlock Text="Сегодня"
+                                   FontFamily="Segoe UI"
+                                   FontSize="13"
+                                   Foreground="{StaticResource MutedTextBrush}" />
+                        <TextBlock Text="12 апреля 2024"
+                                   FontFamily="Segoe UI"
+                                   FontWeight="SemiBold"
+                                   FontSize="16"
+                                   Foreground="#FF111827" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,28,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Background="#FFF1F5F9"
+                        CornerRadius="12"
+                        Padding="12"
+                        Margin="0,0,16,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="18"
+                                   Foreground="{StaticResource PrimaryBrush}"
+                                   Text="" />
+                        <Grid Grid.Column="1">
+                            <TextBox x:Name="SearchTextBox"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Padding="0" />
+                            <TextBlock Text="Поиск по названию или артикулу"
+                                       Margin="2,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Foreground="#FF9CA3AF"
+                                       FontFamily="Segoe UI"
+                                       FontSize="13"
+                                       IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="1"
+                        Content="Добавить товар"
+                        Margin="0,0,12,0"
+                        Style="{StaticResource PrimaryButtonStyle}" />
+                <Button Grid.Column="2"
+                        Content="Сформировать отчёт"
+                        Style="{StaticResource SecondaryButtonStyle}" />
+            </Grid>
+
+            <ItemsControl Grid.Row="2" Margin="0,0,0,24">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="-12" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <Border Style="{StaticResource ElevatedCardStyle}" Margin="12">
+                    <StackPanel>
+                        <TextBlock Text="Товары"
+                                   Style="{StaticResource CaptionTextStyle}" />
+                        <TextBlock Text="1 248"
+                                   Margin="0,6,0,4"
+                                   FontFamily="Segoe UI"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="#FF111827" />
+                        <StackPanel Orientation="Horizontal">
+                            <Border Background="#1A22C55E" CornerRadius="50" Padding="10,2" Margin="0,0,8,0">
+                                <TextBlock Text="▲ 12%"
+                                           FontSize="12"
+                                           Foreground="{StaticResource SuccessColor}" />
+                            </Border>
+                            <TextBlock Text="за последние 30 дней"
+                                       Style="{StaticResource CaptionTextStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource ElevatedCardStyle}" Margin="12">
+                    <StackPanel>
+                        <TextBlock Text="Заказы"
+                                   Style="{StaticResource CaptionTextStyle}" />
+                        <TextBlock Text="326"
+                                   Margin="0,6,0,4"
+                                   FontFamily="Segoe UI"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="#FF111827" />
+                        <StackPanel Orientation="Horizontal">
+                            <Border Background="#1AF97316" CornerRadius="50" Padding="10,2" Margin="0,0,8,0">
+                                <TextBlock Text="▲ 5%"
+                                           FontSize="12"
+                                           Foreground="{StaticResource SuccessColor}" />
+                            </Border>
+                            <TextBlock Text="за неделю"
+                                       Style="{StaticResource CaptionTextStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource ElevatedCardStyle}" Margin="12">
+                    <StackPanel>
+                        <TextBlock Text="Запросы поддержки"
+                                   Style="{StaticResource CaptionTextStyle}" />
+                        <TextBlock Text="18"
+                                   Margin="0,6,0,4"
+                                   FontFamily="Segoe UI"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="#FF111827" />
+                        <StackPanel Orientation="Horizontal">
+                            <Border Background="#1AF59E0B" CornerRadius="50" Padding="10,2" Margin="0,0,8,0">
+                                <TextBlock Text="▼ 3%"
+                                           FontSize="12"
+                                           Foreground="#FFF97316" />
+                            </Border>
+                            <TextBlock Text="меньше, чем вчера"
+                                       Style="{StaticResource CaptionTextStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </ItemsControl>
+
+            <StackPanel Grid.Row="3">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                    <TextBlock Text="Последние операции"
+                               Style="{StaticResource Heading2TextStyle}" />
+                    <Border Background="#1A8B5CF6" CornerRadius="50" Padding="10,2" Margin="12,0,0,0">
+                        <TextBlock Text="обновлено 5 мин назад"
+                                   Style="{StaticResource CaptionTextStyle}" />
+                    </Border>
+                </StackPanel>
+
+                <StackPanel>
+                    <Border CornerRadius="16" Background="{StaticResource SubtleCardBrush}" Padding="18" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Заказ №2351"
+                                           FontFamily="Segoe UI"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Foreground="#FF111827" />
+                                <TextBlock Text="Иван Петров • 3 позиции • 12 540 ₽"
+                                           Style="{StaticResource CaptionTextStyle}" />
+                            </StackPanel>
+                            <Border Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#1A22C55E"
+                                    CornerRadius="50"
+                                    Padding="12,4">
+                                <TextBlock Text="Выполнен"
+                                           FontSize="12"
+                                           Foreground="{StaticResource SuccessColor}" />
+                            </Border>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Открыть"
+                                        Margin="0,0,8,0"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button Content="Повторить"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border CornerRadius="16" Background="{StaticResource SubtleCardBrush}" Padding="18" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Обновление товара: Ноутбук ASUS VivoBook"
+                                           FontFamily="Segoe UI"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Foreground="#FF111827" />
+                                <TextBlock Text="Дарья Иванова • изменена цена и описание"
+                                           Style="{StaticResource CaptionTextStyle}" />
+                            </StackPanel>
+                            <Border Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#1AF59E0B"
+                                    CornerRadius="50"
+                                    Padding="12,4">
+                                <TextBlock Text="Черновик"
+                                           FontSize="12"
+                                           Foreground="#FFF97316" />
+                            </Border>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Просмотреть"
+                                        Margin="0,0,8,0"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button Content="Опубликовать"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border CornerRadius="16" Background="{StaticResource SubtleCardBrush}" Padding="18">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Новый пользователь: Мария Орлова"
+                                           FontFamily="Segoe UI"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Foreground="#FF111827" />
+                                <TextBlock Text="Регистрация через соц. сети • 10:24"
+                                           Style="{StaticResource CaptionTextStyle}" />
+                            </StackPanel>
+                            <Border Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#1A8B5CF6"
+                                    CornerRadius="50"
+                                    Padding="12,4">
+                                <TextBlock Text="Требуется проверка"
+                                           FontSize="12"
+                                           Foreground="{StaticResource AccentBrush}" />
+                            </Border>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Профиль"
+                                        Margin="0,0,8,0"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button Content="Подтвердить"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="4" Margin="0,24,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Всего пользователей:"
+                               Style="{StaticResource CaptionTextStyle}" />
+                    <TextBlock Text="5 438"
+                               Margin="12,0,0,0"
+                               FontFamily="Segoe UI"
+                               FontWeight="SemiBold"
+                               FontSize="16"
+                               Foreground="#FF111827" />
+                    <Border Background="#1A22C55E" CornerRadius="50" Padding="10,2" Margin="12,0,0,0">
+                        <TextBlock Text="+38 сегодня"
+                                   FontSize="12"
+                                   Foreground="{StaticResource SuccessColor}" />
+                    </Border>
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Content="Настройки панели"
+                        Style="{StaticResource SecondaryButtonStyle}" />
+            </Grid>
+        </Grid>
+    </Border>
 </Window>
