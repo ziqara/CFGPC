@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TSuppliersService.cs" />
+    <Compile Include="TAccountService.cs" />
     <Compile Include="TUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
