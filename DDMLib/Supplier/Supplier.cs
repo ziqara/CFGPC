@@ -8,7 +8,7 @@ namespace DDMLib
 {
     public class Supplier
     {
-        public int Inn { get; }
+        public int Inn { get; set; }
         public string Name { get; set; }
         public string ContactEmail { get; set; }
         public string Phone { get; set; }  // может быть null
