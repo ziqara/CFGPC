@@ -26,4 +26,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.Run();
 
-/// http://localhost:5078/
+// For configuring the app's URLs, see https://learn.microsoft.com/aspnet/core/fundamentals/servers/kestrel/endpoints
+
