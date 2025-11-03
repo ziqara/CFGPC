@@ -20,35 +20,42 @@ namespace DDMLib
 
         public void CreateSession(string email, string userName)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return;
-
-            string sessionId = Guid.NewGuid().ToString();
-
-            TimeSpan sessionTimeout = TimeSpan.FromHours(12);
-            DateTime expiresAt = DateTime.Now.Add(sessionTimeout);
-
-            var sessionData = new SessionData
+            try
             {
-                SessionId = sessionId,
-                Email = email,
-                UserName = userName,
-                CreatedAt = DateTime.Now,
-                ExpiresAt = expiresAt
-            };
+                if (string.IsNullOrWhiteSpace(email))
+                    return;
 
-            sessions_[sessionId] = sessionData;
+                string sessionId = Guid.NewGuid().ToString();
 
-            var cookieOptions = new CookieOptions
+                TimeSpan sessionTimeout = TimeSpan.FromHours(12);
+                DateTime expiresAt = DateTime.Now.Add(sessionTimeout);
+
+                var sessionData = new SessionData
+                {
+                    SessionId = sessionId,
+                    Email = email,
+                    UserName = userName,
+                    CreatedAt = DateTime.Now,
+                    ExpiresAt = expiresAt
+                };
+
+                sessions_[sessionId] = sessionData;
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,     // Недоступна из JavaScript
+                    Secure = true,       // Только по HTTPS
+                    SameSite = SameSiteMode.Strict, // Защита от CSRF
+                    Expires = expiresAt, // Время жизни
+                    Path = "/"           // Доступна для всего приложения
+                };
+
+                httpContextAccessor_.HttpContext.Response.Cookies.Append("SessionId", sessionId, cookieOptions);
+            }
+            catch (Exception ex)
             {
-                HttpOnly = true,     // Недоступна из JavaScript
-                Secure = true,       // Только по HTTPS
-                SameSite = SameSiteMode.Strict, // Защита от CSRF
-                Expires = expiresAt, // Время жизни
-                Path = "/"           // Доступна для всего приложения
-            };
-
-            httpContextAccessor_.HttpContext.Response.Cookies.Append("SessionId", sessionId, cookieOptions);
+                ErrorLogger.LogError("CreateSession", ex.Message);
+            }
         }
     }
 }
