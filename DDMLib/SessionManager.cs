@@ -38,6 +38,15 @@ namespace DDMLib
             };
 
             sessions_[sessionId] = sessionData;
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,     // Недоступна из JavaScript
+                Secure = true,       // Только по HTTPS
+                SameSite = SameSiteMode.Strict, // Защита от CSRF
+                Expires = expiresAt, // Время жизни
+                Path = "/"           // Доступна для всего приложения
+            };
         }
     }
 }
