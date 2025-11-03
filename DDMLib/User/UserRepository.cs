@@ -180,6 +180,9 @@ public class UserRepository : IUserRepository
 
     public bool VerifyPassword(User user, string password)
     {
-        throw new NotImplementedException();
+        if (user == null || string.IsNullOrWhiteSpace(password))
+            return false;
+
+        return true;
     }
 }
