@@ -8,6 +8,6 @@ namespace DDMLib
 {
     public interface ISessionManager
     {
-
+        void CreateSession(string email, string userName);
     }
 }
