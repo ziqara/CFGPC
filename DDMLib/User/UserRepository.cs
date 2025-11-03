@@ -165,6 +165,7 @@ public class UserRepository : IUserRepository
         }
         catch (Exception ex)
         {
+            ErrorLogger.LogError("UpdatePasswordHash", ex.Message);
             return false;
         }
     }
