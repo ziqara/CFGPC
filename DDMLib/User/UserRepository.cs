@@ -144,6 +144,8 @@ public class UserRepository : IUserRepository
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
             return false;
 
+        string newPasswordHash = HashPassword(newPassword);
+
         return true;
     }
 
