@@ -194,6 +194,7 @@ public class UserRepository : IUserRepository
         }
         catch(Exception ex) 
         {
+            ErrorLogger.LogError("VerifyPassword", ex.Message);
             return false;
         }
     }
