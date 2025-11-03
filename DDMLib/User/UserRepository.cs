@@ -4,6 +4,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using BCrypt.Net;
 using DDMLib;
+using System.Data.SqlClient;
 
 public class UserRepository : IUserRepository
 {
@@ -113,13 +114,20 @@ public class UserRepository : IUserRepository
 
             string sql = @"UPDATE users SET full_name = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
 
-            var parameters = new
+            using (var connection = new SqlConnection(Config.ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
             {
-                Email = user.Email,
-                FullName = user.FullName?.Trim(),
-                Phone = string.IsNullOrWhiteSpace(user.Phone) ? null : user.Phone.Trim(),
-                Address = string.IsNullOrWhiteSpace(user.Address) ? null : user.Address.Trim()
-            };
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@FullName", user.FullName);
+                command.Parameters.AddWithValue("@Phone", user.Phone ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Address", user.Address ?? (object)DBNull.Value);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected == 0)
+                    return "Не удалось обновить профиль. Пользователь не найден.";
+            }
         }
     }
 
