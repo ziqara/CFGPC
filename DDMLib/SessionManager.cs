@@ -23,6 +23,20 @@ namespace DDMLib
             if (string.IsNullOrWhiteSpace(email))
                 return;
 
+            string sessionId = Guid.NewGuid().ToString();
+
+            TimeSpan sessionTimeout = TimeSpan.FromHours(12);
+            DateTime expiresAt = DateTime.Now.Add(sessionTimeout);
+
+            var sessionData = new SessionData
+            {
+                SessionId = sessionId,
+                Email = email,
+                UserName = userName,
+                CreatedAt = DateTime.Now,
+                ExpiresAt = expiresAt
+            };
+
         }
     }
 }
