@@ -141,23 +141,31 @@ public class UserRepository : IUserRepository
 
     public bool UpdatePasswordHash(string email, string newPassword)
     {
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
-            return false;
-
-        string newPasswordHash = HashPassword(newPassword);
-
-        string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
-
-        using (var connection = new SqlConnection(Config.ConnectionString))
-        using (var command = new SqlCommand(sql, connection))
+        try
         {
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+                return false;
 
-            connection.Open();
-            int rowsAffected = command.ExecuteNonQuery();
+            string newPasswordHash = HashPassword(newPassword);
 
-            return rowsAffected > 0;
+            string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
+
+            using (var connection = new SqlConnection(Config.ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            return false;
         }
     }
 
