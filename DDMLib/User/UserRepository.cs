@@ -180,14 +180,21 @@ public class UserRepository : IUserRepository
 
     public bool VerifyPassword(User user, string password)
     {
-        if (user == null || string.IsNullOrWhiteSpace(password))
+        try
+        {
+            if (user == null || string.IsNullOrWhiteSpace(password))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(user.Password))
+                return false;
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            return isPasswordValid;
+        }
+        catch(Exception ex) 
+        {
             return false;
-
-        if (string.IsNullOrWhiteSpace(user.Password))
-            return false;
-
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
-
-        return isPasswordValid;
+        }
     }
 }
