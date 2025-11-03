@@ -120,6 +120,8 @@
     <Compile Include="AccountService.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
+    <Compile Include="ISessionManager.cs" />
+    <Compile Include="SessionManager.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />
     <Compile Include="User\IUserRepository.cs" />
     <Compile Include="Supplier\MySqlSupplierRepository.cs" />
