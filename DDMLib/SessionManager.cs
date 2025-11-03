@@ -8,5 +8,6 @@ namespace DDMLib
 {
     public class SessionManager : ISessionManager
     {
+
     }
 }
