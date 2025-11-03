@@ -8,11 +8,13 @@ namespace DDMLib
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository userRepository_;
+        private readonly ISessionManager sessionManager_;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ISessionManager sessionManager)
         {
-            _userRepository = userRepository;
+            userRepository_ = userRepository;
+            sessionManager_ = sessionManager;
         }
 
         public string ValidateEmail(string email)
@@ -50,12 +52,12 @@ namespace DDMLib
             if (user.Password != passwordConfirm) return "Пароли не совпадают";
 
  
-            var existing = _userRepository.FindByEmail(user.Email);
+            var existing = userRepository_.FindByEmail(user.Email);
             if (existing != null) return "Email уже зарегистрирован";
 
             try
             {
-                _userRepository.Save(user);
+                userRepository_.Save(user);
                 return "Аккаунт успешно создан!";
             }
             catch (DuplicateNameException)
@@ -76,10 +78,12 @@ namespace DDMLib
             string emailError = ValidateEmail(email);
             if (!string.IsNullOrEmpty(emailError)) return emailError;
 
-            var user = _userRepository.FindByEmail(email);
+            var user = userRepository_.FindByEmail(email);
             if (user == null) return "Аккаунт не найден";
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) return "Неверный пароль";
+
+            sessionManager_.CreateSession(user.Email, user.FullName);
 
             return string.Empty;
         }
