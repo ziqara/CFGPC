@@ -146,6 +146,8 @@ public class UserRepository : IUserRepository
 
         string newPasswordHash = HashPassword(newPassword);
 
+        string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
+
         return true;
     }
 
