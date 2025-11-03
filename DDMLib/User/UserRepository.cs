@@ -106,6 +106,10 @@ public class UserRepository : IUserRepository
 
     public string UpdateProfile(User user)
     {
+        if (!Config.TestDatabaseConnection())
+        {
+            ErrorLogger.LogError("UpdateProfile", "Не удалось подключиться к базе данных.");
+        }
         try
         {
             User existingUser = FindByEmail(user.Email);
