@@ -47,6 +47,8 @@ namespace DDMLib
                 Expires = expiresAt, // Время жизни
                 Path = "/"           // Доступна для всего приложения
             };
+
+            httpContextAccessor_.HttpContext.Response.Cookies.Append("SessionId", sessionId, cookieOptions);
         }
     }
 }
