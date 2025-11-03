@@ -183,6 +183,9 @@ public class UserRepository : IUserRepository
         if (user == null || string.IsNullOrWhiteSpace(password))
             return false;
 
+        if (string.IsNullOrWhiteSpace(user.Password))
+            return false;
+
         return true;
     }
 }
