@@ -145,6 +145,10 @@ public class UserRepository : IUserRepository
 
     public bool UpdatePasswordHash(string email, string newPassword)
     {
+        if (!Config.TestDatabaseConnection())
+        {
+            ErrorLogger.LogError("UpdatePasswordHash", "Не удалось подключиться к базе данных.");
+        }
         try
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
