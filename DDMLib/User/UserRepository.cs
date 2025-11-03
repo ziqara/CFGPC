@@ -110,6 +110,8 @@ public class UserRepository : IUserRepository
             User existingUser = FindByEmail(user.Email);
             if (existingUser == null)
                 return "Пользователь не найден";
+
+            string sql = @"UPDATE users SET full_name = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
         }
     }
 
