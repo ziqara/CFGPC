@@ -112,6 +112,14 @@ public class UserRepository : IUserRepository
                 return "Пользователь не найден";
 
             string sql = @"UPDATE users SET full_name = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
+
+            var parameters = new
+            {
+                Email = user.Email,
+                FullName = user.FullName?.Trim(),
+                Phone = string.IsNullOrWhiteSpace(user.Phone) ? null : user.Phone.Trim(),
+                Address = string.IsNullOrWhiteSpace(user.Address) ? null : user.Address.Trim()
+            };
         }
     }
 
