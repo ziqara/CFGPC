@@ -37,6 +37,7 @@ namespace DDMLib
                 ExpiresAt = expiresAt
             };
 
+            sessions_[sessionId] = sessionData;
         }
     }
 }
