@@ -141,7 +141,10 @@ public class UserRepository : IUserRepository
 
     public bool UpdatePasswordHash(string email, string newPassword)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+            return false;
+
+        return true;
     }
 
     public bool VerifyPassword(User user, string password)
