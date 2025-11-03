@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace DDMLib
     public class SessionManager : ISessionManager
     {
         private readonly IHttpContextAccessor httpContextAccessor_;
+        private static readonly ConcurrentDictionary<string, SessionData> sessions_ = new ConcurrentDictionary<string, SessionData>();
 
         public SessionManager(IHttpContextAccessor httpContextAccessor)
         {
