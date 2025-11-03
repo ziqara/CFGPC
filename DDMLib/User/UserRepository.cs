@@ -105,7 +105,12 @@ public class UserRepository : IUserRepository
 
     public string UpdateProfile(User user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            User existingUser = FindByEmail(user.Email);
+            if (existingUser == null)
+                return "Пользователь не найден";
+        }
     }
 
     public bool UpdatePasswordHash(string email, string newPassword)
