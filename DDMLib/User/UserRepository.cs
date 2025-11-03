@@ -186,6 +186,8 @@ public class UserRepository : IUserRepository
         if (string.IsNullOrWhiteSpace(user.Password))
             return false;
 
-        return true;
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+        return isPasswordValid;
     }
 }
