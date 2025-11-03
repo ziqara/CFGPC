@@ -15,5 +15,12 @@ namespace DDMLib
         {
             httpContextAccessor_ = httpContextAccessor;
         }
+
+        public void CreateSession(string email, string userName)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return;
+
+        }
     }
 }
