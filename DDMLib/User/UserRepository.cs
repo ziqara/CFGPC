@@ -148,7 +148,17 @@ public class UserRepository : IUserRepository
 
         string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
 
-        return true;
+        using (var connection = new SqlConnection(Config.ConnectionString))
+        using (var command = new SqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@Email", email);
+            command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
+
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+
+            return rowsAffected > 0;
+        }
     }
 
     public bool VerifyPassword(User user, string password)
