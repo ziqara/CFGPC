@@ -131,6 +131,12 @@ public class UserRepository : IUserRepository
 
             return string.Empty;
         }
+
+        catch(Exception ex)
+        {
+            ErrorLogger.LogError("UpdateProfile", ex.Message);
+            return "Ошибка при обновлении профиля";
+        }
     }
 
     public bool UpdatePasswordHash(string email, string newPassword)
