@@ -128,6 +128,8 @@ public class UserRepository : IUserRepository
                 if (rowsAffected == 0)
                     return "Не удалось обновить профиль. Пользователь не найден.";
             }
+
+            return string.Empty;
         }
     }
 
