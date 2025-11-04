@@ -123,6 +123,8 @@ namespace DDMLib
                 return;
 
             sessions_.TryRemove(sessionId, out _);
+
+            httpContextAccessor_.HttpContext?.Response.Cookies.Delete("SessionId");
         }
     }
 }
