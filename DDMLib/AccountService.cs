@@ -21,6 +21,9 @@ namespace DDMLib
         {
             if (!sessionManager_.IsUserAuthenticated())
                 return null;
+            
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
 
             return null;
         }
