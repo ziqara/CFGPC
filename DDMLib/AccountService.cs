@@ -8,6 +8,15 @@ namespace DDMLib
 {
     public class AccountService
     {
+        private readonly IUserRepository userRepository_;
+        private readonly ISessionManager sessionManager_;
+
+        public AccountService(IUserRepository userRepository, ISessionManager sessionManager)
+        {
+            userRepository_ = userRepository;
+            sessionManager_ = sessionManager;
+        }
+
         public User GetUserProfile(string email)
         {
             throw new NotImplementedException();
