@@ -90,7 +90,10 @@ namespace DDMLib
 
         public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
         {
-            throw new NotImplementedException();
+            if (!sessionManager_.IsUserAuthenticated())
+                return "Требуется авторизация";
+
+            return string.Empty;
         }
 
         public void Logout()
