@@ -90,31 +90,39 @@ namespace DDMLib
 
         public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
         {
-            if (!sessionManager_.IsUserAuthenticated())
-                return "Требуется авторизация";
+            try
+            {
+                if (!sessionManager_.IsUserAuthenticated())
+                    return "Требуется авторизация";
 
-            if (newPassword != repeatPassword)
-                return "Пароли не совпадают";
+                if (newPassword != repeatPassword)
+                    return "Пароли не совпадают";
 
-            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
-                return "Пароль недостаточно надёжный (минимум 6 символов)";
+                if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+                    return "Пароль недостаточно надёжный (минимум 6 символов)";
 
-            string sessionEmail = sessionManager_.GetUserEmailFromSession();
-            if (sessionEmail != email)
-                return "Доступ запрещён";
+                string sessionEmail = sessionManager_.GetUserEmailFromSession();
+                if (sessionEmail != email)
+                    return "Доступ запрещён";
 
-            User user = userRepository_.FindByEmail(email);
-            if (user == null)
-                return "Пользователь не найден";
+                User user = userRepository_.FindByEmail(email);
+                if (user == null)
+                    return "Пользователь не найден";
 
-            if (!userRepository_.VerifyPassword(user, currentPassword))
-                return "Неверный пароль";
+                if (!userRepository_.VerifyPassword(user, currentPassword))
+                    return "Неверный пароль";
 
-            bool updateResult = userRepository_.UpdatePasswordHash(email, newPassword);
-            if (!updateResult)
+                bool updateResult = userRepository_.UpdatePasswordHash(email, newPassword);
+                if (!updateResult)
+                    return "Ошибка сохранения";
+
+                return "Пароль обновлён";
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ChangePassword", ex.Message);
                 return "Ошибка сохранения";
-
-            return "Пароль обновлён";
+            }
         }
 
         public void Logout()
