@@ -110,7 +110,11 @@ namespace DDMLib
             if (!userRepository_.VerifyPassword(user, currentPassword))
                 return "Неверный пароль";
 
-            return string.Empty;
+            bool updateResult = userRepository_.UpdatePasswordHash(email, newPassword);
+            if (!updateResult)
+                return "Ошибка сохранения";
+
+            return "Пароль обновлён";
         }
 
         public void Logout()
