@@ -47,7 +47,10 @@ namespace DDMLib
 
         public string UpdateProfile(string email, string fullName, string phone, string address)
         {
-            throw new NotImplementedException();
+            if (!sessionManager_.IsUserAuthenticated())
+                return "Требуется авторизация";
+
+            return string.Empty;
         }
 
         public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
