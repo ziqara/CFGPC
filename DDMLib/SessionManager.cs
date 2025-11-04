@@ -117,16 +117,23 @@ namespace DDMLib
 
         public void InvalidateSession()
         {
-            string sessionId = httpContextAccessor_.HttpContext?.Request.Cookies["SessionId"];
+            try
+            {
+                string sessionId = httpContextAccessor_.HttpContext?.Request.Cookies["SessionId"];
 
-            if (string.IsNullOrEmpty(sessionId))
-                return;
+                if (string.IsNullOrEmpty(sessionId))
+                    return;
 
-            sessions_.TryRemove(sessionId, out _);
+                sessions_.TryRemove(sessionId, out _);
 
-            httpContextAccessor_.HttpContext?.Response.Cookies.Delete("SessionId");
+                httpContextAccessor_.HttpContext?.Response.Cookies.Delete("SessionId");
 
-            httpContextAccessor_.HttpContext?.Response.Cookies.Delete("UserName");
+                httpContextAccessor_.HttpContext?.Response.Cookies.Delete("UserName");
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("InvalidateSession", ex.Message);
+            }
         }
     }
 }
