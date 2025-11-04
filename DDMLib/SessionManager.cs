@@ -104,7 +104,7 @@ namespace DDMLib
                 return null;
             }
 
-            return null;
+            return sessionData.Email;
         }
     }
 }
