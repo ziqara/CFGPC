@@ -93,6 +93,9 @@ namespace DDMLib
             if (!sessionManager_.IsUserAuthenticated())
                 return "Требуется авторизация";
 
+            if (newPassword != repeatPassword)
+                return "Пароли не совпадают";
+
             return string.Empty;
         }
 
