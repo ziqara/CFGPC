@@ -29,6 +29,11 @@ namespace DDMLib
             if (sessionEmail != email)
                 return null;
 
+            User user = userRepository_.FindByEmail(email);
+
+            if (user == null)
+                return null;
+
             return null;
         }
 
