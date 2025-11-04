@@ -121,6 +121,8 @@ namespace DDMLib
 
             if (string.IsNullOrEmpty(sessionId))
                 return;
+
+            sessions_.TryRemove(sessionId, out _);
         }
     }
 }
