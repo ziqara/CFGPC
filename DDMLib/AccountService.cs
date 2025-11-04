@@ -25,6 +25,10 @@ namespace DDMLib
             if (string.IsNullOrWhiteSpace(email))
                 return null;
 
+            string sessionEmail = sessionManager_.GetUserEmailFromSession();
+            if (sessionEmail != email)
+                return null;
+
             return null;
         }
 
