@@ -50,6 +50,12 @@ namespace DDMLib
             if (!sessionManager_.IsUserAuthenticated())
                 return "Требуется авторизация";
 
+            if (string.IsNullOrWhiteSpace(fullName))
+                return "ФИО не может быть пустым";
+
+            if (fullName.Length > 255)
+                return "Превышена допустимая длина ФИО (≤ 255)";
+
             return string.Empty;
         }
 
