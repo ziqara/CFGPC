@@ -48,35 +48,43 @@ namespace DDMLib
 
         public string UpdateProfile(string email, string fullName, string phone, string address)
         {
-            if (!sessionManager_.IsUserAuthenticated())
-                return "Требуется авторизация";
+            try
+            {
+                if (!sessionManager_.IsUserAuthenticated())
+                    return "Требуется авторизация";
 
-            if (string.IsNullOrWhiteSpace(fullName))
-                return "ФИО не может быть пустым";
+                if (string.IsNullOrWhiteSpace(fullName))
+                    return "ФИО не может быть пустым";
 
-            if (fullName.Length > 255)
-                return "Превышена допустимая длина ФИО (≤ 255)";
+                if (fullName.Length > 255)
+                    return "Превышена допустимая длина ФИО (≤ 255)";
 
-            if (!string.IsNullOrWhiteSpace(phone) && !IsValidPhoneFormat(phone))
-                return "Неверный формат телефона. Пример: +7 (999) 123-45-67";
+                if (!string.IsNullOrWhiteSpace(phone) && !IsValidPhoneFormat(phone))
+                    return "Неверный формат телефона. Пример: +7 (999) 123-45-67";
 
-            string sessionEmail = sessionManager_.GetUserEmailFromSession();
-            if (sessionEmail != email)
-                return "Доступ запрещён";
+                string sessionEmail = sessionManager_.GetUserEmailFromSession();
+                if (sessionEmail != email)
+                    return "Доступ запрещён";
 
-            User user = userRepository_.FindByEmail(email);
-            if (user == null)
-                return "Пользователь не найден";
+                User user = userRepository_.FindByEmail(email);
+                if (user == null)
+                    return "Пользователь не найден";
 
-            user.FullName = fullName.Trim();
-            user.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim();
-            user.Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim();
+                user.FullName = fullName.Trim();
+                user.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim();
+                user.Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim();
 
-            string updateResult = userRepository_.UpdateProfile(user);
-            if (!string.IsNullOrEmpty(updateResult))
+                string updateResult = userRepository_.UpdateProfile(user);
+                if (!string.IsNullOrEmpty(updateResult))
+                    return "Ошибка сохранения";
+
+                return "Профиль обновлён";
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("UpdateProfile", ex.Message);
                 return "Ошибка сохранения";
-
-            return "Профиль обновлён";
+            }
         }
 
         public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
