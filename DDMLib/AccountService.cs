@@ -34,7 +34,7 @@ namespace DDMLib
             if (user == null)
                 return null;
 
-            return null;
+            return user;
         }
 
         public string UpdateProfile(string email, string fullName, string phone, string address)
