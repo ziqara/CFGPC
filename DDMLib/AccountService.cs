@@ -72,7 +72,11 @@ namespace DDMLib
             user.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim();
             user.Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim();
 
-            return string.Empty;
+            string updateResult = userRepository_.UpdateProfile(user);
+            if (!string.IsNullOrEmpty(updateResult))
+                return "Ошибка сохранения";
+
+            return "Профиль обновлён";
         }
 
         public string ChangePassword(string email, string currentPassword, string newPassword, string repeatPassword)
