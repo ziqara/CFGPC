@@ -127,7 +127,7 @@ namespace DDMLib
 
         public void Logout()
         {
-            throw new NotImplementedException();
+            sessionManager_.InvalidateSession();
         }
 
         private bool IsValidPhoneFormat(string phone)
