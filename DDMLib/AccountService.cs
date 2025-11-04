@@ -96,6 +96,9 @@ namespace DDMLib
             if (newPassword != repeatPassword)
                 return "Пароли не совпадают";
 
+            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+                return "Пароль недостаточно надёжный (минимум 6 символов)";
+
             return string.Empty;
         }
 
