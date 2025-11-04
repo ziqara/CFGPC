@@ -19,7 +19,10 @@ namespace DDMLib
 
         public User GetUserProfile(string email)
         {
-            throw new NotImplementedException();
+            if (!sessionManager_.IsUserAuthenticated())
+                return null;
+
+            return null;
         }
 
         public string UpdateProfile(string email, string fullName, string phone, string address)
