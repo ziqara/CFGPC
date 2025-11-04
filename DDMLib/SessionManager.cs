@@ -88,23 +88,31 @@ namespace DDMLib
 
         public string GetUserEmailFromSession()
         {
-            if (httpContextAccessor_.HttpContext == null)
-                return null;
-
-            string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
-            if (string.IsNullOrEmpty(sessionId))
-                return null;
-
-            if (!sessions_.TryGetValue(sessionId, out var sessionData))
-                return null;
-
-            if (sessionData.ExpiresAt < DateTime.Now)
+            try
             {
-                sessions_.TryRemove(sessionId, out _);
+                if (httpContextAccessor_.HttpContext == null)
+                    return null;
+
+                string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+                if (string.IsNullOrEmpty(sessionId))
+                    return null;
+
+                if (!sessions_.TryGetValue(sessionId, out var sessionData))
+                    return null;
+
+                if (sessionData.ExpiresAt < DateTime.Now)
+                {
+                    sessions_.TryRemove(sessionId, out _);
+                    return null;
+                }
+
+                return sessionData.Email;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("GetUserEmailFromSession", ex.Message);
                 return null;
             }
-
-            return sessionData.Email;
         }
     }
 }
