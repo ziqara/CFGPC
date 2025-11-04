@@ -95,6 +95,9 @@ namespace DDMLib
             if (string.IsNullOrEmpty(sessionId))
                 return null;
 
+            if (!sessions_.TryGetValue(sessionId, out var sessionData))
+                return null;
+
             return null;
         }
     }
