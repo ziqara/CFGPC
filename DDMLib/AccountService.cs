@@ -19,22 +19,30 @@ namespace DDMLib
 
         public User GetUserProfile(string email)
         {
-            if (!sessionManager_.IsUserAuthenticated())
-                return null;
-            
-            if (string.IsNullOrWhiteSpace(email))
-                return null;
+            try
+            {
+                if (!sessionManager_.IsUserAuthenticated())
+                    return null;
 
-            string sessionEmail = sessionManager_.GetUserEmailFromSession();
-            if (sessionEmail != email)
+                if (string.IsNullOrWhiteSpace(email))
+                    return null;
+
+                string sessionEmail = sessionManager_.GetUserEmailFromSession();
+                if (sessionEmail != email)
+                    return null;
+
+                User user = userRepository_.FindByEmail(email);
+
+                if (user == null)
+                    return null;
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("GetUserProfile", ex.Message);
                 return null;
-
-            User user = userRepository_.FindByEmail(email);
-
-            if (user == null)
-                return null;
-
-            return user;
+            }
         }
 
         public string UpdateProfile(string email, string fullName, string phone, string address)
