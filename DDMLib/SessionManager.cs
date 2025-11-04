@@ -114,5 +114,10 @@ namespace DDMLib
                 return null;
             }
         }
+
+        public void InvalidateSession()
+        {
+
+        }
     }
 }

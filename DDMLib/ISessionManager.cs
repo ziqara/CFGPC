@@ -11,5 +11,6 @@ namespace DDMLib
         void CreateSession(string email, string userName);
         bool ValidateSession();
         string GetUserEmailFromSession();
+        void InvalidateSession();
     }
 }
