@@ -99,6 +99,10 @@ namespace DDMLib
             if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
                 return "Пароль недостаточно надёжный (минимум 6 символов)";
 
+            string sessionEmail = sessionManager_.GetUserEmailFromSession();
+            if (sessionEmail != email)
+                return "Доступ запрещён";
+
             return string.Empty;
         }
 
