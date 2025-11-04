@@ -127,7 +127,14 @@ namespace DDMLib
 
         public void Logout()
         {
-            sessionManager_.InvalidateSession();
+            try
+            {
+                sessionManager_.InvalidateSession();
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("Logout", ex.Message);
+            }
         }
 
         private bool IsValidPhoneFormat(string phone)
