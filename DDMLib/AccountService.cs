@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
@@ -95,6 +96,15 @@ namespace DDMLib
         public void Logout()
         {
             throw new NotImplementedException();
+        }
+
+        private bool IsValidPhoneFormat(string phone)
+        {
+            if (string.IsNullOrWhiteSpace(phone))
+                return false;
+
+            var regex = new Regex(@"^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$");
+            return regex.IsMatch(phone);
         }
     }
 }
