@@ -57,5 +57,10 @@ namespace DDMLib
                 ErrorLogger.LogError("CreateSession", ex.Message);
             }
         }
+
+        public bool ValidateSession()
+        {
+            return false;
+        }
     }
 }
