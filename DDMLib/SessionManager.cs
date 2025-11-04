@@ -69,6 +69,12 @@ namespace DDMLib
             if (!sessions_.TryGetValue(sessionId, out SessionData sessionData))
                 return false;
 
+            if (sessionData.ExpiresAt < DateTime.Now)
+            {
+                sessions_.TryRemove(sessionId, out _);
+                return false;
+            }
+
             return false;
         }
     }
