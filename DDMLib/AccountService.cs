@@ -60,6 +60,10 @@ namespace DDMLib
             if (!string.IsNullOrWhiteSpace(phone) && !IsValidPhoneFormat(phone))
                 return "Неверный формат телефона. Пример: +7 (999) 123-45-67";
 
+            string sessionEmail = sessionManager_.GetUserEmailFromSession();
+            if (sessionEmail != email)
+                return "Доступ запрещён";
+
             return string.Empty;
         }
 
