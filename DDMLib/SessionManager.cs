@@ -60,6 +60,11 @@ namespace DDMLib
 
         public bool ValidateSession()
         {
+            var sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+
+            if (string.IsNullOrEmpty(sessionId))
+                return false;
+
             return false;
         }
     }
