@@ -103,6 +103,13 @@ namespace DDMLib
             if (sessionEmail != email)
                 return "Доступ запрещён";
 
+            User user = userRepository_.FindByEmail(email);
+            if (user == null)
+                return "Пользователь не найден";
+
+            if (!userRepository_.VerifyPassword(user, currentPassword))
+                return "Неверный пароль";
+
             return string.Empty;
         }
 
