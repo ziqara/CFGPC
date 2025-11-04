@@ -59,7 +59,7 @@ namespace DDMLib
             }
         }
 
-        public bool ValidateSession()
+        public bool IsUserAuthenticated()
         {
             try
             {
@@ -81,7 +81,7 @@ namespace DDMLib
             }
             catch (Exception ex)
             {
-                ErrorLogger.LogError("ValidateSession", ex.Message);
+                ErrorLogger.LogError("IsUserAuthenticated", ex.Message);
                 return false;
             }
         }

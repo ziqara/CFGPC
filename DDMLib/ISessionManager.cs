@@ -9,7 +9,7 @@ namespace DDMLib
     public interface ISessionManager
     {
         void CreateSession(string email, string userName);
-        bool ValidateSession();
+        bool IsUserAuthenticated();
         string GetUserEmailFromSession();
         void InvalidateSession();
     }
