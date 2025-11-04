@@ -85,5 +85,10 @@ namespace DDMLib
                 return false;
             }
         }
+
+        public string GetUserEmailFromSession()
+        {
+            return null;
+        }
     }
 }
