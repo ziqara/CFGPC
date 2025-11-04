@@ -61,21 +61,29 @@ namespace DDMLib
 
         public bool ValidateSession()
         {
-            string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
-
-            if (string.IsNullOrEmpty(sessionId))
-                return false;
-
-            if (!sessions_.TryGetValue(sessionId, out SessionData sessionData))
-                return false;
-
-            if (sessionData.ExpiresAt < DateTime.Now)
+            try
             {
-                sessions_.TryRemove(sessionId, out _);
+                string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+
+                if (string.IsNullOrEmpty(sessionId))
+                    return false;
+
+                if (!sessions_.TryGetValue(sessionId, out SessionData sessionData))
+                    return false;
+
+                if (sessionData.ExpiresAt < DateTime.Now)
+                {
+                    sessions_.TryRemove(sessionId, out _);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ValidateSession", ex.Message);
                 return false;
             }
-
-            return true;
         }
     }
 }
