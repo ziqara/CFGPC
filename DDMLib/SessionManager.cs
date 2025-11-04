@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using MySqlX.XDevAPI;
 
 namespace DDMLib
 {
@@ -60,9 +61,12 @@ namespace DDMLib
 
         public bool ValidateSession()
         {
-            var sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+            string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
 
             if (string.IsNullOrEmpty(sessionId))
+                return false;
+
+            if (!sessions_.TryGetValue(sessionId, out SessionData sessionData))
                 return false;
 
             return false;
