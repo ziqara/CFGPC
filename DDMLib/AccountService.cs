@@ -64,6 +64,10 @@ namespace DDMLib
             if (sessionEmail != email)
                 return "Доступ запрещён";
 
+            User user = userRepository_.FindByEmail(email);
+            if (user == null)
+                return "Пользователь не найден";
+
             return string.Empty;
         }
 
