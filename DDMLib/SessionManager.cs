@@ -117,7 +117,10 @@ namespace DDMLib
 
         public void InvalidateSession()
         {
+            string sessionId = httpContextAccessor_.HttpContext?.Request.Cookies["SessionId"];
 
+            if (string.IsNullOrEmpty(sessionId))
+                return;
         }
     }
 }
