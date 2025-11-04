@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace DDMLib
 {
@@ -55,6 +56,9 @@ namespace DDMLib
 
             if (fullName.Length > 255)
                 return "Превышена допустимая длина ФИО (≤ 255)";
+
+            if (!string.IsNullOrWhiteSpace(phone) && !IsValidPhoneFormat(phone))
+                return "Неверный формат телефона. Пример: +7 (999) 123-45-67";
 
             return string.Empty;
         }
