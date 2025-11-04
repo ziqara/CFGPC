@@ -88,6 +88,13 @@ namespace DDMLib
 
         public string GetUserEmailFromSession()
         {
+            if (httpContextAccessor_.HttpContext == null)
+                return null;
+
+            string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+            if (string.IsNullOrEmpty(sessionId))
+                return null;
+
             return null;
         }
     }
