@@ -75,7 +75,7 @@ namespace DDMLib
                 return false;
             }
 
-            return false;
+            return true;
         }
     }
 }
