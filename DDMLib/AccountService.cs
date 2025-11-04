@@ -68,6 +68,10 @@ namespace DDMLib
             if (user == null)
                 return "Пользователь не найден";
 
+            user.FullName = fullName.Trim();
+            user.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim();
+            user.Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim();
+
             return string.Empty;
         }
 
