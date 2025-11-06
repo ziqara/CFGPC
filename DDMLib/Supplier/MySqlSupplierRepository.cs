@@ -16,6 +16,9 @@ namespace DDMLib
                 using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
                 {
                     connection.Open();
+
+                    string sql = "SELECT inn, name, contact_email, phone, address FROM suppliers";
+                    MySqlCommand command = new MySqlCommand(sql, connection);
                 }
             }
             catch 
