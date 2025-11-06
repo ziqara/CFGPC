@@ -13,6 +13,11 @@ namespace DDMLib
         public string ContactEmail { get; set; }
         public string Phone { get; set; }  // может быть null
         public string Address { get; set; } // может быть null
+
+        public Supplier(int inn)
+        {
+            Inn = inn;
+        }
     }
 
 }
