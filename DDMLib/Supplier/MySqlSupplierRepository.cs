@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DDMLib;
+using MySql.Data.MySqlClient;
 
 namespace DDMLib
 {
@@ -10,7 +9,7 @@ namespace DDMLib
     {
         public List<Supplier> ReadAllSuppliers()
         {
-            throw new NotImplementedException();
+            List<Supplier> suppliers = new List<Supplier>();
         }
     }
 }
