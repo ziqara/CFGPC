@@ -32,11 +32,15 @@ namespace DDMLib
                             suppliers.Add(s);
                         }
                     }
+
+                    return suppliers;
                 }
             }
-            catch 
+            catch(Exception ex) 
             {
-                
+                ErrorLogger.LogError("ReadAllSuppliers", ex.Message);
+                throw;
             }
+        }
     }
 }
