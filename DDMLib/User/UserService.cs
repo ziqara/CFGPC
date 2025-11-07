@@ -36,6 +36,17 @@ namespace DDMLib
             return string.Empty;
         }
 
+        public string ValidateFullName(string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(fullName))
+                return "ФИО не может быть пустым";
+
+            if (fullName.Length > 255)
+                return "Превышена допустимая длина ФИО (≤ 255)";
+
+            return string.Empty;
+        }
+
         public string RegisterUser(User user, string passwordConfirm)
         {
             user.Email = user.Email == null ? null : user.Email.Trim();
