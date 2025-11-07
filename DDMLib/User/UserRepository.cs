@@ -4,6 +4,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using BCrypt.Net;
 using DDMLib;
+using System.Data.SqlClient;
 
 public class UserRepository : IUserRepository
 {
@@ -14,28 +15,28 @@ public class UserRepository : IUserRepository
             ErrorLogger.LogError("FindByEmail", "Не удалось подключиться к базе данных.");
         }
 
-        using (var connection = new MySqlConnection(Config.ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
                 connection.Open();
 
-                var command = new MySqlCommand(@"
-                    SELECT email, password_hash, full_name, phone, address
+                MySqlCommand command = new MySqlCommand(@"
+                    SELECT email, passwordHash, fullName, phone, address
                     FROM users
                     WHERE email = @email
                     LIMIT 1;", connection);
 
                 command.Parameters.AddWithValue("@email", email == null ? (object)DBNull.Value : email.Trim());
 
-                using (var reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (!reader.Read())
                         return null; 
 
                     int iEmail = reader.GetOrdinal("email");
-                    int iPass = reader.GetOrdinal("password_hash");
-                    int iFull = reader.GetOrdinal("full_name");
+                    int iPass = reader.GetOrdinal("passwordHash");
+                    int iFull = reader.GetOrdinal("fullName");
                     int iPhone = reader.GetOrdinal("phone");
                     int iAddr = reader.GetOrdinal("address");
 
@@ -62,19 +63,14 @@ public class UserRepository : IUserRepository
 
     public User Save(User user)
     {
-        if (!Config.TestDatabaseConnection())
-        {
-            ErrorLogger.LogError("Save", "Не удалось подключиться к базе данных.");
-        }
-
-        using (var connection = new MySqlConnection(Config.ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
                 connection.Open();
 
-                var command = new MySqlCommand(@"
-                    INSERT INTO users (email, password_hash, full_name, phone, address)
+                MySqlCommand command = new MySqlCommand(@"
+                    INSERT INTO users (email, passwordHash, fullName, phone, address)
                     VALUES (@email, @password_hash, @full_name, @phone, @address);", connection);
 
                 command.Parameters.AddWithValue("@email", user.Email == null ? (object)DBNull.Value : user.Email.Trim());
@@ -105,16 +101,88 @@ public class UserRepository : IUserRepository
 
     public string UpdateProfile(User user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            User existingUser = FindByEmail(user.Email);
+            if (existingUser == null)
+                return "Пользователь не найден";
+
+            string sql = @"UPDATE users SET fullName = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
+
+            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@FullName", user.FullName);
+                command.Parameters.AddWithValue("@Phone", user.Phone ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Address", user.Address ?? (object)DBNull.Value);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected == 0)
+                    return "Не удалось обновить профиль. Пользователь не найден.";
+            }
+
+            return string.Empty;
+        }
+
+        catch(Exception ex)
+        {
+            ErrorLogger.LogError("UpdateProfile", ex.Message);
+            return "Ошибка при обновлении профиля";
+        }
     }
 
     public bool UpdatePasswordHash(string email, string newPassword)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+                return false;
+
+            string newPasswordHash = HashPassword(newPassword);
+
+            string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
+
+            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogger.LogError("UpdatePasswordHash", ex.Message);
+            return false;
+        }
     }
 
     public bool VerifyPassword(User user, string password)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (user == null || string.IsNullOrWhiteSpace(password))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(user.Password))
+                return false;
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            return isPasswordValid;
+        }
+        catch(Exception ex) 
+        {
+            ErrorLogger.LogError("VerifyPassword", ex.Message);
+            return false;
+        }
     }
 }

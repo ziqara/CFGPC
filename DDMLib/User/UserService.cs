@@ -8,11 +8,13 @@ namespace DDMLib
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository userRepository_;
+        private readonly SessionManager sessionManager_;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, SessionManager sessionManager)
         {
-            _userRepository = userRepository;
+            userRepository_ = userRepository;
+            sessionManager_ = sessionManager;
         }
 
         public string ValidateEmail(string email)
@@ -34,6 +36,42 @@ namespace DDMLib
             return string.Empty;
         }
 
+        public string ValidateFullName(string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(fullName))
+                return "ФИО не может быть пустым";
+
+            if (fullName.Length > 255)
+                return "Превышена допустимая длина ФИО (≤ 255)";
+
+            return string.Empty;
+        }
+
+        public string ValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+                return "Пароль недостаточно надёжный (минимум 6 символов)";
+
+            return string.Empty;
+        }
+
+        public string CheckAuthenticationAndAccess(string email)
+        {
+            if (!sessionManager_.IsUserAuthenticated())
+                return "Требуется авторизация";
+
+            string sessionEmail = sessionManager_.GetUserEmailFromSession();
+            if (sessionEmail != email)
+                return "Доступ запрещён";
+
+            return string.Empty;
+        }
+
+        public User ValidateUserExists(string email)
+        {
+            return userRepository_.FindByEmail(email);
+        }
+
         public string RegisterUser(User user, string passwordConfirm)
         {
             user.Email = user.Email == null ? null : user.Email.Trim();
@@ -50,12 +88,12 @@ namespace DDMLib
             if (user.Password != passwordConfirm) return "Пароли не совпадают";
 
  
-            var existing = _userRepository.FindByEmail(user.Email);
+            User existing = userRepository_.FindByEmail(user.Email);
             if (existing != null) return "Email уже зарегистрирован";
 
             try
             {
-                _userRepository.Save(user);
+                userRepository_.Save(user);
                 return "Аккаунт успешно создан!";
             }
             catch (DuplicateNameException)
@@ -76,10 +114,12 @@ namespace DDMLib
             string emailError = ValidateEmail(email);
             if (!string.IsNullOrEmpty(emailError)) return emailError;
 
-            var user = _userRepository.FindByEmail(email);
+            User user = userRepository_.FindByEmail(email);
             if (user == null) return "Аккаунт не найден";
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) return "Неверный пароль";
+
+            sessionManager_.CreateSession(user.Email, user.FullName);
 
             return string.Empty;
         }
