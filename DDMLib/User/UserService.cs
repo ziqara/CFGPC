@@ -67,6 +67,11 @@ namespace DDMLib
             return string.Empty;
         }
 
+        public User ValidateUserExists(string email)
+        {
+            return userRepository_.FindByEmail(email);
+        }
+
         public string RegisterUser(User user, string passwordConfirm)
         {
             user.Email = user.Email == null ? null : user.Email.Trim();
