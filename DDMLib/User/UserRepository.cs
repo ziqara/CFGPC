@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
                 connection.Open();
 
                 var command = new MySqlCommand(@"
-                    SELECT email, password_hash, full_name, phone, address
+                    SELECT email, passwordHash, fullName, phone, address
                     FROM users
                     WHERE email = @email
                     LIMIT 1;", connection);
@@ -35,8 +35,8 @@ public class UserRepository : IUserRepository
                         return null; 
 
                     int iEmail = reader.GetOrdinal("email");
-                    int iPass = reader.GetOrdinal("password_hash");
-                    int iFull = reader.GetOrdinal("full_name");
+                    int iPass = reader.GetOrdinal("passwordHash");
+                    int iFull = reader.GetOrdinal("fullName");
                     int iPhone = reader.GetOrdinal("phone");
                     int iAddr = reader.GetOrdinal("address");
 
@@ -70,7 +70,7 @@ public class UserRepository : IUserRepository
                 connection.Open();
 
                 var command = new MySqlCommand(@"
-                    INSERT INTO users (email, password_hash, full_name, phone, address)
+                    INSERT INTO users (email, passwordHash, fullName, phone, address)
                     VALUES (@email, @password_hash, @full_name, @phone, @address);", connection);
 
                 command.Parameters.AddWithValue("@email", user.Email == null ? (object)DBNull.Value : user.Email.Trim());
@@ -107,7 +107,7 @@ public class UserRepository : IUserRepository
             if (existingUser == null)
                 return "Пользователь не найден";
 
-            string sql = @"UPDATE users SET full_name = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
+            string sql = @"UPDATE users SET fullName = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
 
             using (var connection = new SqlConnection(Config.ConnectionString))
             using (var command = new SqlCommand(sql, connection))
