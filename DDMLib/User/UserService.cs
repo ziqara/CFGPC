@@ -47,6 +47,15 @@ namespace DDMLib
             return string.Empty;
         }
 
+        public string ValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+                return "Пароль недостаточно надёжный (минимум 6 символов)";
+
+            return string.Empty;
+        }
+
+
         public string RegisterUser(User user, string passwordConfirm)
         {
             user.Email = user.Email == null ? null : user.Email.Trim();
