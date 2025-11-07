@@ -63,11 +63,6 @@ public class UserRepository : IUserRepository
 
     public User Save(User user)
     {
-        if (!Config.TestDatabaseConnection())
-        {
-            ErrorLogger.LogError("Save", "Не удалось подключиться к базе данных.");
-        }
-
         using (var connection = new MySqlConnection(Config.ConnectionString))
         {
             try
@@ -106,10 +101,6 @@ public class UserRepository : IUserRepository
 
     public string UpdateProfile(User user)
     {
-        if (!Config.TestDatabaseConnection())
-        {
-            ErrorLogger.LogError("UpdateProfile", "Не удалось подключиться к базе данных.");
-        }
         try
         {
             User existingUser = FindByEmail(user.Email);
@@ -145,10 +136,6 @@ public class UserRepository : IUserRepository
 
     public bool UpdatePasswordHash(string email, string newPassword)
     {
-        if (!Config.TestDatabaseConnection())
-        {
-            ErrorLogger.LogError("UpdatePasswordHash", "Не удалось подключиться к базе данных.");
-        }
         try
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
