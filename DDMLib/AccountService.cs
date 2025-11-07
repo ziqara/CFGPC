@@ -12,31 +12,24 @@ namespace DDMLib
     {
         private readonly IUserRepository userRepository_;
         private readonly SessionManager sessionManager_;
+        private readonly UserService userService_;
 
-        public AccountService(IUserRepository userRepository, SessionManager sessionManager)
+        public AccountService(IUserRepository userRepository, SessionManager sessionManager, UserService userService)
         {
             userRepository_ = userRepository;
             sessionManager_ = sessionManager;
+            userService_ = userService;
         }
 
         public User GetUserProfile(string email)
         {
             try
             {
-                if (!sessionManager_.IsUserAuthenticated())
+                string authError = userService_.CheckAuthenticationAndAccess(email);
+                if (!string.IsNullOrEmpty(authError))
                     return null;
 
-                if (string.IsNullOrWhiteSpace(email))
-                    return null;
-
-                string sessionEmail = sessionManager_.GetUserEmailFromSession();
-                if (sessionEmail != email)
-                    return null;
-
-                User user = userRepository_.FindByEmail(email);
-
-                if (user == null)
-                    return null;
+                User user = userService_.ValidateUserExists(email);
 
                 return user;
             }
@@ -51,23 +44,19 @@ namespace DDMLib
         {
             try
             {
-                if (!sessionManager_.IsUserAuthenticated())
-                    return "Требуется авторизация";
+                string authError = userService_.CheckAuthenticationAndAccess(email);
+                if (!string.IsNullOrEmpty(authError))
+                    return authError;
 
-                if (string.IsNullOrWhiteSpace(fullName))
-                    return "ФИО не может быть пустым";
+                string fullNameError = userService_.ValidateFullName(fullName);
+                if (!string.IsNullOrEmpty(fullNameError))
+                    return fullNameError;
 
-                if (fullName.Length > 255)
-                    return "Превышена допустимая длина ФИО (≤ 255)";
+                string phoneError = userService_.ValidatePhone(phone);
+                if (!string.IsNullOrEmpty(phoneError))
+                    return phoneError;
 
-                if (!string.IsNullOrWhiteSpace(phone) && !IsValidPhoneFormat(phone))
-                    return "Неверный формат телефона. Пример: +7 (999) 123-45-67";
-
-                string sessionEmail = sessionManager_.GetUserEmailFromSession();
-                if (sessionEmail != email)
-                    return "Доступ запрещён";
-
-                User user = userRepository_.FindByEmail(email);
+                User user = userService_.ValidateUserExists(email);
                 if (user == null)
                     return "Пользователь не найден";
 
@@ -92,20 +81,18 @@ namespace DDMLib
         {
             try
             {
-                if (!sessionManager_.IsUserAuthenticated())
-                    return "Требуется авторизация";
+                string authError = userService_.CheckAuthenticationAndAccess(email);
+                if (!string.IsNullOrEmpty(authError))
+                    return authError;
 
                 if (newPassword != repeatPassword)
                     return "Пароли не совпадают";
 
-                if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
-                    return "Пароль недостаточно надёжный (минимум 6 символов)";
+                string passwordError = userService_.ValidatePassword(newPassword);
+                if (!string.IsNullOrEmpty(passwordError))
+                    return passwordError;
 
-                string sessionEmail = sessionManager_.GetUserEmailFromSession();
-                if (sessionEmail != email)
-                    return "Доступ запрещён";
-
-                User user = userRepository_.FindByEmail(email);
+                User user = userService_.ValidateUserExists(email);
                 if (user == null)
                     return "Пользователь не найден";
 
@@ -135,15 +122,6 @@ namespace DDMLib
             {
                 ErrorLogger.LogError("Logout", ex.Message);
             }
-        }
-
-        private bool IsValidPhoneFormat(string phone)
-        {
-            if (string.IsNullOrWhiteSpace(phone))
-                return false;
-
-            var regex = new Regex(@"^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$");
-            return regex.IsMatch(phone);
         }
     }
 }
