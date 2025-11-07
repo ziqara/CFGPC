@@ -9,9 +9,9 @@ namespace DDMLib
     public class UserService
     {
         private readonly IUserRepository userRepository_;
-        private readonly ISessionManager sessionManager_;
+        private readonly SessionManager sessionManager_;
 
-        public UserService(IUserRepository userRepository, ISessionManager sessionManager)
+        public UserService(IUserRepository userRepository, SessionManager sessionManager)
         {
             userRepository_ = userRepository;
             sessionManager_ = sessionManager;

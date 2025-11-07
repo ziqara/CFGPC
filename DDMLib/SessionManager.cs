@@ -9,7 +9,7 @@ using MySqlX.XDevAPI;
 
 namespace DDMLib
 {
-    public class SessionManager : ISessionManager
+    public class SessionManager
     {
         private readonly IHttpContextAccessor httpContextAccessor_;
         private static readonly ConcurrentDictionary<string, SessionData> sessions_ = new ConcurrentDictionary<string, SessionData>();

@@ -11,9 +11,9 @@ namespace DDMLib
     public class AccountService
     {
         private readonly IUserRepository userRepository_;
-        private readonly ISessionManager sessionManager_;
+        private readonly SessionManager sessionManager_;
 
-        public AccountService(IUserRepository userRepository, ISessionManager sessionManager)
+        public AccountService(IUserRepository userRepository, SessionManager sessionManager)
         {
             userRepository_ = userRepository;
             sessionManager_ = sessionManager;
