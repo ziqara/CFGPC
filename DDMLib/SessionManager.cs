@@ -88,7 +88,7 @@ namespace DDMLib
             }
         }
 
-        public void InvalidateSession()
+        public void CloseSession()
         {
             try
             {

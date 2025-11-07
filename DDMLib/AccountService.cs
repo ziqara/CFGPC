@@ -116,7 +116,7 @@ namespace DDMLib
         {
             try
             {
-                sessionManager_.InvalidateSession();
+                sessionManager_.CloseSession();
             }
             catch (Exception ex)
             {
