@@ -55,6 +55,17 @@ namespace DDMLib
             return string.Empty;
         }
 
+        public string CheckAuthenticationAndAccess(string email)
+        {
+            if (!sessionManager_.IsUserAuthenticated())
+                return "Требуется авторизация";
+
+            string sessionEmail = sessionManager_.GetUserEmailFromSession();
+            if (sessionEmail != email)
+                return "Доступ запрещён";
+
+            return string.Empty;
+        }
 
         public string RegisterUser(User user, string passwordConfirm)
         {
