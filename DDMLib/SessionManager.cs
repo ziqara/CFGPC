@@ -63,21 +63,7 @@ namespace DDMLib
         {
             try
             {
-                string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
-
-                if (string.IsNullOrEmpty(sessionId))
-                    return false;
-
-                if (!sessions_.TryGetValue(sessionId, out SessionData sessionData))
-                    return false;
-
-                if (sessionData.ExpiresAt < DateTime.Now)
-                {
-                    sessions_.TryRemove(sessionId, out _);
-                    return false;
-                }
-
-                return true;
+                return IsActiveCookie(out _);
             }
             catch (Exception ex)
             {
@@ -90,23 +76,10 @@ namespace DDMLib
         {
             try
             {
-                if (httpContextAccessor_.HttpContext == null)
-                    return null;
+                if (IsActiveCookie(out SessionData sessionData))
+                    return sessionData.Email;
 
-                string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
-                if (string.IsNullOrEmpty(sessionId))
-                    return null;
-
-                if (!sessions_.TryGetValue(sessionId, out var sessionData))
-                    return null;
-
-                if (sessionData.ExpiresAt < DateTime.Now)
-                {
-                    sessions_.TryRemove(sessionId, out _);
-                    return null;
-                }
-
-                return sessionData.Email;
+                return null;
             }
             catch (Exception ex)
             {
@@ -134,6 +107,30 @@ namespace DDMLib
             {
                 ErrorLogger.LogError("InvalidateSession", ex.Message);
             }
+        }
+
+        private bool IsActiveCookie(out SessionData sessionData)
+        {
+            sessionData = null;
+
+            if (httpContextAccessor_.HttpContext == null)
+                return false;
+
+            string sessionId = httpContextAccessor_.HttpContext.Request.Cookies["SessionId"];
+            if (string.IsNullOrEmpty(sessionId))
+                return false;
+
+            if (!sessions_.TryGetValue(sessionId, out sessionData))
+                return false;
+
+            if (sessionData.ExpiresAt < DateTime.Now)
+            {
+                sessions_.TryRemove(sessionId, out _);
+                sessionData = null;
+                return false;
+            }
+
+            return true;
         }
     }
 }
