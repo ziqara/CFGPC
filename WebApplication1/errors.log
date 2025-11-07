@@ -23,3 +23,5 @@
 2025-10-26 16:28:43 | FindByEmail | Data is Null. This method or property cannot be called on Null values.
 2025-11-03 23:11:19 | FindByEmail | Не удалось подключиться к базе данных.
 2025-11-03 23:11:21 | FindByEmail | Unable to connect to any of the specified MySQL hosts
+2025-11-07 10:46:52 | FindByEmail | Unknown column 'passwordHash' in 'field list'
+2025-11-07 10:47:03 | FindByEmail | Unknown column 'passwordHash' in 'field list'

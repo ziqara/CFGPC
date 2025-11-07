@@ -11,7 +11,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ISessionManager, SessionManager>();
+builder.Services.AddScoped<SessionManager>();
 
 var app = builder.Build();
 
