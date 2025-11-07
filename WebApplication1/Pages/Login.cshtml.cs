@@ -7,11 +7,13 @@ namespace WebApplication1.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService userService_;
+        private readonly SessionManager sessionManager_;
 
-        public LoginModel(UserService userService)
+        public LoginModel(UserService userService, SessionManager sessionManager)
         {
-            _userService = userService;
+            userService_ = userService;
+            sessionManager_ = sessionManager;
         }
 
         [BindProperty]
@@ -25,20 +27,35 @@ namespace WebApplication1.Pages
         public string Password { get; set; }
 
         public string Message { get; set; }
+        public bool IsAuthenticated { get; set; }
+        public string UserName { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (sessionManager_.IsUserAuthenticated())
+            {
+                IsAuthenticated = true;
+                UserName = sessionManager_.GetUserNameFromSession();
+                return Page();
+            }
 
+            IsAuthenticated = false;
+            return Page();
         }
 
         public IActionResult OnPost()
         {
+            if (sessionManager_.IsUserAuthenticated())
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            string result = _userService.LoginUser(Email, Password);
+            string result = userService_.LoginUser(Email, Password);
 
             if (string.IsNullOrEmpty(result))
             {
@@ -47,6 +64,7 @@ namespace WebApplication1.Pages
             else
             {
                 Message = result;
+                IsAuthenticated = false;
                 return Page();
             }
         }
