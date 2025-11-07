@@ -36,10 +36,14 @@ namespace DDMLib
                     return suppliers;
                 }
             }
+
             catch(Exception ex) 
             {
-                ErrorLogger.LogError("ReadAllSuppliers", ex.Message);
-                throw;
+                throw new Exception(
+                $"Вероятно, проблемы в соединении с БД: {ex.Message}",
+                ex
+            );
+
             }
         }
     }
