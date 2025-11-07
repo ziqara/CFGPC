@@ -15,13 +15,13 @@ public class UserRepository : IUserRepository
             ErrorLogger.LogError("FindByEmail", "Не удалось подключиться к базе данных.");
         }
 
-        using (var connection = new MySqlConnection(Config.ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
                 connection.Open();
 
-                var command = new MySqlCommand(@"
+                MySqlCommand command = new MySqlCommand(@"
                     SELECT email, passwordHash, fullName, phone, address
                     FROM users
                     WHERE email = @email
@@ -29,7 +29,7 @@ public class UserRepository : IUserRepository
 
                 command.Parameters.AddWithValue("@email", email == null ? (object)DBNull.Value : email.Trim());
 
-                using (var reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (!reader.Read())
                         return null; 
@@ -63,13 +63,13 @@ public class UserRepository : IUserRepository
 
     public User Save(User user)
     {
-        using (var connection = new MySqlConnection(Config.ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
         {
             try
             {
                 connection.Open();
 
-                var command = new MySqlCommand(@"
+                MySqlCommand command = new MySqlCommand(@"
                     INSERT INTO users (email, passwordHash, fullName, phone, address)
                     VALUES (@email, @password_hash, @full_name, @phone, @address);", connection);
 
@@ -109,8 +109,8 @@ public class UserRepository : IUserRepository
 
             string sql = @"UPDATE users SET fullName = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
 
-            using (var connection = new SqlConnection(Config.ConnectionString))
-            using (var command = new SqlCommand(sql, connection))
+            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@Email", user.Email);
                 command.Parameters.AddWithValue("@FullName", user.FullName);
@@ -145,8 +145,8 @@ public class UserRepository : IUserRepository
 
             string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
 
-            using (var connection = new SqlConnection(Config.ConnectionString))
-            using (var command = new SqlCommand(sql, connection))
+            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@Email", email);
                 command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);

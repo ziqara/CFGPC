@@ -31,7 +31,7 @@ namespace DDMLib
                 TimeSpan sessionTimeout = TimeSpan.FromHours(12);
                 DateTime expiresAt = DateTime.Now.Add(sessionTimeout);
 
-                var sessionData = new SessionData
+                SessionData sessionData = new SessionData
                 {
                     SessionId = sessionId,
                     Email = email,
@@ -42,7 +42,7 @@ namespace DDMLib
 
                 sessions_[sessionId] = sessionData;
 
-                var cookieOptions = new CookieOptions
+                CookieOptions cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,     // Недоступна из JavaScript
                     Secure = true,       // Только по HTTPS

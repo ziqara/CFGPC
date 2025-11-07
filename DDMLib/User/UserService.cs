@@ -88,7 +88,7 @@ namespace DDMLib
             if (user.Password != passwordConfirm) return "Пароли не совпадают";
 
  
-            var existing = userRepository_.FindByEmail(user.Email);
+            User existing = userRepository_.FindByEmail(user.Email);
             if (existing != null) return "Email уже зарегистрирован";
 
             try
@@ -114,7 +114,7 @@ namespace DDMLib
             string emailError = ValidateEmail(email);
             if (!string.IsNullOrEmpty(emailError)) return emailError;
 
-            var user = userRepository_.FindByEmail(email);
+            User user = userRepository_.FindByEmail(email);
             if (user == null) return "Аккаунт не найден";
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) return "Неверный пароль";
