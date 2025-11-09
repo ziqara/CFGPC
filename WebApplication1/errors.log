@@ -26,3 +26,11 @@
 2025-11-07 10:46:52 | FindByEmail | Unknown column 'passwordHash' in 'field list'
 2025-11-07 10:47:03 | FindByEmail | Unknown column 'passwordHash' in 'field list'
 2025-11-09 21:16:22 | FindByEmail | Unknown column 'passwordHash' in 'field list'
+2025-11-09 22:00:48 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-09 22:00:50 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-09 22:04:49 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-09 22:08:38 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-09 22:08:41 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-09 22:12:40 | UpdateProfile | A connection was successfully established with the server, but then an error occurred during the login process. (provider: Shared Memory Provider, error: 0 - С обоих концов канала отсутствуют процессы.)
+2025-11-09 22:12:44 | UpdateProfile | A connection was successfully established with the server, but then an error occurred during the login process. (provider: Shared Memory Provider, error: 0 - С обоих концов канала отсутствуют процессы.)
+2025-11-09 22:15:33 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
