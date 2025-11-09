@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title mb-0">Ваш профиль</h2>
+                    <h2 class="card-title mb-0">Профиль пользователя</h2>
                 </div>
                 <div class="card-body">
                     @if (Model.UserProfile == null)
@@ -89,6 +89,9 @@
 
                         <div class="mt-4">
                             <a asp-page="/Index" class="btn btn-secondary">На главную</a>
+                            <button type="button" class="btn btn-primary">
+                                Редактировать профиль
+                            </button>
                         </div>
                     }
                 </div>
