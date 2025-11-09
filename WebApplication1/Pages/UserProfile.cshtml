@@ -89,12 +89,54 @@
 
                         <div class="mt-4">
                             <a asp-page="/Index" class="btn btn-secondary">На главную</a>
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                 Редактировать профиль
                             </button>
                         </div>
                     }
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Редактирование профиля</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="editFullName" class="form-label">Полное имя</label>
+                                <input type="text" class="form-control" id="editFullName" value="@Model.UserProfile?.FullName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editPhone" class="form-label">Телефон</label>
+                                <input type="tel" class="form-control" id="editPhone" value="@Model.UserProfile?.Phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editAddress" class="form-label">Адрес</label>
+                                <input type="text" class="form-control" id="editAddress" value="@Model.UserProfile?.Address">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
     </div>
