@@ -105,20 +105,22 @@
     </div>
 </div>
 
-<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+<div class="modal fade @(ViewData["ShowModal"]?.ToString() == "true" ? "show d-block" : "")" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="@(ViewData["ShowModal"]?.ToString() == "true" ? "background-color: rgba(0,0,0,0.5);" : "")">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post">
+            <form method="post" id="editProfileForm">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Редактирование профиля</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label asp-for="FullName" class="form-label">Полное имя</label>
-                                <input asp-for="FullName" class="form-control" value="@Model.UserProfile?.FullName">
+                                <input asp-for="FullName" class="form-control">
                                 <span asp-validation-for="FullName" class="text-danger"></span>
                             </div>
                         </div>
@@ -152,4 +154,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
+        {
+            <text>
+                    var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                    modal.show();
+            </text>
+        }
+        });
+    </script>
 }

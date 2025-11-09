@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace WebApplication1.Pages
 {
@@ -29,6 +28,7 @@ namespace WebApplication1.Pages
 
         [BindProperty]
         [StringLength(11, ErrorMessage = "Телефон не должен превышать 11 символов")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Телефон должен содержать только цифры")]  
         public string? Phone { get; set; }
 
         [BindProperty]
@@ -65,18 +65,20 @@ namespace WebApplication1.Pages
                 return RedirectToPage("/Login");
             }
 
-            if (!string.IsNullOrEmpty(Phone))
+            if (string.IsNullOrEmpty(Phone))
             {
-                string phoneError = userService_.ValidatePhone(Phone);
-                if (!string.IsNullOrEmpty(phoneError))
-                {
-                    ModelState.AddModelError("Phone", phoneError);
-                }
+                ModelState.Remove("Phone");
+            }
+
+            if (string.IsNullOrEmpty(Address))
+            {
+                ModelState.Remove("Address");
             }
 
             if (!ModelState.IsValid)
             {
                 LoadUserProfile(userEmail);
+                ViewData["ShowModal"] = "true";
                 return Page();
             }
 
@@ -85,15 +87,15 @@ namespace WebApplication1.Pages
             if (result == "Профиль обновлён")
             {
                 Message = result;
-                LoadUserProfile(userEmail);
+                return RedirectToPage();
             }
             else
             {
                 ModelState.AddModelError(string.Empty, result);
                 LoadUserProfile(userEmail);
+                ViewData["ShowModal"] = "true";
+                return Page();
             }
-
-            return Page();
         }
 
         private void LoadUserProfile(string email)
