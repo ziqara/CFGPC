@@ -25,12 +25,12 @@ namespace WebApplication1.Pages
         public string FullName { get; set; }
 
         [BindProperty]
-        [StringLength(20, ErrorMessage = "Телефон не должен превышать 20 символов")]
-        public string Phone { get; set; }
+        [StringLength(11, ErrorMessage = "Телефон не должен превышать 11 символов")]
+        public string? Phone { get; set; }
 
         [BindProperty]
         [StringLength(500, ErrorMessage = "Адрес не должен превышать 500 символов")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public IActionResult OnGet()
         {
@@ -46,7 +46,6 @@ namespace WebApplication1.Pages
             }
 
             LoadUserProfile(userEmail);
-
             return Page();
         }
 
