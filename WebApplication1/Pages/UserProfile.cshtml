@@ -1,4 +1,98 @@
 ﻿@page
-@model ClientWebApp.Pages.UserProfileModel
+@model WebApplication1.Pages.UserProfileModel
 @{
+    ViewData["Title"] = "Профиль пользователя";
 }
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">Профиль пользователя</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model.UserProfile == null)
+                    {
+                        <div class="alert alert-warning">
+                            <p>Не удалось загрузить данные профиля.</p>
+                            <a asp-page="/Index" class="btn btn-primary">На главную</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Полное имя:</label>
+                                    <p class="form-control-plaintext">@Model.UserProfile.FullName</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Email:</label>
+                                    <p class="form-control-plaintext">@Model.UserProfile.Email</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Телефон:</label>
+                                    <p class="form-control-plaintext">
+                                        @if (string.IsNullOrEmpty(Model.UserProfile.Phone))
+                                        {
+                                            <span class="text-muted">Не указан</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.UserProfile.Phone
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Адрес:</label>
+                                    <p class="form-control-plaintext">
+                                        @if (string.IsNullOrEmpty(Model.UserProfile.Address))
+                                        {
+                                            <span class="text-muted">Не указан</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.UserProfile.Address
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Дата регистрации:</label>
+                                    <p class="form-control-plaintext">
+                                        @if (Model.UserProfile.RegistrationDate != DateTime.MinValue)
+                                        {
+                                            @Model.UserProfile.RegistrationDate.ToString("dd.MM.yyyy HH:mm")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Неизвестно</span>
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <a asp-page="/Index" class="btn btn-secondary">На главную</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
