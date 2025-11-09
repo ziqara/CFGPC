@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace WebApplication1.Pages
 {
@@ -9,11 +10,13 @@ namespace WebApplication1.Pages
     {
         private readonly SessionManager sessionManager_;
         private readonly AccountService accountService_;
+        private readonly UserService userService_;
 
-        public UserProfileModel(SessionManager sessionManager, AccountService accountService)
+        public UserProfileModel(SessionManager sessionManager, AccountService accountService, UserService userService)
         {
             sessionManager_ = sessionManager;
             accountService_ = accountService;
+            userService_ = userService;
         }
 
         public User UserProfile { get; set; }
@@ -60,6 +63,15 @@ namespace WebApplication1.Pages
             if (string.IsNullOrEmpty(userEmail))
             {
                 return RedirectToPage("/Login");
+            }
+
+            if (!string.IsNullOrEmpty(Phone))
+            {
+                string phoneError = userService_.ValidatePhone(Phone);
+                if (!string.IsNullOrEmpty(phoneError))
+                {
+                    ModelState.AddModelError("Phone", phoneError);
+                }
             }
 
             if (!ModelState.IsValid)
