@@ -10,6 +10,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<UserService>();
 
+builder.Services.AddScoped<AccountService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SessionManager>();
 
