@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
                 connection.Open();
 
                 MySqlCommand command = new MySqlCommand(@"
-                    SELECT email, passwordHash, fullName, phone, address
+                    SELECT email, passwordHash, fullName, phone, address, registrationDate
                     FROM users
                     WHERE email = @email
                     LIMIT 1;", connection);
@@ -39,9 +39,11 @@ public class UserRepository : IUserRepository
                     int iFull = reader.GetOrdinal("fullName");
                     int iPhone = reader.GetOrdinal("phone");
                     int iAddr = reader.GetOrdinal("address");
+                    int iRegDate = reader.GetOrdinal("registrationDate");
 
                     Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);
                     Func<int, string> GetStringOrNull = i => reader.IsDBNull(i) ? null : reader.GetString(i);
+                    Func<int, DateTime> GetDateTimeOrMin = i => reader.IsDBNull(i) ? DateTime.MinValue : reader.GetDateTime(i);
 
                     return new User
                     {
@@ -49,7 +51,8 @@ public class UserRepository : IUserRepository
                         Password = GetStringOrEmpty(iPass),
                         FullName = GetStringOrEmpty(iFull),
                         Phone = GetStringOrNull(iPhone),
-                        Address = GetStringOrNull(iAddr)
+                        Address = GetStringOrNull(iAddr),
+                        RegistrationDate = GetDateTimeOrMin(iRegDate)
                     };
                 }
             }
