@@ -36,9 +36,9 @@
             // 
             this.supplierGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.supplierGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.supplierGridView.Location = new System.Drawing.Point(0, 66);
+            this.supplierGridView.Location = new System.Drawing.Point(0, 179);
             this.supplierGridView.Name = "supplierGridView";
-            this.supplierGridView.Size = new System.Drawing.Size(800, 384);
+            this.supplierGridView.Size = new System.Drawing.Size(800, 271);
             this.supplierGridView.TabIndex = 0;
             // 
             // SupplierForm
@@ -50,6 +50,7 @@
             this.Name = "SupplierForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Supplier";
+            this.Load += new System.EventHandler(this.SupplierForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.supplierGridView)).EndInit();
             this.ResumeLayout(false);
 
