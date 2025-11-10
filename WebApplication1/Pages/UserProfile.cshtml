@@ -97,6 +97,9 @@
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                 Редактировать профиль
                             </button>
+                            <button type="button" class="btn btn-outline-warning" disabled>
+                                Сменить пароль
+                            </button>
                         </div>
                     }
                 </div>
@@ -160,8 +163,8 @@
         @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
         {
             <text>
-                    var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                    modal.show();
+                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                        modal.show();
             </text>
         }
         });
