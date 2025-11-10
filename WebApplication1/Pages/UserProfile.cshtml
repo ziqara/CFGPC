@@ -97,7 +97,7 @@
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                 Редактировать профиль
                             </button>
-                            <button type="button" class="btn btn-outline-warning" disabled>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                 Сменить пароль
                             </button>
                         </div>
@@ -155,6 +155,39 @@
     </div>
 </div>
 
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Текущий пароль</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Новый пароль</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Повторите новый пароль</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="handlePasswordChange()">Сменить пароль</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
@@ -163,10 +196,14 @@
         @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
         {
             <text>
-                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                        modal.show();
+                    var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                    modal.show();
             </text>
         }
         });
+
+        function handlePasswordChange() {
+
+        }
     </script>
 }
