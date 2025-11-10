@@ -20,6 +20,7 @@ namespace WebApplication1.Pages
 
         public User UserProfile { get; set; }
         public string Message { get; set; }
+        public string PasswordMessage { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "ФИО обязательно")]
@@ -28,12 +29,29 @@ namespace WebApplication1.Pages
 
         [BindProperty]
         [StringLength(11, ErrorMessage = "Телефон не должен превышать 11 символов")]
-        [RegularExpression(@"^\d+$", ErrorMessage = "Телефон должен содержать только цифры")]  
+        [RegularExpression(@"^\d+$", ErrorMessage = "Телефон должен содержать только цифры")]
         public string? Phone { get; set; }
 
         [BindProperty]
         [StringLength(500, ErrorMessage = "Адрес не должен превышать 500 символов")]
         public string? Address { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Введите текущий пароль")]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Введите новый пароль")]
+        [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Пароль должен быть от 6 до 20 символов")]
+        public string NewPassword { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Подтвердите новый пароль")]
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
+        public string ConfirmPassword { get; set; }
 
         public IActionResult OnGet()
         {
@@ -96,6 +114,44 @@ namespace WebApplication1.Pages
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
+        }
+
+        public IActionResult OnPostChangePassword()
+        {
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                return RedirectToPage("/Login");
+            }
+
+            string userEmail = sessionManager_.GetUserEmailFromSession();
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                LoadUserProfile(userEmail);
+                return Page();
+            }
+
+            string result = accountService_.ChangePassword(userEmail, CurrentPassword, NewPassword, ConfirmPassword);
+
+            if (result == "Пароль обновлён")
+            {
+                PasswordMessage = result;
+                CurrentPassword = string.Empty;
+                NewPassword = string.Empty;
+                ConfirmPassword = string.Empty;
+                ModelState.Clear();
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result);
+            }
+
+            LoadUserProfile(userEmail);
+            return Page();
         }
 
         private void LoadUserProfile(string email)
