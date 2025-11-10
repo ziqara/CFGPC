@@ -124,6 +124,9 @@
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                 Сменить пароль
                             </button>
+                            <form method="post" class="d-inline" asp-page-handler="Logout">
+                                <button type="submit" class="btn btn-danger">Выйти</button>
+                            </form>
                         </div>
                     }
                 </div>
@@ -188,7 +191,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div> 
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                     @if (!string.IsNullOrEmpty(Model.Message))
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -239,8 +242,8 @@
         @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
         {
             <text>
-                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                        modal.show();
+                            var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                            modal.show();
             </text>
         }
         });

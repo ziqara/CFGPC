@@ -181,7 +181,7 @@ namespace WebApplication1.Pages
 
             if (result == "Пароль обновлён")
             {
-                PasswordMessage = result; 
+                PasswordMessage = result;
                 CurrentPassword = string.Empty;
                 NewPassword = string.Empty;
                 ConfirmPassword = string.Empty;
@@ -195,6 +195,12 @@ namespace WebApplication1.Pages
 
             LoadUserProfile(userEmail);
             return Page();
+        }
+
+        public IActionResult OnPostLogout()
+        {
+            ErrorLogger.LogError("UserProfileModel OnPostLogout", "Logout button clicked (not implemented yet).");
+            return RedirectToPage("/Index");
         }
 
         private void LoadUserProfile(string email)
