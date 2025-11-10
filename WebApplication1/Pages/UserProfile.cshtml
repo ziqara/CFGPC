@@ -16,10 +16,6 @@
                     {
                         <div class="alert alert-success">@Model.Message</div>
                     }
-                    @if (!string.IsNullOrEmpty(Model.PasswordMessage))
-                    {
-                        <div class="alert alert-info">@Model.PasswordMessage</div>
-                    }
 
                     @if (Model.UserProfile == null)
                     {
@@ -162,37 +158,32 @@
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" id="changePasswordForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
                     <div class="mb-3">
-                        <label asp-for="CurrentPassword" class="form-label">Текущий пароль</label>
-                        <input asp-for="CurrentPassword" type="password" class="form-control">
-                        <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                        <label for="currentPassword" class="form-label">Текущий пароль</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="NewPassword" class="form-label">Новый пароль</label>
-                        <input asp-for="NewPassword" type="password" class="form-control">
-                        <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        <label for="newPassword" class="form-label">Новый пароль</label>
+                        <input type="password" class="form-control" id="newPassword" required>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="ConfirmPassword" class="form-label">Повторите новый пароль</label>
-                        <input asp-for="ConfirmPassword" type="password" class="form-control">
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        <label for="confirmPassword" class="form-label">Повторите новый пароль</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary" asp-page-handler="ChangePassword">Сменить пароль</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="handlePasswordChange()">Сменить пароль</button>
+            </div>
         </div>
     </div>
 </div>
@@ -205,10 +196,14 @@
         @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
         {
             <text>
-                    var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                    modal.show();
+                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                        modal.show();
             </text>
         }
         });
+
+        function handlePasswordChange() {
+
+        }
     </script>
 }
