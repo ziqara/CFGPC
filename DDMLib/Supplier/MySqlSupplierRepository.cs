@@ -1,16 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using DDMLib;
 
-namespace DDMLib
+public class MySqlSupplierRepository : ISupplierRepository
 {
-    public class MySqlSupplierRepository : ISupplierRepository
+    public List<Supplier> ReadAllSuppliers()
     {
-        public List<Supplier> ReadAllSuppliers()
+        List<Supplier> suppliers = new List<Supplier>();
+
+        try
         {
-            throw new NotImplementedException();
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT inn, name, contactEmail, phone, address FROM suppliers;";
+                using (MySqlCommand command = new MySqlCommand(sql, connection))
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Supplier s = new Supplier(reader.GetInt32(0))
+                        {
+                            Name = reader.GetString(1),
+                            ContactEmail = reader.GetString(2),
+                            Phone = reader.IsDBNull(3) ? null : reader.GetString(3),
+                            Address = reader.IsDBNull(4) ? null : reader.GetString(4)
+                        };
+
+                        suppliers.Add(s);
+                    }
+                }
+            }
         }
+        catch
+        {
+            throw; // ошибка пробрасывается в ui
+        }
+
+        return suppliers;
     }
 }
