@@ -21,6 +21,7 @@ namespace AdminForm
             service_ = new SupplierService(new MySqlSupplierRepository());
 
             supplierGridView.CellFormatting += SupplierGridView_CellFormatting;
+            supplierGridView.CellToolTipTextNeeded += SupplierGridView_CellToolTipTextNeeded;
         }
 
         private void SupplierForm_Load(object sender, EventArgs e)
@@ -67,6 +68,19 @@ namespace AdminForm
                     e.FormattingApplied = true;
                 }
             }
+        }
+
+        private void SupplierGridView_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var column = supplierGridView.Columns[e.ColumnIndex];
+            if (column.DataPropertyName != "Address") return;
+
+            var supplier = supplierGridView.Rows[e.RowIndex].DataBoundItem as Supplier;
+            var address = supplier?.Address;
+
+            e.ToolTipText = string.IsNullOrWhiteSpace(address) ? string.Empty : address;
         }
     }
 }
