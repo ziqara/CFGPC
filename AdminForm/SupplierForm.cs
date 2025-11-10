@@ -19,6 +19,8 @@ namespace AdminForm
         {
             InitializeComponent();
             service_ = new SupplierService(new MySqlSupplierRepository());
+
+            supplierGridView.CellFormatting += SupplierGridView_CellFormatting;
         }
 
         private void SupplierForm_Load(object sender, EventArgs e)
@@ -30,9 +32,9 @@ namespace AdminForm
         {
             try
             {
-                var suppliers = service_.GetAllSuppliers();
+                List <Supplier> suppliers = service_.GetAllSuppliers();
 
-                if (suppliers.Count == 0)
+                if (suppliers == null || suppliers.Count == 0)
                 {
                     supplierGridView.Visible = false;
                     MessageBox.Show("Поставщиков пока нет", "Информация",
@@ -45,8 +47,25 @@ namespace AdminForm
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки поставщиков:\n{ex.Message}",
+                supplierGridView.Visible = false;
+                MessageBox.Show($"Вероятно, проблемы в соединении с БД.\n\n{ex.Message}",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SupplierGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var col = supplierGridView.Columns[e.ColumnIndex].DataPropertyName;
+            if (col == "Phone" || col == "Address")
+            {
+                var value = e.Value as string;
+                if (string.IsNullOrEmpty(value))
+                {
+                    e.Value = "—";
+                    e.FormattingApplied = true;
+                }
             }
         }
     }
