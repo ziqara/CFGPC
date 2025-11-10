@@ -34,3 +34,50 @@
 2025-11-09 22:12:40 | UpdateProfile | A connection was successfully established with the server, but then an error occurred during the login process. (provider: Shared Memory Provider, error: 0 - С обоих концов канала отсутствуют процессы.)
 2025-11-09 22:12:44 | UpdateProfile | A connection was successfully established with the server, but then an error occurred during the login process. (provider: Shared Memory Provider, error: 0 - С обоих концов канала отсутствуют процессы.)
 2025-11-09 22:15:33 | UpdateProfile | Could not load file or assembly 'System.Data.SqlClient, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Не удается найти указанный файл.
+2025-11-10 22:34:22 | UserProfileModel OnGet | Started
+2025-11-10 22:34:22 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-10 22:35:25 | UserProfileModel OnGet | Started
+2025-11-10 22:35:25 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:35:45 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:35:45 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 22:35:45 | UserProfileModel OnPostChangePassword | ModelState is invalid before calling service.
+2025-11-10 22:38:03 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:38:03 | UserProfileModel OnPostChangePassword | User not authenticated, redirecting.
+2025-11-10 22:38:19 | UserProfileModel OnGet | Started
+2025-11-10 22:38:19 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:38:29 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:38:29 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 22:38:29 | UserProfileModel OnPostChangePassword | ModelState is invalid before calling service.
+2025-11-10 22:38:29 | UserProfileModel OnPostChangePassword | ModelState Error in 'FullName': ФИО обязательно
+2025-11-10 22:40:38 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:40:38 | UserProfileModel OnPostChangePassword | User not authenticated, redirecting.
+2025-11-10 22:40:48 | UserProfileModel OnGet | Started
+2025-11-10 22:40:48 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:41:00 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:41:00 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 22:41:00 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-10 22:41:00 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-10 22:41:00 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-10 22:44:13 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 22:44:13 | UserProfileModel OnPostUpdateProfile | ModelState is invalid.
+2025-11-10 22:44:18 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 22:44:18 | UserProfileModel OnPostUpdateProfile | ModelState is invalid.
+2025-11-10 22:47:25 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 22:47:25 | UserProfileModel OnPostUpdateProfile | User not authenticated, redirecting.
+2025-11-10 22:47:34 | UserProfileModel OnGet | Started
+2025-11-10 22:47:34 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:47:36 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 22:47:36 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-10 22:47:36 | UserProfileModel OnGet | Started
+2025-11-10 22:47:36 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:47:42 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 22:47:42 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-10 22:47:42 | UserProfileModel OnGet | Started
+2025-11-10 22:47:42 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-10 22:48:11 | UserProfileModel OnGet | Started
+2025-11-10 22:48:11 | UserProfileModel OnGet | Profile loaded successfully.

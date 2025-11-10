@@ -20,9 +20,10 @@ namespace WebApplication1.Pages
 
         public User UserProfile { get; set; }
         public string Message { get; set; }
+        public string PasswordMessage { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "ФИО обязательно")]
+        [Required(ErrorMessage = "ФИО обязательно", AllowEmptyStrings = false)]
         [StringLength(255, ErrorMessage = "ФИО не должно превышать 255 символов")]
         public string FullName { get; set; }
 
@@ -35,35 +36,64 @@ namespace WebApplication1.Pages
         [StringLength(500, ErrorMessage = "Адрес не должен превышать 500 символов")]
         public string? Address { get; set; }
 
+        [BindProperty]
+        [Required(ErrorMessage = "Введите текущий пароль")]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Введите новый пароль")]
+        [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Пароль должен быть от 6 до 20 символов")]
+        public string NewPassword { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Подтвердите новый пароль")]
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
+        public string ConfirmPassword { get; set; }
+
+
         public IActionResult OnGet()
         {
+            ErrorLogger.LogError("UserProfileModel OnGet", "Started");
             if (!sessionManager_.IsUserAuthenticated())
             {
+                ErrorLogger.LogError("UserProfileModel OnGet", "User not authenticated, redirecting.");
                 return RedirectToPage("/Login");
             }
 
             string userEmail = sessionManager_.GetUserEmailFromSession();
             if (string.IsNullOrEmpty(userEmail))
             {
+                ErrorLogger.LogError("UserProfileModel OnGet", "User email not found in session, redirecting.");
                 return RedirectToPage("/Login");
             }
 
             LoadUserProfile(userEmail);
+            ErrorLogger.LogError("UserProfileModel OnGet", "Profile loaded successfully.");
             return Page();
         }
 
         public IActionResult OnPostUpdateProfile()
         {
+            ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "Started");
             if (!sessionManager_.IsUserAuthenticated())
             {
+                ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "User not authenticated, redirecting.");
                 return RedirectToPage("/Login");
             }
 
             string userEmail = sessionManager_.GetUserEmailFromSession();
             if (string.IsNullOrEmpty(userEmail))
             {
+                ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "User email not found in session, redirecting.");
                 return RedirectToPage("/Login");
             }
+
+            ModelState.Remove(nameof(CurrentPassword));
+            ModelState.Remove(nameof(NewPassword));
+            ModelState.Remove(nameof(ConfirmPassword));
 
             if (string.IsNullOrEmpty(Phone))
             {
@@ -77,6 +107,7 @@ namespace WebApplication1.Pages
 
             if (!ModelState.IsValid)
             {
+                ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "ModelState is invalid.");
                 LoadUserProfile(userEmail);
                 ViewData["ShowModal"] = "true";
                 return Page();
@@ -87,15 +118,83 @@ namespace WebApplication1.Pages
             if (result == "Профиль обновлён")
             {
                 Message = result;
+                ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "Profile updated successfully.");
                 return RedirectToPage();
             }
             else
             {
+                ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", $"Profile update failed: {result}");
                 ModelState.AddModelError(string.Empty, result);
                 LoadUserProfile(userEmail);
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
+        }
+
+        public IActionResult OnPostChangePassword()
+        {
+            ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "Started");
+
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "User not authenticated, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            string userEmail = sessionManager_.GetUserEmailFromSession();
+            ErrorLogger.LogError("UserProfileModel OnPostChangePassword", $"Session email retrieved: '{userEmail}'");
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "User email not found in session, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            PasswordMessage = string.Empty;
+            Message = string.Empty;
+
+            ModelState.Remove(nameof(FullName));
+            ModelState.Remove(nameof(Phone));
+            ModelState.Remove(nameof(Address));
+
+            if (!ModelState.IsValid)
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "ModelState is invalid after removing profile fields.");
+                foreach (var error in ModelState)
+                {
+                    if (error.Key == nameof(CurrentPassword) || error.Key == nameof(NewPassword) || error.Key == nameof(ConfirmPassword))
+                    {
+                        foreach (var subError in error.Value.Errors)
+                        {
+                            ErrorLogger.LogError("UserProfileModel OnPostChangePassword", $"Password Change ModelState Error in '{error.Key}': {subError.ErrorMessage}");
+                        }
+                    }
+                }
+                LoadUserProfile(userEmail);
+                return Page();
+            }
+
+            ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "ModelState is valid for password change. Calling AccountService.");
+
+            string result = accountService_.ChangePassword(userEmail, CurrentPassword, NewPassword, ConfirmPassword);
+            ErrorLogger.LogError("UserProfileModel OnPostChangePassword", $"AccountService returned: '{result}'");
+
+            if (result == "Пароль обновлён")
+            {
+                PasswordMessage = result; 
+                CurrentPassword = string.Empty;
+                NewPassword = string.Empty;
+                ConfirmPassword = string.Empty;
+                ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "Password changed successfully.");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result);
+                ErrorLogger.LogError("UserProfileModel OnPostChangePassword", $"Password change failed: {result}");
+            }
+
+            LoadUserProfile(userEmail);
+            return Page();
         }
 
         private void LoadUserProfile(string email)

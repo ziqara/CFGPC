@@ -14,7 +14,31 @@
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(Model.Message))
                     {
-                        <div class="alert alert-success">@Model.Message</div>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @Model.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.PasswordMessage))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @Model.PasswordMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    }
+
+                    @if (!ViewContext.ModelState.IsValid && ViewContext.ModelState[string.Empty] != null && ViewContext.ModelState[string.Empty].Errors.Count > 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                @foreach (var error in ViewContext.ModelState[string.Empty].Errors)
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
                     }
 
                     @if (Model.UserProfile == null)
@@ -123,7 +147,7 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label asp-for="FullName" class="form-label">Полное имя</label>
-                                <input asp-for="FullName" class="form-control">
+                                <input asp-for="FullName" class="form-control" />
                                 <span asp-validation-for="FullName" class="text-danger"></span>
                             </div>
                         </div>
@@ -133,14 +157,14 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label asp-for="Phone" class="form-label">Телефон</label>
-                                <input asp-for="Phone" class="form-control">
+                                <input asp-for="Phone" class="form-control" />
                                 <span asp-validation-for="Phone" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label asp-for="Address" class="form-label">Адрес</label>
-                                <input asp-for="Address" class="form-control">
+                                <input asp-for="Address" class="form-control" />
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
                         </div>
@@ -158,32 +182,51 @@
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm">
+            <form method="post" id="changePasswordForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div> 
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.PasswordMessage))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @Model.PasswordMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    }
+
                     <div class="mb-3">
-                        <label for="currentPassword" class="form-label">Текущий пароль</label>
-                        <input type="password" class="form-control" id="currentPassword" required>
+                        <label asp-for="CurrentPassword" class="form-label">Текущий пароль</label>
+                        <input asp-for="CurrentPassword" type="password" class="form-control" />
+                        <span asp-validation-for="CurrentPassword" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="newPassword" class="form-label">Новый пароль</label>
-                        <input type="password" class="form-control" id="newPassword" required>
+                        <label asp-for="NewPassword" class="form-label">Новый пароль</label>
+                        <input asp-for="NewPassword" type="password" class="form-control" />
+                        <span asp-validation-for="NewPassword" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="confirmPassword" class="form-label">Повторите новый пароль</label>
-                        <input type="password" class="form-control" id="confirmPassword" required>
+                        <label asp-for="ConfirmPassword" class="form-label">Повторите новый пароль</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-primary" onclick="handlePasswordChange()">Сменить пароль</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="ChangePassword">Сменить пароль</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -201,9 +244,5 @@
             </text>
         }
         });
-
-        function handlePasswordChange() {
-
-        }
     </script>
 }
