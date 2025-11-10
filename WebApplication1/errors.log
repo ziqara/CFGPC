@@ -81,3 +81,30 @@
 2025-11-10 22:47:50 | UserProfileModel OnPostChangePassword | Password changed successfully.
 2025-11-10 22:48:11 | UserProfileModel OnGet | Started
 2025-11-10 22:48:11 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 23:11:29 | UserProfileModel OnGet | Started
+2025-11-10 23:11:29 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 23:11:31 | UserProfileModel OnPostLogout | Logout button clicked (not implemented yet).
+2025-11-10 23:11:32 | UserProfileModel OnGet | Started
+2025-11-10 23:11:32 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 23:13:25 | UserProfileModel OnGet | Started
+2025-11-10 23:13:25 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-10 23:13:34 | UserProfileModel OnGet | Started
+2025-11-10 23:13:34 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 23:13:40 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 23:13:40 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-10 23:13:45 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-10 23:13:45 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-10 23:13:45 | UserProfileModel OnGet | Started
+2025-11-10 23:13:45 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-10 23:14:06 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 23:14:06 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 23:14:06 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-10 23:14:07 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-10 23:14:07 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | Started
+2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-10 23:14:20 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-10 23:14:20 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.

@@ -199,8 +199,18 @@ namespace WebApplication1.Pages
 
         public IActionResult OnPostLogout()
         {
-            ErrorLogger.LogError("UserProfileModel OnPostLogout", "Logout button clicked (not implemented yet).");
-            return RedirectToPage("/Index");
+            ErrorLogger.LogError("UserProfileModel OnPostLogout", "Logout initiated.");
+
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostLogout", "User not authenticated, cannot logout.");
+            }
+
+            accountService_.Logout();
+
+            ErrorLogger.LogError("UserProfileModel OnPostLogout", "Logout process completed, redirecting to Login.");
+
+            return RedirectToPage("/Login");
         }
 
         private void LoadUserProfile(string email)
