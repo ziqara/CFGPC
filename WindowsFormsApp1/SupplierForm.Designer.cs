@@ -40,14 +40,14 @@
             this.supplierDataTable.Name = "supplierDataTable";
             this.supplierDataTable.ReadOnly = true;
             this.supplierDataTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.supplierDataTable.Size = new System.Drawing.Size(546, 368);
+            this.supplierDataTable.Size = new System.Drawing.Size(543, 368);
             this.supplierDataTable.TabIndex = 0;
             // 
             // SupplierForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 450);
+            this.ClientSize = new System.Drawing.Size(543, 450);
             this.Controls.Add(this.supplierDataTable);
             this.Name = "SupplierForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
