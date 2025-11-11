@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DDMLib;
 
-namespace AdminForm
+namespace WindowsFormsApp1
 {
     internal static class Program
     {
@@ -14,9 +15,10 @@ namespace AdminForm
         [STAThread]
         static void Main()
         {
+            Config.InitializeConfiguration();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
         }
     }
 }

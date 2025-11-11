@@ -22,9 +22,8 @@ namespace DDMTests
             List<Supplier> data = new List<Supplier>();
             for (int i = 0; i < inns.Length; i++)
             {
-                data.Add(new Supplier
+                data.Add(new Supplier(inns[i])
                 {
-                    Inn = inns[i],
                     Name = names[i],
                     ContactEmail = emails[i],
                     Phone = phones[i],
