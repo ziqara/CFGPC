@@ -4,75 +4,78 @@
     ViewData["Title"] = "Профиль пользователя";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title mb-0">Профиль пользователя</h2>
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <h2 class="card-title mb-0 text-center">Профиль пользователя</h2>
                 </div>
-                <div class="card-body">
-                    @if (!string.IsNullOrEmpty(Model.Message))
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            @Model.Message
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-                        </div>
-                    }
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i> @Model.Message
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                            </div>
+                        }
 
-                    @if (!string.IsNullOrEmpty(Model.PasswordMessage))
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            @Model.PasswordMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-                        </div>
-                    }
+                        @if (!string.IsNullOrEmpty(Model.PasswordMessage))
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-lock-open me-2"></i> @Model.PasswordMessage
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                            </div>
+                        }
 
-                    @if (!ViewContext.ModelState.IsValid && ViewContext.ModelState[string.Empty] != null && ViewContext.ModelState[string.Empty].Errors.Count > 0)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <ul class="mb-0">
-                                @foreach (var error in ViewContext.ModelState[string.Empty].Errors)
-                                {
-                                    <li>@error.ErrorMessage</li>
-                                }
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-                        </div>
-                    }
+                        @if (!ViewContext.ModelState.IsValid && ViewContext.ModelState[string.Empty] != null && ViewContext.ModelState[string.Empty].Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <ul class="mb-0">
+                                    @foreach (var error in ViewContext.ModelState[string.Empty].Errors)
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                            </div>
+                        }
+                    </div>
 
                     @if (Model.UserProfile == null)
                     {
-                        <div class="alert alert-warning">
-                            <p>Не удалось загрузить данные профиля.</p>
-                            <a asp-page="/Index" class="btn btn-primary">На главную</a>
+                        <div class="alert alert-warning text-center">
+                            <p class="mb-0">Не удалось загрузить данные профиля.</p>
+                            <a asp-page="/Index" class="btn btn-primary mt-2">На главную</a>
                         </div>
                     }
                     else
                     {
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Полное имя:</label>
-                                    <p class="form-control-plaintext">@Model.UserProfile.FullName</p>
+                                    <label class="form-label fw-bold text-muted">Полное имя:</label>
+                                    <p class="form-control-plaintext fs-5">@Model.UserProfile.FullName</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Email:</label>
-                                    <p class="form-control-plaintext">@Model.UserProfile.Email</p>
+                                    <label class="form-label fw-bold text-muted">Email:</label>
+                                    <p class="form-control-plaintext fs-5">@Model.UserProfile.Email</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Телефон:</label>
-                                    <p class="form-control-plaintext">
+                                    <label class="form-label fw-bold text-muted">Телефон:</label>
+                                    <p class="form-control-plaintext fs-5">
                                         @if (string.IsNullOrEmpty(Model.UserProfile.Phone))
                                         {
-                                            <span class="text-muted">Не указан</span>
+                                            <span class="text-muted fst-italic">Не указан</span>
                                         }
                                         else
                                         {
@@ -83,11 +86,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Адрес:</label>
-                                    <p class="form-control-plaintext">
+                                    <label class="form-label fw-bold text-muted">Адрес:</label>
+                                    <p class="form-control-plaintext fs-5">
                                         @if (string.IsNullOrEmpty(Model.UserProfile.Address))
                                         {
-                                            <span class="text-muted">Не указан</span>
+                                            <span class="text-muted fst-italic">Не указан</span>
                                         }
                                         else
                                         {
@@ -98,34 +101,40 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Дата регистрации:</label>
-                                    <p class="form-control-plaintext">
+                                    <label class="form-label fw-bold text-muted">Дата регистрации:</label>
+                                    <p class="form-control-plaintext fs-5">
                                         @if (Model.UserProfile.RegistrationDate != DateTime.MinValue)
                                         {
                                             @Model.UserProfile.RegistrationDate.ToString("dd.MM.yyyy")
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Неизвестно</span>
+                                            <span class="text-muted fst-italic">Неизвестно</span>
                                         }
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <a asp-page="/Index" class="btn btn-secondary">На главную</a>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                                Редактировать профиль
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                            <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="fas fa-home me-2"></i>На главную
+                            </a>
+                            <button type="button" class="btn btn-outline-primary btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-user-edit me-2"></i>Редактировать профиль
                             </button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                                Сменить пароль
+                            <button type="button" class="btn btn-outline-success btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                <i class="fas fa-key me-2"></i>Сменить пароль
                             </button>
-                            <form method="post" class="d-inline" asp-page-handler="Logout">
-                                <button type="submit" class="btn btn-danger">Выйти</button>
+                            <form method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-danger btn-lg px-4" asp-page-handler="Logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                                </button>
                             </form>
                         </div>
                     }
@@ -135,22 +144,22 @@
     </div>
 </div>
 
-<div class="modal fade @(ViewData["ShowModal"]?.ToString() == "true" ? "show d-block" : "")" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="@(ViewData["ShowModal"]?.ToString() == "true" ? "background-color: rgba(0,0,0,0.5);" : "")">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="editProfileModalLabel"><i class="fas fa-user-edit me-2 text-primary"></i>Редактирование профиля</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <form method="post" id="editProfileForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Редактирование профиля</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label asp-for="FullName" class="form-label">Полное имя</label>
-                                <input asp-for="FullName" class="form-control" />
+                                <label asp-for="FullName" class="form-label fw-bold">Полное имя</label>
+                                <input asp-for="FullName" class="form-control form-control-lg" />
                                 <span asp-validation-for="FullName" class="text-danger"></span>
                             </div>
                         </div>
@@ -159,23 +168,25 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Phone" class="form-label">Телефон</label>
-                                <input asp-for="Phone" class="form-control" />
+                                <label asp-for="Phone" class="form-label fw-bold">Телефон</label>
+                                <input asp-for="Phone" class="form-control" placeholder="Только цифры, до 11 символов"/>
                                 <span asp-validation-for="Phone" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Address" class="form-label">Адрес</label>
+                                <label asp-for="Address" class="form-label fw-bold">Адрес</label>
                                 <input asp-for="Address" class="form-control" />
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary" asp-page-handler="UpdateProfile">Сохранить</button>
+                    <button type="submit" class="btn btn-primary px-4" asp-page-handler="UpdateProfile">
+                        <i class="fas fa-save me-2"></i>Сохранить
+                    </button>
                 </div>
             </form>
         </div>
@@ -183,51 +194,39 @@
 </div>
 
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key me-2 text-success"></i>Смена пароля</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <form method="post" id="changePasswordForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                    @if (!string.IsNullOrEmpty(Model.Message))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            @Model.Message
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-                        </div>
-                    }
-                    @if (!string.IsNullOrEmpty(Model.PasswordMessage))
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            @Model.PasswordMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-                        </div>
-                    }
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
                     <div class="mb-3">
-                        <label asp-for="CurrentPassword" class="form-label">Текущий пароль</label>
+                        <label asp-for="CurrentPassword" class="form-label fw-bold">Текущий пароль</label>
                         <input asp-for="CurrentPassword" type="password" class="form-control" />
                         <span asp-validation-for="CurrentPassword" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="NewPassword" class="form-label">Новый пароль</label>
+                        <label asp-for="NewPassword" class="form-label fw-bold">Новый пароль</label>
                         <input asp-for="NewPassword" type="password" class="form-control" />
                         <span asp-validation-for="NewPassword" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="ConfirmPassword" class="form-label">Повторите новый пароль</label>
+                        <label asp-for="ConfirmPassword" class="form-label fw-bold">Повторите новый пароль</label>
                         <input asp-for="ConfirmPassword" type="password" class="form-control" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary" asp-page-handler="ChangePassword">Сменить пароль</button>
+                    <button type="submit" class="btn btn-success px-4" asp-page-handler="ChangePassword">
+                        <i class="fas fa-key me-2"></i>Сменить пароль
+                    </button>
                 </div>
             </form>
         </div>
@@ -236,16 +235,17 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
-        {
-            <text>
-                            var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                            modal.show();
-            </text>
-        }
+            @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
+            {
+                <text>
+                var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                modal.show();
+                </text>
+            }
         });
     </script>
 }
