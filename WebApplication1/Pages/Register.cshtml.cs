@@ -7,11 +7,13 @@ namespace WebApplication1.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService userService_;
+        private readonly SessionManager sessionManager_;
 
-        public RegisterModel(UserService userService)
+        public RegisterModel(UserService userService, SessionManager sessionManager)
         {
-            _userService = userService;
+            userService_ = userService;
+            sessionManager_ = sessionManager;
         }
 
         [BindProperty]
@@ -30,19 +32,37 @@ namespace WebApplication1.Pages
         public string ConfirmPassword { get; set; }
 
         public string Message { get; set; }
+        public bool IsAuthenticated { get; set; }
+        public string UserName { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (sessionManager_.IsUserAuthenticated())
+            {
+                IsAuthenticated = true;
+                UserName = sessionManager_.GetUserNameFromSession();
+                return Page();
+            }
+
+            IsAuthenticated = false;
+
             if (NewUser == null)
                 NewUser = new UserValidation();
+
+            return Page();
         }
 
         public IActionResult OnPost()
         {
+            if (sessionManager_.IsUserAuthenticated())
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (!ModelState.IsValid)
                 return Page();
 
-            var result = _userService.RegisterUser(
+            var result = userService_.RegisterUser(
                 new User
                 {
                     Email = NewUser.Email,
@@ -57,6 +77,10 @@ namespace WebApplication1.Pages
             if (result == "Аккаунт успешно создан!")
             {
                 Message = result;
+                NewUser = new UserValidation();
+                Password = string.Empty;
+                ConfirmPassword = string.Empty;
+                ModelState.Clear();
                 return Page();
             }
 
@@ -69,8 +93,7 @@ namespace WebApplication1.Pages
                 ModelState.AddModelError(string.Empty, result);
             }
 
-            return RedirectToPage("/Login");
+            return Page();
         }
-
     }
 }

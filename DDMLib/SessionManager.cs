@@ -132,5 +132,21 @@ namespace DDMLib
 
             return true;
         }
+
+        public string GetUserNameFromSession()
+        {
+            try
+            {
+                if (IsActiveCookie(out SessionData sessionData))
+                    return sessionData.UserName;
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("GetUserNameFromSession", ex.Message);
+                return null;
+            }
+        }
     }
 }

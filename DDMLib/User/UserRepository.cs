@@ -4,7 +4,6 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using BCrypt.Net;
 using DDMLib;
-using System.Data.SqlClient;
 
 public class UserRepository : IUserRepository
 {
@@ -22,7 +21,7 @@ public class UserRepository : IUserRepository
                 connection.Open();
 
                 MySqlCommand command = new MySqlCommand(@"
-                    SELECT email, passwordHash, fullName, phone, address
+                    SELECT email, passwordHash, fullName, phone, address, registrationDate
                     FROM users
                     WHERE email = @email
                     LIMIT 1;", connection);
@@ -32,16 +31,18 @@ public class UserRepository : IUserRepository
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (!reader.Read())
-                        return null; 
+                        return null;
 
                     int iEmail = reader.GetOrdinal("email");
                     int iPass = reader.GetOrdinal("passwordHash");
                     int iFull = reader.GetOrdinal("fullName");
                     int iPhone = reader.GetOrdinal("phone");
                     int iAddr = reader.GetOrdinal("address");
+                    int iRegDate = reader.GetOrdinal("registrationDate");
 
                     Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);
                     Func<int, string> GetStringOrNull = i => reader.IsDBNull(i) ? null : reader.GetString(i);
+                    Func<int, DateTime> GetDateTimeOrMin = i => reader.IsDBNull(i) ? DateTime.MinValue : reader.GetDateTime(i);
 
                     return new User
                     {
@@ -49,7 +50,8 @@ public class UserRepository : IUserRepository
                         Password = GetStringOrEmpty(iPass),
                         FullName = GetStringOrEmpty(iFull),
                         Phone = GetStringOrNull(iPhone),
-                        Address = GetStringOrNull(iAddr)
+                        Address = GetStringOrNull(iAddr),
+                        RegistrationDate = GetDateTimeOrMin(iRegDate)
                     };
                 }
             }
@@ -109,8 +111,8 @@ public class UserRepository : IUserRepository
 
             string sql = @"UPDATE users SET fullName = @FullName, phone = @Phone, address = @Address WHERE email = @Email";
 
-            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
-            using (SqlCommand command = new SqlCommand(sql, connection))
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            using (MySqlCommand command = new MySqlCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@Email", user.Email);
                 command.Parameters.AddWithValue("@FullName", user.FullName);
@@ -126,11 +128,10 @@ public class UserRepository : IUserRepository
 
             return string.Empty;
         }
-
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ErrorLogger.LogError("UpdateProfile", ex.Message);
-            return "Ошибка при обновлении профиля";
+            return "Ошибка при обновлении профиля: " + ex.Message;
         }
     }
 
@@ -143,10 +144,10 @@ public class UserRepository : IUserRepository
 
             string newPasswordHash = HashPassword(newPassword);
 
-            string sql = @"UPDATE users SET password = @PasswordHash WHERE email = @Email";
+            string sql = @"UPDATE users SET passwordHash = @PasswordHash WHERE email = @Email";
 
-            using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
-            using (SqlCommand command = new SqlCommand(sql, connection))
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            using (MySqlCommand command = new MySqlCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@Email", email);
                 command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
@@ -155,7 +156,6 @@ public class UserRepository : IUserRepository
                 int rowsAffected = command.ExecuteNonQuery();
 
                 return rowsAffected > 0;
-
             }
         }
         catch (Exception ex)
@@ -179,7 +179,7 @@ public class UserRepository : IUserRepository
 
             return isPasswordValid;
         }
-        catch(Exception ex) 
+        catch (Exception ex)
         {
             ErrorLogger.LogError("VerifyPassword", ex.Message);
             return false;
