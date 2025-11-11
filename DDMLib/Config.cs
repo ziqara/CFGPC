@@ -13,12 +13,7 @@ namespace DDMLib
 
         public static string ConnectionString { get; private set; }
 
-        static Config()
-        {
-            InitializeConfiguration();
-        }
-
-        private static void InitializeConfiguration()
+        public static void InitializeConfiguration()
         {
             if (!File.Exists(IniFilePath))
             {

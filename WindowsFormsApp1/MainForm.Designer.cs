@@ -61,6 +61,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.toolStrip1);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DDM ADMIN PANEL";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

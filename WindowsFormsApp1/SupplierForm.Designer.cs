@@ -36,18 +36,21 @@
             // 
             this.supplierDataTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.supplierDataTable.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.supplierDataTable.Location = new System.Drawing.Point(0, 120);
+            this.supplierDataTable.Location = new System.Drawing.Point(0, 82);
             this.supplierDataTable.Name = "supplierDataTable";
-            this.supplierDataTable.Size = new System.Drawing.Size(800, 330);
+            this.supplierDataTable.ReadOnly = true;
+            this.supplierDataTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.supplierDataTable.Size = new System.Drawing.Size(546, 368);
             this.supplierDataTable.TabIndex = 0;
             // 
             // SupplierForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(546, 450);
             this.Controls.Add(this.supplierDataTable);
             this.Name = "SupplierForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Поставщики";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.supplierDataTable)).EndInit();
