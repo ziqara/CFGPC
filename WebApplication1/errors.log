@@ -215,3 +215,17 @@
 2025-11-11 08:38:26 | UserProfileModel OnGet | Profile loaded successfully.
 2025-11-11 08:50:49 | UserProfileModel OnGet | Started
 2025-11-11 08:50:49 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 09:50:39 | FindByEmail | Не удалось подключиться к базе данных.
+2025-11-11 09:50:39 | FindByEmail | Unable to connect to any of the specified MySQL hosts
+2025-11-11 09:53:13 | UserProfileModel OnGet | Started
+2025-11-11 09:53:13 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 09:53:18 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 09:53:18 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 09:53:18 | UserProfileModel OnGet | Started
+2025-11-11 09:53:18 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 09:53:23 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 09:53:23 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 09:53:23 | UserProfileModel OnGet | Started
+2025-11-11 09:53:23 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 09:53:26 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-11 09:53:26 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.

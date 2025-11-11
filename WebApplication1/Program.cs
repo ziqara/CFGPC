@@ -2,6 +2,8 @@ using DDMLib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
+Config.InitializeConfiguration();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
