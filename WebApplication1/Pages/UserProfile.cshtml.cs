@@ -29,7 +29,7 @@ namespace WebApplication1.Pages
 
         [BindProperty]
         [StringLength(11, ErrorMessage = "Телефон не должен превышать 11 символов")]
-        [RegularExpression(@"^\d+$", ErrorMessage = "Телефон должен содержать только цифры")]
+        [RegularExpression(@"^(\d{11,11})$", ErrorMessage = "Телефон должен содержать только цифры и иметь 11 символов.")]
         public string? Phone { get; set; }
 
         [BindProperty]

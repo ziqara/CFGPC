@@ -108,3 +108,108 @@
 2025-11-10 23:14:19 | UserProfileModel OnPostChangePassword | Password changed successfully.
 2025-11-10 23:14:20 | UserProfileModel OnPostLogout | Logout initiated.
 2025-11-10 23:14:20 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-11 08:10:17 | FindByEmail | Unknown column 'registrationDate' in 'field list'
+2025-11-11 08:11:35 | UserProfileModel OnGet | Started
+2025-11-11 08:11:35 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:11:43 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:11:43 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:11:43 | UserProfileModel OnGet | Started
+2025-11-11 08:11:43 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:11:54 | UserProfileModel OnPostChangePassword | Started
+2025-11-11 08:11:54 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-11 08:11:54 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-11 08:11:54 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-11 08:11:54 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-11 08:12:09 | UserProfileModel OnPostChangePassword | Started
+2025-11-11 08:12:09 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-11 08:12:09 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-11 08:12:09 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-11 08:12:09 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-11 08:12:12 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-11 08:12:12 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-11 08:12:20 | UserProfileModel OnGet | Started
+2025-11-11 08:12:20 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:13:59 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:13:59 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:13:59 | UserProfileModel OnGet | Started
+2025-11-11 08:13:59 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:14:10 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:14:10 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:14:18 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:14:18 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:14:18 | UserProfileModel OnGet | Started
+2025-11-11 08:14:18 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:14:27 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:14:27 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:14:39 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:14:39 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:14:43 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:14:43 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:14:43 | UserProfileModel OnGet | Started
+2025-11-11 08:14:43 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:16:58 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-11 08:16:58 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-11 08:25:20 | UserProfileModel OnGet | Started
+2025-11-11 08:25:20 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:25:30 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:25:30 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:25:30 | UserProfileModel OnGet | Started
+2025-11-11 08:25:30 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:25:38 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:25:38 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:25:38 | UserProfileModel OnGet | Started
+2025-11-11 08:25:38 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:26:21 | UserProfileModel OnPostChangePassword | Started
+2025-11-11 08:26:21 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-11 08:26:21 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-11 08:26:21 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-11 08:26:21 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-11 08:26:24 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-11 08:26:24 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-11 08:26:35 | UserProfileModel OnGet | Started
+2025-11-11 08:26:35 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:26:43 | UserProfileModel OnPostChangePassword | Started
+2025-11-11 08:26:43 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2025-11-11 08:26:43 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2025-11-11 08:26:43 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2025-11-11 08:26:43 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2025-11-11 08:26:45 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-11 08:26:45 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-11 08:34:23 | UserProfileModel OnGet | Started
+2025-11-11 08:34:23 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:34:27 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:34:27 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:34:37 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:34:37 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:34:40 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:34:40 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:34:40 | UserProfileModel OnGet | Started
+2025-11-11 08:34:40 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:34:44 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:34:44 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:34:44 | UserProfileModel OnGet | Started
+2025-11-11 08:34:44 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:36:41 | UserProfileModel OnGet | Started
+2025-11-11 08:36:41 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:36:44 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:36:44 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:36:52 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:36:52 | UserProfileModel OnPostUpdateProfile | Profile update failed: Неверный формат телефона. Пример: +7 (999) 123-45-67
+2025-11-11 08:37:18 | UserProfileModel OnGet | Started
+2025-11-11 08:37:18 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:37:53 | UserProfileModel OnGet | Started
+2025-11-11 08:37:53 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-11 08:38:02 | UserProfileModel OnGet | Started
+2025-11-11 08:38:02 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:38:15 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:38:15 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:38:15 | UserProfileModel OnGet | Started
+2025-11-11 08:38:15 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:38:20 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:38:20 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:38:20 | UserProfileModel OnGet | Started
+2025-11-11 08:38:20 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-11 08:38:26 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-11 08:38:26 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-11 08:38:26 | UserProfileModel OnGet | Started
+2025-11-11 08:38:26 | UserProfileModel OnGet | Profile loaded successfully.
