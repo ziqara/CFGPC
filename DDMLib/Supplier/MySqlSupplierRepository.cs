@@ -32,12 +32,12 @@ public class MySqlSupplierRepository : ISupplierRepository
                     }
                 }
             }
+
+            return suppliers;
         }
         catch
         {
             throw; // ошибка пробрасывается в ui
         }
-
-        return suppliers;
     }
 }
