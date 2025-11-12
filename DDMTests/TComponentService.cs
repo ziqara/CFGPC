@@ -31,7 +31,8 @@ namespace DDMTests
         [TestMethod]
         public void TestGetComponentsByCategory_ValidCategory_ReturnsCorrectList()
         {
-
+            Mock<IComponentRepository> mockRepository_ = new Mock<IComponentRepository>();
+            ComponentService service = new ComponentService(mockRepository_.Object);
         }
     }
 }
