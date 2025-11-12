@@ -75,6 +75,55 @@ namespace DDMTests
         {
             Mock<IComponentRepository> mockRepository_ = new Mock<IComponentRepository>();
             ComponentService service = new ComponentService(mockRepository_.Object);
+
+            ComponentDto cpuComponent = new ComponentDto
+            {
+                Component = new Component
+                {
+                    Name = "Intel Core i5-13600K",
+                    Brand = "Intel",
+                    Model = "i5-13600K",
+                    Type = "cpu",
+                    Price = 25000,
+                    StockQuantity = 5,
+                    Description = "Процессор Intel",
+                    IsAvailable = true,
+                    PhotoUrl = "/img/cpu-i5.jpg",
+                    SupplierId = 1
+                },
+                Specs = new { Cores = 14, BaseClock = "3.5 GHz" }
+            };
+
+            ComponentDto caseComponent = new ComponentDto
+            {
+                Component = new Component
+                {
+                    Name = "Fractal Design Meshify C",
+                    Brand = "Fractal Design",
+                    Model = "Meshify C",
+                    Type = "case",
+                    Price = 7500,
+                    StockQuantity = 3,
+                    Description = "Корпус",
+                    IsAvailable = true,
+                    PhotoUrl = "/img/case-meshify.jpg",
+                    SupplierId = 1
+                },
+                Specs = new CaseSpec
+                {
+                    FormFactor = "ATX Mid Tower",
+                    Size = "450×210×470 мм"
+                }
+            };
+
+            mockRepository_.Setup(repo => repo.GetComponentsByCategory("cpu"))
+                           .Returns(new List<ComponentDto> { cpuComponent });
+
+            mockRepository_.Setup(repo => repo.GetComponentsByCategory("case"))
+                           .Returns(new List<ComponentDto> { caseComponent });
+
+            mockRepository_.Setup(repo => repo.GetComponentsByCategory("cooling"))
+                           .Returns(new List<ComponentDto>());
         }
     }
 }
