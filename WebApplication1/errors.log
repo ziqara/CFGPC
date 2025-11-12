@@ -229,3 +229,21 @@
 2025-11-11 09:53:23 | UserProfileModel OnGet | Profile loaded successfully.
 2025-11-11 09:53:26 | UserProfileModel OnPostLogout | Logout initiated.
 2025-11-11 09:53:26 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-12 21:30:38 | FindByEmail | Не удалось подключиться к базе данных.
+2025-11-12 21:30:40 | FindByEmail | Unable to connect to any of the specified MySQL hosts
+2025-11-12 21:30:54 | UserProfileModel OnGet | Started
+2025-11-12 21:30:54 | GetUserProfile | Object reference not set to an instance of an object.
+2025-11-12 21:30:54 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-12 21:30:57 | UserProfileModel OnGet | Started
+2025-11-12 21:30:57 | GetUserProfile | Object reference not set to an instance of an object.
+2025-11-12 21:30:57 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-12 21:32:51 | UserProfileModel OnGet | Started
+2025-11-12 21:32:51 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-12 21:32:57 | UserProfileModel OnGet | Started
+2025-11-12 21:32:57 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-12 21:33:02 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-12 21:33:02 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-12 21:33:02 | UserProfileModel OnGet | Started
+2025-11-12 21:33:02 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-12 21:33:04 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-12 21:33:04 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.

@@ -17,7 +17,7 @@ namespace DDMLib
             sessionManager_ = sessionManager;
         }
 
-        public string ValidateEmail(string email)
+        public static string ValidateEmail(string email)
         {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, emailPattern))
@@ -25,7 +25,7 @@ namespace DDMLib
             return string.Empty;
         }
 
-        public string ValidatePhone(string phone)
+        public static string ValidatePhone(string phone)
         {
             if (!string.IsNullOrWhiteSpace(phone))
             {
@@ -36,7 +36,7 @@ namespace DDMLib
             return string.Empty;
         }
 
-        public string ValidateFullName(string fullName)
+        public static string ValidateFullName(string fullName)
         {
             if (string.IsNullOrWhiteSpace(fullName))
                 return "ФИО не может быть пустым";
@@ -47,7 +47,7 @@ namespace DDMLib
             return string.Empty;
         }
 
-        public string ValidatePassword(string password)
+        public static string ValidatePassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 return "Пароль недостаточно надёжный (минимум 6 символов)";
@@ -55,7 +55,7 @@ namespace DDMLib
             return string.Empty;
         }
 
-        public string CheckAuthenticationAndAccess(string email)
+        public static string CheckAuthenticationAndAccess(string email, SessionManager sessionManager_)
         {
             if (!sessionManager_.IsUserAuthenticated())
                 return "Требуется авторизация";

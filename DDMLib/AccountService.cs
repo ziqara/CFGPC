@@ -25,7 +25,7 @@ namespace DDMLib
         {
             try
             {
-                string authError = userService_.CheckAuthenticationAndAccess(email);
+                string authError = UserService.CheckAuthenticationAndAccess(email, sessionManager_);
                 if (!string.IsNullOrEmpty(authError))
                     return null;
 
@@ -44,15 +44,15 @@ namespace DDMLib
         {
             try
             {
-                string authError = userService_.CheckAuthenticationAndAccess(email);
+                string authError = UserService.CheckAuthenticationAndAccess(email, sessionManager_);
                 if (!string.IsNullOrEmpty(authError))
                     return authError;
 
-                string fullNameError = userService_.ValidateFullName(fullName);
+                string fullNameError = UserService.ValidateFullName(fullName);
                 if (!string.IsNullOrEmpty(fullNameError))
                     return fullNameError;
 
-                string phoneError = userService_.ValidatePhone(phone);
+                string phoneError = UserService.ValidatePhone(phone);
                 if (!string.IsNullOrEmpty(phoneError))
                     return phoneError;
 
@@ -81,14 +81,14 @@ namespace DDMLib
         {
             try
             {
-                string authError = userService_.CheckAuthenticationAndAccess(email);
+                string authError = UserService.CheckAuthenticationAndAccess(email, sessionManager_);
                 if (!string.IsNullOrEmpty(authError))
                     return authError;
 
                 if (newPassword != repeatPassword)
                     return "Пароли не совпадают";
 
-                string passwordError = userService_.ValidatePassword(newPassword);
+                string passwordError = UserService.ValidatePassword(newPassword);
                 if (!string.IsNullOrEmpty(passwordError))
                     return passwordError;
 

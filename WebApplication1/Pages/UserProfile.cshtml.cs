@@ -9,13 +9,11 @@ namespace WebApplication1.Pages
     {
         private readonly SessionManager sessionManager_;
         private readonly AccountService accountService_;
-        private readonly UserService userService_;
 
-        public UserProfileModel(SessionManager sessionManager, AccountService accountService, UserService userService)
+        public UserProfileModel(SessionManager sessionManager, AccountService accountService)
         {
             sessionManager_ = sessionManager;
             accountService_ = accountService;
-            userService_ = userService;
         }
 
         public User UserProfile { get; set; }
