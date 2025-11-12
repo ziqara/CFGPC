@@ -23,6 +23,9 @@ namespace DDMTests
 
             List<ComponentDto> result = service.GetComponentsByCategory("gpu");
 
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+
         }
     }
 }
