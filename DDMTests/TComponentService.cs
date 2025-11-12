@@ -20,6 +20,8 @@ namespace DDMTests
 
             mockRepository_.Setup(repo => repo.GetComponentsByCategory("gpu"))
                .Returns(new List<ComponentDto>());
+
+            List<ComponentDto> result = service.GetComponentsByCategory("gpu");
         }
     }
 }
