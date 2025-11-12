@@ -27,5 +27,11 @@ namespace DDMTests
             Assert.AreEqual(0, result.Count);
 
         }
+
+        [TestMethod]
+        public void TestGetComponentsByCategory_ValidCategory_ReturnsCorrectList()
+        {
+
+        }
     }
 }
