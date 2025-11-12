@@ -73,7 +73,8 @@ namespace DDMTests
         [TestMethod]
         public void TestGetComponentsByCategory_SwitchingCategories_ReturnsCorrectData()
         {
-
+            Mock<IComponentRepository> mockRepository_ = new Mock<IComponentRepository>();
+            ComponentService service = new ComponentService(mockRepository_.Object);
         }
     }
 }
