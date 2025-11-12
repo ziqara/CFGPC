@@ -59,6 +59,8 @@ namespace DDMTests
 
             mockRepository_.Setup(repo => repo.GetComponentsByCategory("psu"))
                            .Returns(new List<ComponentDto> { expectedComponent });
+
+            List<ComponentDto> result = service.GetComponentsByCategory("psu");
         }
     }
 }
