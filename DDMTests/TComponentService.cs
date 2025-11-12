@@ -69,5 +69,11 @@ namespace DDMTests
             Assert.AreEqual("Corsair RM850x", component.Name);
             Assert.AreEqual(8900, component.Price);
         }
+
+        [TestMethod]
+        public void TestGetComponentsByCategory_SwitchingCategories_ReturnsCorrectData()
+        {
+
+        }
     }
 }
