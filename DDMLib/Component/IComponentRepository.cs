@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DDMLib.Component
 {
-    internal interface IComponentRepository
+    public interface IComponentRepository
     {
         List<ComponentDto> GetComponentsByCategory(string category);
     }
