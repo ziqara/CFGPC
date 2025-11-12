@@ -150,6 +150,7 @@
   <ItemGroup>
     <Compile Include="AccountService.cs" />
     <Compile Include="Component\Component.cs" />
+    <Compile Include="Component\ComponentDto.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
