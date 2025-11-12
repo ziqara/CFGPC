@@ -22,6 +22,7 @@ namespace DDMTests
                .Returns(new List<ComponentDto>());
 
             List<ComponentDto> result = service.GetComponentsByCategory("gpu");
+
         }
     }
 }
