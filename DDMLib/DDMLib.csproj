@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="Component\CaseSpec.cs" />
     <Compile Include="Component\Component.cs" />
     <Compile Include="Component\ComponentDto.cs" />
     <Compile Include="Component\PsuSpec.cs" />
