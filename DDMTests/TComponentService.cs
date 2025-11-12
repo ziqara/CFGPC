@@ -10,5 +10,10 @@ namespace DDMTests
     [TestClass]
     public class TComponentService
     {
+        [TestMethod]
+        public void TestGetComponentsByCategory_EmptyCategory_ReturnsEmptyList()
+        {
+
+        }
     }
 }
