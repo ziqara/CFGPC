@@ -128,6 +128,10 @@ namespace DDMTests
             List<ComponentDto> cpuResult = service.GetComponentsByCategory("cpu");
             List<ComponentDto> caseResult = service.GetComponentsByCategory("case");
             List<ComponentDto> coolingResult = service.GetComponentsByCategory("cooling");
+
+            Assert.AreEqual(1, cpuResult.Count);
+            Assert.AreEqual(1, caseResult.Count);
+            Assert.AreEqual(0, coolingResult.Count);
         }
     }
 }
