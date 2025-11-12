@@ -33,6 +33,32 @@ namespace DDMTests
         {
             Mock<IComponentRepository> mockRepository_ = new Mock<IComponentRepository>();
             ComponentService service = new ComponentService(mockRepository_.Object);
+
+            ComponentDto expectedComponent = new ComponentDto
+            {
+                Component = new Component
+                {
+                    ComponentId = 205,
+                    Name = "Corsair RM850x",
+                    Brand = "Corsair",
+                    Model = "RM850x",
+                    Type = "psu",
+                    Price = 8900,
+                    StockQuantity = 10,
+                    Description = "Полностью модульный блок питания",
+                    IsAvailable = true,
+                    PhotoUrl = "/img/psu-rm850x.jpg",
+                    SupplierId = 1
+                },
+                Specs = new PsuSpec
+                {
+                    Wattage = 850,
+                    EfficiencyRating = "80+ Gold"
+                }
+            };
+
+            mockRepository_.Setup(repo => repo.GetComponentsByCategory("psu"))
+                           .Returns(new List<ComponentDto> { expectedComponent });
         }
     }
 }
