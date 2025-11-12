@@ -124,6 +124,10 @@ namespace DDMTests
 
             mockRepository_.Setup(repo => repo.GetComponentsByCategory("cooling"))
                            .Returns(new List<ComponentDto>());
+
+            List<ComponentDto> cpuResult = service.GetComponentsByCategory("cpu");
+            List<ComponentDto> caseResult = service.GetComponentsByCategory("case");
+            List<ComponentDto> coolingResult = service.GetComponentsByCategory("cooling");
         }
     }
 }
