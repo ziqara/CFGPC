@@ -61,6 +61,13 @@ namespace DDMTests
                            .Returns(new List<ComponentDto> { expectedComponent });
 
             List<ComponentDto> result = service.GetComponentsByCategory("psu");
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            Component component = result[0].Component;
+            Assert.AreEqual("Corsair RM850x", component.Name);
+            Assert.AreEqual(8900, component.Price);
         }
     }
 }
