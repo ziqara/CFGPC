@@ -17,6 +17,9 @@ namespace DDMTests
         {
             Mock<IComponentRepository> mockRepository_ = new Mock<IComponentRepository>();
             ComponentService service = new ComponentService(mockRepository_.Object);
+
+            mockRepository_.Setup(repo => repo.GetComponentsByCategory("gpu"))
+               .Returns(new List<ComponentDto>());
         }
     }
 }
