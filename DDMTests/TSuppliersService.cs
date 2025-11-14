@@ -153,5 +153,30 @@ namespace DDMTests
             Assert.AreEqual("Некорректный номер телефона", result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        [DataRow("", "Название обязательно")]
+        [DataRow("   ", "Название обязательно")]
+        public void CreateSupplier_InvalidName_EmptyOrSpaces_ReturnsError(string badName, string expectedError)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = badName,
+                ContactEmail = "valid@example.com",
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual(expectedError, result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
