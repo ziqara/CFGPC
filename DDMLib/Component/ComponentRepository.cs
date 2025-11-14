@@ -296,6 +296,38 @@ namespace DDMLib.Component
                         }
                     }
                     break;
+                case "cooling":
+                    specCommand = new MySqlCommand(@"
+                        SELECT coolerType, tdpSupport, fanRpm, size, isRgb
+                        FROM coolings
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iCoolerType = specReader.GetOrdinal("coolerType");
+                            int iTdpSupport = specReader.GetOrdinal("tdpSupport");
+                            int iFanRpm = specReader.GetOrdinal("fanRpm");
+                            int iSize = specReader.GetOrdinal("size");
+                            int iIsRgb = specReader.GetOrdinal("isRgb");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+                            Func<int, bool> GetBoolOrFalse = i => specReader.IsDBNull(i) ? false : specReader.GetBoolean(i);
+
+                            return new CoolingSpec
+                            {
+                                CoolerType = GetStringOrEmpty(iCoolerType),
+                                TdpSupport = GetInt32OrZero(iTdpSupport),
+                                FanRpm = GetInt32OrZero(iFanRpm),
+                                Size = GetStringOrEmpty(iSize),
+                                IsRgb = GetBoolOrFalse(iIsRgb)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
