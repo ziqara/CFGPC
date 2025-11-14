@@ -272,6 +272,30 @@ namespace DDMLib.Component
                         }
                     }
                     break;
+                case "case":
+                    specCommand = new MySqlCommand(@"
+                        SELECT formFactor, size
+                        FROM cases
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iFormFactor = specReader.GetOrdinal("formFactor");
+                            int iSize = specReader.GetOrdinal("size");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+
+                            return new CaseSpec
+                            {
+                                FormFactor = GetStringOrEmpty(iFormFactor),
+                                Size = GetStringOrEmpty(iSize)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
