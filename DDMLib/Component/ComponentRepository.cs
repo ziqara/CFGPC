@@ -101,5 +101,18 @@ namespace DDMLib.Component
                 SupplierId = GetInt32OrZero(iSupplier)
             };
         }
+
+        private object GetSpecificSpec(MySqlConnection connection, int componentId, string category)
+        {
+            MySqlCommand specCommand;
+            MySqlDataReader specReader;
+
+            switch (category.ToLower())
+            {
+
+            }
+
+            return null;
+        }
     }
 }
