@@ -156,6 +156,7 @@
     <Compile Include="Component\CoolingSpec.cs" />
     <Compile Include="Component\GpuSpec.cs" />
     <Compile Include="Component\IComponentRepository.cs" />
+    <Compile Include="Component\MotherboardSpec.cs" />
     <Compile Include="Component\PsuSpec.cs" />
     <Compile Include="Component\RamSpec.cs" />
     <Compile Include="Config.cs" />
