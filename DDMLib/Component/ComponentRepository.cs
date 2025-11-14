@@ -247,6 +247,31 @@ namespace DDMLib.Component
                         }
                     }
                     break;
+                case "psu":
+                    specCommand = new MySqlCommand(@"
+                        SELECT wattage, efficiencyRating
+                        FROM psus
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iWattage = specReader.GetOrdinal("wattage");
+                            int iEfficiency = specReader.GetOrdinal("efficiencyRating");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                            return new PsuSpec
+                            {
+                                Wattage = GetInt32OrZero(iWattage),
+                                EfficiencyRating = GetStringOrEmpty(iEfficiency)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
