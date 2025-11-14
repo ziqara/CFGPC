@@ -44,12 +44,9 @@ namespace DDMTests
         }
 
         [TestMethod]
-        [DataRow(new int[] { 123456789 }, new string[] { "ООО Альфа" }, 
-            new string[] { "alpha@example.com" }, new string[] { null }, new string[] { null })]
-        [DataRow(new int[] { 223344556 }, new string[] { "ООО Бета" },
-            new string[] { "beta@example.com" }, new string[] { "" }, new string[] { "" })]
-        [DataRow(new int[] { 998877665 }, new string[] { "ООО Гамма" },
-            new string[] { "gamma@example.com" }, new string[] { "+7 (999) 123-45-67" }, new string[] { "г. Москва, ул. Ленина, д. 5" })]
+        [DataRow(123456789, "ООО Альфа", "alpha@example.com", null, null)]
+        [DataRow(223344556, "ООО Бета", "beta@example.com", "", "")]
+        [DataRow(998877665, "ООО Гамма", "gamma@example.com", "+7 (999) 123-45-67", "г. Москва, ул. Ленина, д. 5")]
         public void CreateSupplier_ValidData(int[] inns, string[] names, string[] emails, string[] phones, string[] addresses)
         {
             for (int i = 0; i < inns.Length; i++)
@@ -128,6 +125,55 @@ namespace DDMTests
 
             // Assert
             Assert.AreEqual("Поставщик с таким названием уже есть", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void CreateSupplier_InvalidPhone_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Тест",
+                ContactEmail = "valid@example.com",
+                Phone = "123", // Invalid
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Некорректный номер телефона", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        [DataRow("123")]                
+        [DataRow("123456789123")]       
+        [DataRow("88ABC777")]           
+        public void CreateSupplier_InvalidPhone_ReturnsErrorMessage(string phone)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Тест",
+                ContactEmail = "valid@example.com",
+                Phone = phone,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Некорректный номер телефона", result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
     }
