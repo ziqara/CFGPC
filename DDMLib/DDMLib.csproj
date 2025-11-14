@@ -160,6 +160,7 @@
     <Compile Include="Session\SessionData.cs" />
     <Compile Include="Session\SessionManager.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />
+    <Compile Include="Supplier\SupplierValidator.cs" />
     <Compile Include="User\IUserRepository.cs" />
     <Compile Include="Supplier\MySqlSupplierRepository.cs" />
     <Compile Include="Supplier\Supplier.cs" />
