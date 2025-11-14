@@ -11,12 +11,15 @@ namespace DDMTests
     public class TUserService
     {
         private Mock<IUserRepository> _userRepositoryMock = null;
+        private Mock<SessionManager> _sessionManagerMock = null;
         private UserService _userService = null;
+
         [TestInitialize]
         public void Setup()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
-            _userService = new UserService(_userRepositoryMock.Object);
+            _sessionManagerMock = new Mock<SessionManager>();
+            _userService = new UserService(_userRepositoryMock.Object, _sessionManagerMock.Object);
         }
 
         [TestMethod]

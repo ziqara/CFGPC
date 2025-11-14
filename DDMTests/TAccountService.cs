@@ -16,7 +16,13 @@ namespace DDMTests
         public void TestGetUserProfile_WithValidEmail_ReturnsUserProfile()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
+            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManagerMock.Object,
+                userServiceMock.Object);
 
             var testUsers = new[]
             {
@@ -76,7 +82,13 @@ namespace DDMTests
         public void TestUpdateProfile_WithValidData_UpdatesProfileSuccessfully()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
+            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManagerMock.Object,
+                userServiceMock.Object);
             string email = "user1@example.com";
             string fullName = "Иван Петрович";
             string phone = "+79990000000";
@@ -113,7 +125,13 @@ namespace DDMTests
         public void TestChangePassword_WithValidData_ChangesPasswordSuccessfully()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
+            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManagerMock.Object,
+                userServiceMock.Object);
 
             string email = "user1@example.com";
             string currentPassword = "OldPassw0rd!";
@@ -166,7 +184,13 @@ namespace DDMTests
         public void TestUpdateProfile_WithInvalidData_ReturnsValidationErrors(string fullName, string phone, string address, string expectedError)
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
+            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManagerMock.Object,
+                userServiceMock.Object);
 
             string email = "user1@example.com";
 
@@ -194,7 +218,13 @@ namespace DDMTests
         public void TestChangePassword_WithInvalidData_ReturnsValidationErrors(string currentPassword, string newPassword, string repeatPassword, string expectedError)
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            AccountService accountService = new AccountService();
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
+            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManagerMock.Object,
+                userServiceMock.Object);
 
             string email = "user1@example.com";
 
