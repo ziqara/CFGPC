@@ -159,6 +159,7 @@
     <Compile Include="Component\MotherboardSpec.cs" />
     <Compile Include="Component\PsuSpec.cs" />
     <Compile Include="Component\RamSpec.cs" />
+    <Compile Include="Component\StorageSpec.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
