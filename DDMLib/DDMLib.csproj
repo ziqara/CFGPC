@@ -155,6 +155,7 @@
     <Compile Include="Component\ComponentService.cs" />
     <Compile Include="Component\IComponentRepository.cs" />
     <Compile Include="Component\PsuSpec.cs" />
+    <Compile Include="Component\RamSpec.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
