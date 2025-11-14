@@ -33,6 +33,31 @@ namespace DDMLib.Component
                 try
                 {
                     connection.Open();
+                    string componentQuery = @"
+                        SELECT component_id, name, brand, model, type, price, stock_quantity, description, is_available, photo_url, supplier_id
+                        FROM components
+                        WHERE type = @category";
+
+                    MySqlCommand command = new MySqlCommand(componentQuery, connection);
+                    command.Parameters.AddWithValue("@category", category);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var component = MapComponentFromReader(reader);
+
+                            object spec = GetSpecificSpec(connection, component.ComponentId, category);
+
+                            var dto = new ComponentDto
+                            {
+                                Component = component,
+                                Specs = spec
+                            };
+
+                            result.Add(dto);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
