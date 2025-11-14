@@ -202,5 +202,30 @@ namespace DDMTests
             Assert.AreEqual("Название не должно превышать 50 символов", result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        [DataRow("", "Email обязателен")]
+        [DataRow("   ", "Email обязателен")]
+        public void CreateSupplier_EmptyEmail_ReturnsErrorMessage(string email, string expectedError)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО БезПочты",
+                ContactEmail = email,
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual(expectedError, result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
