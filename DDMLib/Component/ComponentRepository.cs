@@ -135,7 +135,7 @@ namespace DDMLib.Component
                             };
                         }
                     }
-                break;
+                    break;
                 case "ram":
                     specCommand = new MySqlCommand(@"
                         SELECT type, capacityGb, speedMhz, slotsNeeded
@@ -164,7 +164,34 @@ namespace DDMLib.Component
                             };
                         }
                     }
-                break;
+                    break;
+                case "cpu":
+                    specCommand = new MySqlCommand(@"
+                        SELECT socket, cores, tdp
+                        FROM cpus
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iSocket = specReader.GetOrdinal("socket");
+                            int iCores = specReader.GetOrdinal("cores");
+                            int iTdp = specReader.GetOrdinal("tdp");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                            return new CpuSpec
+                            {
+                                Socket = GetStringOrEmpty(iSocket),
+                                Cores = GetInt32OrZero(iCores),
+                                Tdp = GetInt32OrZero(iTdp)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
