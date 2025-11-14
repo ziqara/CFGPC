@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TComponentService.cs" />
     <Compile Include="TSuppliersService.cs" />
     <Compile Include="TAccountService.cs" />
     <Compile Include="TUserService.cs" />

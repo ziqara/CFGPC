@@ -149,6 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="Component\CaseSpec.cs" />
+    <Compile Include="Component\Component.cs" />
+    <Compile Include="Component\ComponentDto.cs" />
+    <Compile Include="Component\ComponentService.cs" />
+    <Compile Include="Component\IComponentRepository.cs" />
+    <Compile Include="Component\PsuSpec.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
