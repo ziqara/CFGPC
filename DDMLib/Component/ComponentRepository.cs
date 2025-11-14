@@ -192,6 +192,36 @@ namespace DDMLib.Component
                         }
                     }
                     break;
+                case "motherboard":
+                    specCommand = new MySqlCommand(@"
+                        SELECT socket, chipset, ramType, pcieVersion, formFactor
+                        FROM motherboards
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iSocket = specReader.GetOrdinal("socket");
+                            int iChipset = specReader.GetOrdinal("chipset");
+                            int iRamType = specReader.GetOrdinal("ramType");
+                            int iPcie = specReader.GetOrdinal("pcieVersion");
+                            int iFormFactor = specReader.GetOrdinal("formFactor");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+
+                            return new MotherboardSpec
+                            {
+                                Socket = GetStringOrEmpty(iSocket),
+                                Chipset = GetStringOrEmpty(iChipset),
+                                RamType = GetStringOrEmpty(iRamType),
+                                PcieVersion = GetStringOrEmpty(iPcie),
+                                FormFactor = GetStringOrEmpty(iFormFactor)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
