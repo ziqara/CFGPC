@@ -105,5 +105,30 @@ namespace DDMTests
             Assert.AreEqual("Email уже используется", result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        public void CreateSupplier_DuplicateName_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ооо ромашка",
+                ContactEmail = "new@example.com",
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            repo.Setup(r => r.existsByNameInsensitive("ооо ромашка")).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Поставщик с таким названием уже есть", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
