@@ -222,6 +222,31 @@ namespace DDMLib.Component
                         }
                     }
                     break;
+                case "storage":
+                    specCommand = new MySqlCommand(@"
+                        SELECT interface, capacityGb
+                        FROM storages
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iInterface = specReader.GetOrdinal("interface");
+                            int iCapacity = specReader.GetOrdinal("capacityGb");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                            return new StorageSpec
+                            {
+                                Interface = GetStringOrEmpty(iInterface),
+                                CapacityGb = GetInt32OrZero(iCapacity)
+                            };
+                        }
+                    }
+                    break;
             }
 
             return null;
