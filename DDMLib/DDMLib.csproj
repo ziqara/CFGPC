@@ -154,6 +154,7 @@
     <Compile Include="Component\ComponentDto.cs" />
     <Compile Include="Component\ComponentService.cs" />
     <Compile Include="Component\CoolingSpec.cs" />
+    <Compile Include="Component\GpuSpec.cs" />
     <Compile Include="Component\IComponentRepository.cs" />
     <Compile Include="Component\PsuSpec.cs" />
     <Compile Include="Component\RamSpec.cs" />
