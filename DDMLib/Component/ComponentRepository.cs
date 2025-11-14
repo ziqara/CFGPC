@@ -109,7 +109,33 @@ namespace DDMLib.Component
 
             switch (category.ToLower())
             {
+                case "gpu":
+                    specCommand = new MySqlCommand(@"
+                        SELECT pcie_version, tdp, vramGb
+                        FROM gpus
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
 
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iPcie = specReader.GetOrdinal("pcieVersion");
+                            int iTdp = specReader.GetOrdinal("tdp");
+                            int iVram = specReader.GetOrdinal("vramGb");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                            return new GpuSpec
+                            {
+                                PcieVersion = GetStringOrEmpty(iPcie),
+                                Tdp = GetInt32OrZero(iTdp),
+                                VramGb = GetInt32OrZero(iVram)
+                            };
+                        }
+                    }
+                break;
             }
 
             return null;
