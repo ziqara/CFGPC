@@ -55,7 +55,7 @@ namespace DDMTests
             for (int i = 0; i < inns.Length; i++)
             {
                 // Arrange
-                var supplier = new Supplier(inns[i])
+                Supplier supplier = new Supplier(inns[i])
                 {
                     Name = names[i],
                     ContactEmail = emails[i],
@@ -63,14 +63,14 @@ namespace DDMTests
                     Address = addresses[i]
                 };
 
-                var repo = new Moq.Mock<ISupplierRepository>();
+                Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
 
                 repo.Setup(r => r.existsByNameInsensitive(names[i])).Returns(false);
                 repo.Setup(r => r.existsByEmail(emails[i])).Returns(false);
                 repo.Setup(r => r.existsByInn(inns[i])).Returns(false);
                 repo.Setup(r => r.AddSupplier(supplier)).Returns(true);
 
-                var service = new SupplierService(repo.Object);
+                SupplierService service = new SupplierService(repo.Object);
 
                 // Act
                 string result = service.CreateSupplier(supplier);
@@ -81,5 +81,29 @@ namespace DDMTests
             }
         }
 
+        [TestMethod]
+        public void CreateSupplier_DuplicateEmail_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "dup@example.com",
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            repo.Setup(r => r.existsByEmail("dup@example.com")).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Email уже используется", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
