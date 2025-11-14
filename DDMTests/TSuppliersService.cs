@@ -41,7 +41,45 @@ namespace DDMTests
             Assert.IsNotNull(result);
             CollectionAssert.AreEqual(expected, result);
             repo.Verify(r => r.ReadAllSuppliers(), Times.Once);
-
         }
+
+        [TestMethod]
+        [DataRow(new int[] { 123456789 }, new string[] { "ООО Альфа" }, 
+            new string[] { "alpha@example.com" }, new string[] { null }, new string[] { null })]
+        [DataRow(new int[] { 223344556 }, new string[] { "ООО Бета" },
+            new string[] { "beta@example.com" }, new string[] { "" }, new string[] { "" })]
+        [DataRow(new int[] { 998877665 }, new string[] { "ООО Гамма" },
+            new string[] { "gamma@example.com" }, new string[] { "+7 (999) 123-45-67" }, new string[] { "г. Москва, ул. Ленина, д. 5" })]
+        public void CreateSupplier_ValidData(int[] inns, string[] names, string[] emails, string[] phones, string[] addresses)
+        {
+            for (int i = 0; i < inns.Length; i++)
+            {
+                // Arrange
+                var supplier = new Supplier(inns[i])
+                {
+                    Name = names[i],
+                    ContactEmail = emails[i],
+                    Phone = phones[i],
+                    Address = addresses[i]
+                };
+
+                var repo = new Moq.Mock<ISupplierRepository>();
+
+                repo.Setup(r => r.existsByNameInsensitive(names[i])).Returns(false);
+                repo.Setup(r => r.existsByEmail(emails[i])).Returns(false);
+                repo.Setup(r => r.existsByInn(inns[i])).Returns(false);
+                repo.Setup(r => r.AddSupplier(supplier)).Returns(true);
+
+                var service = new SupplierService(repo.Object);
+
+                // Act
+                string result = service.CreateSupplier(supplier);
+
+                // Assert
+                Assert.AreEqual("", result, "Valid supplier should produce no errors");
+                repo.Verify(r => r.AddSupplier(supplier), Times.Once);
+            }
+        }
+
     }
 }
