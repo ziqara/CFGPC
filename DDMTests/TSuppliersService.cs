@@ -129,29 +129,6 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void CreateSupplier_InvalidPhone_ReturnsErrorMessage()
-        {
-            // Arrange
-            Supplier supplier = new Supplier(123456789)
-            {
-                Name = "ООО Тест",
-                ContactEmail = "valid@example.com",
-                Phone = "123", // Invalid
-                Address = null
-            };
-
-            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
-            SupplierService service = new SupplierService(repo.Object);
-
-            // Act
-            string result = service.CreateSupplier(supplier);
-
-            // Assert
-            Assert.AreEqual("Некорректный номер телефона", result);
-            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
-        }
-
-        [TestMethod]
         [DataRow("123")]                
         [DataRow("123456789123")]       
         [DataRow("88ABC777")]           
