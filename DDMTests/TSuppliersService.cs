@@ -281,5 +281,33 @@ namespace DDMTests
             Assert.AreEqual(expected, result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        public void CreateSupplier_AddSupplierReturnsFalse_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "alpha@example.com",
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            repo.Setup(r => r.existsByNameInsensitive("ООО Альфа")).Returns(false);
+            repo.Setup(r => r.existsByEmail("alpha@example.com")).Returns(false);
+            repo.Setup(r => r.existsByInn(123456789)).Returns(false);
+            repo.Setup(r => r.AddSupplier(supplier)).Returns(false); // имитация сбоя БД
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreNotEqual("", result);
+            repo.Verify(r => r.AddSupplier(supplier), Times.Once);
+        }
     }
 }
