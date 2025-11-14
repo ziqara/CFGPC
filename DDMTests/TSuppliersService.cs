@@ -178,5 +178,29 @@ namespace DDMTests
             Assert.AreEqual(expectedError, result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        public void CreateSupplier_NameTooLong_ReturnsErrorMessage()
+        {
+            // Arrange
+            string longName = new string('A', 51); // 51 символ
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = longName,
+                ContactEmail = "valid@example.com",
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Название не должно превышать 50 символов", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
