@@ -64,6 +64,8 @@ namespace DDMLib.Component
                     ErrorLogger.LogError("GetComponentsByCategory", ex.Message);
                     throw;
                 }
+
+                return result;
             }
         }
 
