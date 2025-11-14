@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,20 @@ namespace DDMLib.Component
                 throw new ArgumentException("Недопустимое значение категории.", nameof(category));
             }
 
+            List<ComponentDto> result = new List<ComponentDto>();
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.LogError("GetComponentsByCategory", ex.Message);
+                    throw;
+                }
+            }
         }
     }
 }
