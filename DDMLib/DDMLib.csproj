@@ -152,6 +152,7 @@
     <Compile Include="Component\CaseSpec.cs" />
     <Compile Include="Component\Component.cs" />
     <Compile Include="Component\ComponentDto.cs" />
+    <Compile Include="Component\ComponentRepository.cs" />
     <Compile Include="Component\ComponentService.cs" />
     <Compile Include="Component\CoolingSpec.cs" />
     <Compile Include="Component\GpuSpec.cs" />
