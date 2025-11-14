@@ -227,5 +227,31 @@ namespace DDMTests
             Assert.AreEqual(expectedError, result);
             repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        [DataRow("ivan@@example.com")]
+        [DataRow("bad@@example")]
+        [DataRow("no-at-symbol.com")]
+        public void CreateSupplier_InvalidEmailFormat_ReturnsErrorMessage(string badEmail)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Тест",
+                ContactEmail = badEmail,
+                Phone = null,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.CreateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Некорректный email", result);
+            repo.Verify(r => r.AddSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
