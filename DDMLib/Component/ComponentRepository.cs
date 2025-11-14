@@ -136,6 +136,35 @@ namespace DDMLib.Component
                         }
                     }
                 break;
+                case "ram":
+                    specCommand = new MySqlCommand(@"
+                        SELECT type, capacityGb, speedMhz, slotsNeeded
+                        FROM rams
+                        WHERE componentId = @componentId", connection);
+                    specCommand.Parameters.AddWithValue("@componentId", componentId);
+
+                    using (specReader = specCommand.ExecuteReader())
+                    {
+                        if (specReader.Read())
+                        {
+                            int iType = specReader.GetOrdinal("type");
+                            int iCap = specReader.GetOrdinal("capacityGb");
+                            int iSpeed = specReader.GetOrdinal("speedMhz");
+                            int iSlots = specReader.GetOrdinal("slotsNeeded");
+
+                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                            return new RamSpec
+                            {
+                                Type = GetStringOrEmpty(iType),
+                                CapacityGb = GetInt32OrZero(iCap),
+                                SpeedMhz = GetInt32OrZero(iSpeed),
+                                SlotsNeeded = GetInt32OrZero(iSlots)
+                            };
+                        }
+                    }
+                break;
             }
 
             return null;
