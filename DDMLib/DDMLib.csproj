@@ -152,9 +152,16 @@
     <Compile Include="Component\CaseSpec.cs" />
     <Compile Include="Component\Component.cs" />
     <Compile Include="Component\ComponentDto.cs" />
+    <Compile Include="Component\ComponentRepository.cs" />
     <Compile Include="Component\ComponentService.cs" />
+    <Compile Include="Component\CoolingSpec.cs" />
+    <Compile Include="Component\CpuSpec.cs" />
+    <Compile Include="Component\GpuSpec.cs" />
     <Compile Include="Component\IComponentRepository.cs" />
+    <Compile Include="Component\MotherboardSpec.cs" />
     <Compile Include="Component\PsuSpec.cs" />
+    <Compile Include="Component\RamSpec.cs" />
+    <Compile Include="Component\StorageSpec.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
