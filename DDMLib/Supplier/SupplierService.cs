@@ -19,5 +19,10 @@ namespace DDMLib
         {
             return repo_.ReadAllSuppliers();
         }
+
+        public string CreateSupplier(Supplier supplier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

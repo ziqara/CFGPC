@@ -9,5 +9,13 @@ namespace DDMLib
     public interface ISupplierRepository
     {
         List<Supplier> ReadAllSuppliers();
+
+        bool AddSupplier(Supplier supplier);
+
+        bool existsByInn(int inn);
+
+        bool existsByNameInsensitive(string name);
+
+        bool existsByEmail(string email);
     }
 }
