@@ -50,6 +50,8 @@ namespace DDMLib
             {
                 return "Не удалось сохранить поставщика";
             }
+
+            return string.Empty;
         }
     }
 }
