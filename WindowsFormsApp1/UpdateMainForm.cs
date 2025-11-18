@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class UpdateMainForm : Form
+    {
+        private Button currentButton;
+        private Random random;
+        private int tempIndex;
+        public UpdateMainForm()
+        {
+            InitializeComponent();
+            random = new Random();
+        }
+
+        private Color SelectThemeColor()
+        {
+            int index = random.Next(ThemeColor.ColorList.Count);
+            while (tempIndex == index)
+            {
+                index = random.Next(ThemeColor.ColorList.Count);
+            }
+            tempIndex = index;
+            string color = ThemeColor.ColorList[index];
+            return ColorTranslator.FromHtml(color);
+        }
+
+        private void ActivateButton(object btnSender)
+        {
+            if (btnSender != null) 
+            {
+                if (currentButton != (Button)btnSender) 
+                {
+                    DisableButton();
+                    Color color = SelectThemeColor();
+                    currentButton = (Button)btnSender;
+                    currentButton.BackColor = color;
+                    currentButton.ForeColor = Color.White;
+                    currentButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                }
+            }
+        }
+
+        private void DisableButton()
+        {
+            foreach (Control previosBtn in panelMenu.Controls)
+            {
+                if(previosBtn.GetType() == typeof(Button))
+                {
+                    previosBtn.BackColor = Color.FromArgb(73, 80, 87);
+                    previosBtn.ForeColor = Color.White;
+                    previosBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                }
+            }
+        }
+
+        private void btnSupplier_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnConfig_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnOrders_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnClients_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnWarries_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnReviews_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+    }
+}
