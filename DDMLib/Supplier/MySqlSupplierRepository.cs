@@ -1,12 +1,38 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using DDMLib;
+using System;
 
 public class MySqlSupplierRepository : ISupplierRepository
 {
     public bool AddSupplier(Supplier supplier)
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = @"INSERT INTO suppliers (inn, name, contactEmail, phone, address)
+                               VALUES (@inn, @name, @mail, @phone, @addr);";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", supplier.Inn);
+                    cmd.Parameters.AddWithValue("@name", supplier.Name);
+                    cmd.Parameters.AddWithValue("@mail", supplier.ContactEmail);
+
+                    cmd.Parameters.AddWithValue("@phone", supplier.Phone == null ? (object)DBNull.Value : supplier.Phone);
+                    cmd.Parameters.AddWithValue("@addr", supplier.Address == null ? (object)DBNull.Value : supplier.Address);
+
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsByEmail(string email)
