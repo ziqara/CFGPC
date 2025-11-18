@@ -40,6 +40,7 @@
             this.panelTitle = new System.Windows.Forms.Panel();
             this.lblTitile = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.panelDekstopPanel = new System.Windows.Forms.Panel();
             this.panelMenu.SuspendLayout();
             this.panelLogo.SuspendLayout();
             this.panelTitle.SuspendLayout();
@@ -58,7 +59,7 @@
             this.panelMenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelMenu.Location = new System.Drawing.Point(0, 0);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(220, 450);
+            this.panelMenu.Size = new System.Drawing.Size(220, 534);
             this.panelMenu.TabIndex = 0;
             // 
             // btnReviews
@@ -192,7 +193,7 @@
             this.panelTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTitle.Location = new System.Drawing.Point(220, 0);
             this.panelTitle.Name = "panelTitle";
-            this.panelTitle.Size = new System.Drawing.Size(580, 80);
+            this.panelTitle.Size = new System.Drawing.Size(840, 80);
             this.panelTitle.TabIndex = 1;
             // 
             // lblTitile
@@ -201,7 +202,7 @@
             this.lblTitile.AutoSize = true;
             this.lblTitile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblTitile.ForeColor = System.Drawing.Color.White;
-            this.lblTitile.Location = new System.Drawing.Point(232, 26);
+            this.lblTitile.Location = new System.Drawing.Point(362, 26);
             this.lblTitile.Name = "lblTitile";
             this.lblTitile.Size = new System.Drawing.Size(110, 29);
             this.lblTitile.TabIndex = 0;
@@ -219,11 +220,20 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Digital Dream\'s Machine";
             // 
+            // panelDekstopPanel
+            // 
+            this.panelDekstopPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelDekstopPanel.Location = new System.Drawing.Point(220, 80);
+            this.panelDekstopPanel.Name = "panelDekstopPanel";
+            this.panelDekstopPanel.Size = new System.Drawing.Size(840, 454);
+            this.panelDekstopPanel.TabIndex = 2;
+            // 
             // UpdateMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1060, 534);
+            this.Controls.Add(this.panelDekstopPanel);
             this.Controls.Add(this.panelTitle);
             this.Controls.Add(this.panelMenu);
             this.Name = "UpdateMainForm";
@@ -250,5 +260,6 @@
         private System.Windows.Forms.Panel panelTitle;
         private System.Windows.Forms.Label lblTitile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panelDekstopPanel;
     }
 }

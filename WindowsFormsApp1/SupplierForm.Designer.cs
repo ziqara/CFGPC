@@ -36,17 +36,16 @@
             // supplierDataTable
             // 
             this.supplierDataTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.supplierDataTable.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.supplierDataTable.Location = new System.Drawing.Point(0, 82);
+            this.supplierDataTable.Location = new System.Drawing.Point(277, 78);
             this.supplierDataTable.Name = "supplierDataTable";
             this.supplierDataTable.ReadOnly = true;
             this.supplierDataTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.supplierDataTable.Size = new System.Drawing.Size(543, 368);
+            this.supplierDataTable.Size = new System.Drawing.Size(544, 292);
             this.supplierDataTable.TabIndex = 0;
             // 
             // btnAddSupplier
             // 
-            this.btnAddSupplier.Location = new System.Drawing.Point(26, 12);
+            this.btnAddSupplier.Location = new System.Drawing.Point(692, 427);
             this.btnAddSupplier.Name = "btnAddSupplier";
             this.btnAddSupplier.Size = new System.Drawing.Size(75, 23);
             this.btnAddSupplier.TabIndex = 1;
@@ -58,7 +57,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(543, 450);
+            this.ClientSize = new System.Drawing.Size(883, 485);
             this.Controls.Add(this.btnAddSupplier);
             this.Controls.Add(this.supplierDataTable);
             this.Name = "SupplierForm";

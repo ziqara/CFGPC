@@ -15,6 +15,7 @@ namespace WindowsFormsApp1
         private Button currentButton;
         private Random random;
         private int tempIndex;
+        private Form activeForm;
         public UpdateMainForm()
         {
             InitializeComponent();
@@ -64,9 +65,28 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void OpenChildForm(Form childform, object btnSender)
+        {
+             if(activeForm != null)
+            {
+                activeForm.Close();
+            }
+            ActivateButton(btnSender);
+            activeForm = childform;
+            childform.TopLevel = false;
+            childform.FormBorderStyle = FormBorderStyle.None;
+            childform.Dock = DockStyle.Fill;
+            this.panelDekstopPanel.Controls.Add(childform);
+            this.panelDekstopPanel.Tag = childform;
+            childform.BringToFront();
+            childform.Show();
+
+            lblTitile.Text = childform.Text;
+        }
+
         private void btnSupplier_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new SupplierForm(), sender);
         }
 
         private void btnConfig_Click(object sender, EventArgs e)

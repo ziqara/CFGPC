@@ -20,8 +20,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
             service_ = new SupplierService(new MySqlSupplierRepository());
 
-            supplierDataTable.CellFormatting += SupplierGridView_CellFormatting;
-            supplierDataTable.CellToolTipTextNeeded += SupplierGridView_CellToolTipTextNeeded;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
