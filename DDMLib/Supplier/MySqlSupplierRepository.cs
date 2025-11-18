@@ -62,7 +62,27 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsByInn(int inn)
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE inn = @inn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsByNameInsensitive(string name)
