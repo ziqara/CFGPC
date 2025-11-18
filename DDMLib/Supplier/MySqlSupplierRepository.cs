@@ -37,7 +37,27 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsByEmail(string email)
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE contactEmail = @mail;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@mail", email);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsByInn(int inn)
