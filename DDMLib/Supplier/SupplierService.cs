@@ -44,6 +44,12 @@ namespace DDMLib
             { 
                 return "Email уже используется"; 
             }
+
+            bool ok = repo_.AddSupplier(supplier);
+            if (!ok)
+            {
+                return "Не удалось сохранить поставщика";
+            }
         }
     }
 }
