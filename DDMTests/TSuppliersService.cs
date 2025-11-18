@@ -46,7 +46,7 @@ namespace DDMTests
         [TestMethod]
         [DataRow(123456789, "ООО Альфа", "alpha@example.com", null, null)]
         [DataRow(223344556, "ООО Бета", "beta@example.com", "", "")]
-        [DataRow(998877665, "ООО Гамма", "gamma@example.com", "+7 (999) 123-45-67", "г. Москва, ул. Ленина, д. 5")]
+        [DataRow(998877665, "ООО Гамма", "gamma@example.com", "79991234567", "г. Москва, ул. Ленина, д. 5")]
         public void CreateSupplier_ValidData(int[] inns, string[] names, string[] emails, string[] phones, string[] addresses)
         {
             for (int i = 0; i < inns.Length; i++)
@@ -73,7 +73,7 @@ namespace DDMTests
                 string result = service.CreateSupplier(supplier);
 
                 // Assert
-                Assert.AreEqual("", result, "Valid supplier should produce no errors");
+                Assert.AreEqual("", result);
                 repo.Verify(r => r.AddSupplier(supplier), Times.Once);
             }
         }

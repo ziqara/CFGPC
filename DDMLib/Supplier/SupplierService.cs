@@ -9,10 +9,12 @@ namespace DDMLib
     public class SupplierService
     {
         private readonly ISupplierRepository repo_;
+        private readonly SupplierValidator validator_;
 
         public SupplierService(ISupplierRepository repo)
         {
             repo_ = repo;
+            validator_ = new SupplierValidator();
         }
 
         public List<Supplier> GetAllSuppliers()
@@ -22,7 +24,25 @@ namespace DDMLib
 
         public string CreateSupplier(Supplier supplier)
         {
-            throw new NotImplementedException();
+            List<string> errors = validator_.Validate(supplier);
+
+            if (repo_.existsByInn(supplier.Inn))
+                errors.Add("Поставщик с таким ИНН уже существует");
+
+            if (repo_.existsByNameInsensitive(supplier.Name))
+                errors.Add("Поставщик с таким названием уже есть");
+
+            if (repo_.existsByEmail(supplier.ContactEmail))
+                errors.Add("Email уже используется");
+
+            if (errors.Count > 0)
+                return string.Join("\n", errors);
+
+            bool ok = repo_.AddSupplier(supplier);
+            if (!ok)
+                return "Не удалось сохранить поставщика (ошибка подключения БД)";
+
+            return string.Empty;
         }
     }
 }

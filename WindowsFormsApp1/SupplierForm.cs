@@ -82,5 +82,16 @@ namespace WindowsFormsApp1
 
             e.ToolTipText = string.IsNullOrWhiteSpace(address) ? string.Empty : address;
         }
+
+        private void btnAddSupplier_Click(object sender, EventArgs e)
+        {
+            using (AddSupplierForm form = new AddSupplierForm())
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadSuppliers();
+                }
+            }
+        }
     }
 }

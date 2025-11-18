@@ -1,9 +1,115 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using DDMLib;
+using System;
 
 public class MySqlSupplierRepository : ISupplierRepository
 {
+    public bool AddSupplier(Supplier supplier)
+    {
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = @"INSERT INTO suppliers (inn, name, contactEmail, phone, address)
+                               VALUES (@inn, @name, @mail, @phone, @addr);";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", supplier.Inn);
+                    cmd.Parameters.AddWithValue("@name", supplier.Name);
+                    cmd.Parameters.AddWithValue("@mail", supplier.ContactEmail);
+
+                    cmd.Parameters.AddWithValue("@phone", supplier.Phone == null ? (object)DBNull.Value : supplier.Phone);
+                    cmd.Parameters.AddWithValue("@addr", supplier.Address == null ? (object)DBNull.Value : supplier.Address);
+
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public bool existsByEmail(string email)
+    {
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE contactEmail = @mail;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@mail", email);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public bool existsByInn(int inn)
+    {
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE inn = @inn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public bool existsByNameInsensitive(string name)
+    {
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE LOWER(name) = LOWER(@name);";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
     public List<Supplier> ReadAllSuppliers()
     {
         List<Supplier> suppliers = new List<Supplier>();
