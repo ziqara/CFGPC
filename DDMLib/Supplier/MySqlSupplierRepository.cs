@@ -87,7 +87,27 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsByNameInsensitive(string name)
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT COUNT(*) FROM suppliers WHERE LOWER(name) = LOWER(@name);";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public List<Supplier> ReadAllSuppliers()
