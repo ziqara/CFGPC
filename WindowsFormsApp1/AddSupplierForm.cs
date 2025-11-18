@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,19 +24,11 @@ namespace WindowsFormsApp1
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string innText = txtInn.Text?.Trim();
-            if (!int.TryParse(innText, out int inn))
-            {
-                MessageBox.Show(
-                    "ИНН должен быть целым числом.",
-                    "Ошибка ввода",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
+            int inn = 0;
+            string innText = txtInn.Text;
+            int.TryParse(innText, out inn);
 
-            // 2. Собираем объект Supplier из полей формы
-            var supplier = new Supplier(inn)
+            Supplier supplier = new Supplier(inn)
             {
                 Name = txtName.Text?.Trim(),
                 ContactEmail = txtEmail.Text?.Trim(),
@@ -49,12 +42,10 @@ namespace WindowsFormsApp1
 
             try
             {
-                // 3. Бизнес-валидация + проверки уникальности в сервисе
                 string errors = service_.CreateSupplier(supplier);
 
                 if (!string.IsNullOrEmpty(errors))
                 {
-                    // Есть ошибки — показываем все разом
                     MessageBox.Show(
                         errors,
                         "Ошибки заполнения",
@@ -63,20 +54,17 @@ namespace WindowsFormsApp1
                     return;
                 }
 
-                // 4. Успех
                 MessageBox.Show(
                     "Поставщик добавлен.",
                     "Успех",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Сообщаем вызывающей форме, что всё ок, и закрываемся
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
-            {
-                // Ошибка на уровне БД
+            { 
                 MessageBox.Show(
                     "Вероятно, проблемы в соединении с БД: " + ex.Message,
                     "Ошибка БД",

@@ -42,6 +42,11 @@ namespace DDMLib
                 }
             }
 
+            string innStr = supplier.Inn.ToString();
+
+            if (innStr.Length != 9)
+                errors.Add("ИНН должен состоять из 9 цифр");
+
             return errors;
         }
     }
