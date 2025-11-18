@@ -84,32 +84,37 @@ namespace WindowsFormsApp1
             lblTitile.Text = childform.Text;
         }
 
-        private void btnSupplier_Click(object sender, EventArgs e)
+        private void btnSupplier_Click_1(object sender, EventArgs e)
         {
             OpenChildForm(new SupplierForm(), sender);
         }
 
-        private void btnConfig_Click(object sender, EventArgs e)
+        private void btnOrders_Click_2(object sender, EventArgs e)
         {
             ActivateButton(sender);
         }
 
-        private void btnOrders_Click(object sender, EventArgs e)
+        private void btnConfig_Click_1(object sender, EventArgs e)
         {
             ActivateButton(sender);
         }
 
-        private void btnClients_Click(object sender, EventArgs e)
+        private void btnComponent_Click(object sender, EventArgs e)
         {
             ActivateButton(sender);
         }
 
-        private void btnWarries_Click(object sender, EventArgs e)
+        private void btnClients_Click_1(object sender, EventArgs e)
         {
             ActivateButton(sender);
         }
 
-        private void btnReviews_Click(object sender, EventArgs e)
+        private void btnWarrious_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+        }
+
+        private void btnReviews_Click_1(object sender, EventArgs e)
         {
             ActivateButton(sender);
         }

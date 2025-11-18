@@ -20,7 +20,10 @@ namespace WindowsFormsApp1
             InitializeComponent();
             service_ = new SupplierService(new MySqlSupplierRepository());
 
+            supplierDataTable.CellFormatting += SupplierGridView_CellFormatting;
+            supplierDataTable.CellToolTipTextNeeded += SupplierGridView_CellToolTipTextNeeded;
 
+            DataTableB();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -91,6 +94,50 @@ namespace WindowsFormsApp1
                     LoadSuppliers();
                 }
             }
+        }
+
+        private void DataTableB()
+        {
+            // Настройка внешнего вида
+            supplierDataTable.BackgroundColor = Color.FromArgb(248, 249, 250);
+            supplierDataTable.GridColor = Color.FromArgb(206, 212, 218);
+            supplierDataTable.BorderStyle = BorderStyle.FixedSingle;
+            supplierDataTable.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            supplierDataTable.RowHeadersVisible = false;
+            supplierDataTable.AllowUserToAddRows = false;
+            supplierDataTable.AllowUserToDeleteRows = false;
+            supplierDataTable.ReadOnly = true; // <-- Только для чтения (нельзя редактировать ячейки)
+            supplierDataTable.MultiSelect = false; // Только одна строка
+            supplierDataTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            supplierDataTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // Отключаем визуальные эффекты выделения
+            supplierDataTable.EnableHeadersVisualStyles = false;
+
+            // Настройка заголовков колонок
+            supplierDataTable.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 58, 64);
+            supplierDataTable.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(248, 249, 250);
+            supplierDataTable.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 58, 64);
+            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.FromArgb(248, 249, 250);
+            supplierDataTable.ColumnHeadersHeight = 30;
+
+            // Настройка строк
+            supplierDataTable.DefaultCellStyle.BackColor = Color.FromArgb(248, 249, 250);
+            supplierDataTable.DefaultCellStyle.ForeColor = Color.FromArgb(52, 58, 64);
+            supplierDataTable.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Подсвечивание при выборе строки
+            supplierDataTable.DefaultCellStyle.SelectionBackColor = Color.FromArgb(206, 212, 218); // Более заметный серый
+            supplierDataTable.DefaultCellStyle.SelectionForeColor = Color.FromArgb(52, 58, 64);
+
+            // Убрали чередование строк
+            // supplierDataTable.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(233, 236, 239);
+
+            // Высота строк
+            supplierDataTable.RowTemplate.Height = 25;
+
+            Color accentColor = Color.FromArgb(108, 117, 125);
         }
     }
 }
