@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using DDMLib.Component;
+using DDMLib;
 
 namespace ClientWebApp.Pages
 {
@@ -19,7 +20,16 @@ namespace ClientWebApp.Pages
 
         public void OnGet([FromQuery] string category = "cpu")
         {
-            Components = componentService_.GetComponentsByCategory(category);
+            try
+            {
+                Components = componentService_.GetComponentsByCategory(category);
+                ErrorLogger.LogError("OnGet ComponentsPageModel", $"Загружено компонентов: {Components.Count}");
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("OnGet ComponentsPageModel", ex.Message);
+                Components = new List<ComponentDto>();
+            }
         }
     }
 }
