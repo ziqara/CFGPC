@@ -37,7 +37,12 @@
             this.btnConfig = new System.Windows.Forms.Button();
             this.btnSupplier = new System.Windows.Forms.Button();
             this.panelLogo = new System.Windows.Forms.Panel();
+            this.panelTitle = new System.Windows.Forms.Panel();
+            this.lblTitile = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelMenu.SuspendLayout();
+            this.panelLogo.SuspendLayout();
+            this.panelTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelMenu
@@ -173,21 +178,61 @@
             // panelLogo
             // 
             this.panelLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.panelLogo.Controls.Add(this.label1);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogo.Location = new System.Drawing.Point(0, 0);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Size = new System.Drawing.Size(220, 80);
             this.panelLogo.TabIndex = 1;
             // 
+            // panelTitle
+            // 
+            this.panelTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
+            this.panelTitle.Controls.Add(this.lblTitile);
+            this.panelTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTitle.Location = new System.Drawing.Point(220, 0);
+            this.panelTitle.Name = "panelTitle";
+            this.panelTitle.Size = new System.Drawing.Size(580, 80);
+            this.panelTitle.TabIndex = 1;
+            // 
+            // lblTitile
+            // 
+            this.lblTitile.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblTitile.AutoSize = true;
+            this.lblTitile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblTitile.ForeColor = System.Drawing.Color.White;
+            this.lblTitile.Location = new System.Drawing.Point(232, 26);
+            this.lblTitile.Name = "lblTitile";
+            this.lblTitile.Size = new System.Drawing.Size(110, 29);
+            this.lblTitile.TabIndex = 0;
+            this.lblTitile.Text = "Главная";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(16, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(180, 20);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Digital Dream\'s Machine";
+            // 
             // UpdateMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.panelTitle);
             this.Controls.Add(this.panelMenu);
             this.Name = "UpdateMainForm";
             this.Text = "UpdateMainForm";
             this.panelMenu.ResumeLayout(false);
+            this.panelLogo.ResumeLayout(false);
+            this.panelLogo.PerformLayout();
+            this.panelTitle.ResumeLayout(false);
+            this.panelTitle.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -202,5 +247,8 @@
         private System.Windows.Forms.Button btnReviews;
         private System.Windows.Forms.Button btnWarries;
         private System.Windows.Forms.Button btnClients;
+        private System.Windows.Forms.Panel panelTitle;
+        private System.Windows.Forms.Label lblTitile;
+        private System.Windows.Forms.Label label1;
     }
 }
