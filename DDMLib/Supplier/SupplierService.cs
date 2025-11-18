@@ -25,31 +25,22 @@ namespace DDMLib
         public string CreateSupplier(Supplier supplier)
         {
             List<string> errors = validator_.Validate(supplier);
-            if (errors.Count > 0)
-            {
-                return string.Join("\n", errors);
-            }
 
-            if (repo_.existsByInn(supplier.Inn)) 
-            { 
-                return "Поставщик с таким ИНН уже существует"; 
-            }
+            if (repo_.existsByInn(supplier.Inn))
+                errors.Add("Поставщик с таким ИНН уже существует");
 
             if (repo_.existsByNameInsensitive(supplier.Name))
-            { 
-                return "Поставщик с таким названием уже есть"; 
-            }
+                errors.Add("Поставщик с таким названием уже есть");
 
             if (repo_.existsByEmail(supplier.ContactEmail))
-            { 
-                return "Email уже используется"; 
-            }
+                errors.Add("Email уже используется");
+
+            if (errors.Count > 0)
+                return string.Join("\n", errors);
 
             bool ok = repo_.AddSupplier(supplier);
             if (!ok)
-            {
                 return "Не удалось сохранить поставщика (ошибка подключения БД)";
-            }
 
             return string.Empty;
         }

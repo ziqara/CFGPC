@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.supplierDataTable = new System.Windows.Forms.DataGridView();
+            this.btnAddSupplier = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.supplierDataTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,11 +44,22 @@
             this.supplierDataTable.Size = new System.Drawing.Size(543, 368);
             this.supplierDataTable.TabIndex = 0;
             // 
+            // btnAddSupplier
+            // 
+            this.btnAddSupplier.Location = new System.Drawing.Point(26, 12);
+            this.btnAddSupplier.Name = "btnAddSupplier";
+            this.btnAddSupplier.Size = new System.Drawing.Size(75, 23);
+            this.btnAddSupplier.TabIndex = 1;
+            this.btnAddSupplier.Text = "Добавить";
+            this.btnAddSupplier.UseVisualStyleBackColor = true;
+            this.btnAddSupplier.Click += new System.EventHandler(this.btnAddSupplier_Click);
+            // 
             // SupplierForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(543, 450);
+            this.Controls.Add(this.btnAddSupplier);
             this.Controls.Add(this.supplierDataTable);
             this.Name = "SupplierForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -61,6 +73,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView supplierDataTable;
+        private System.Windows.Forms.Button btnAddSupplier;
     }
 }
 
