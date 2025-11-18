@@ -29,6 +29,21 @@ namespace DDMLib
             {
                 return string.Join("\n", errors);
             }
+
+            if (repo_.existsByInn(supplier.Inn)) 
+            { 
+                return "Поставщик с таким ИНН уже существует"; 
+            }
+
+            if (repo_.existsByNameInsensitive(supplier.Name))
+            { 
+                return "Поставщик с таким названием уже есть"; 
+            }
+
+            if (repo_.existsByEmail(supplier.ContactEmail))
+            { 
+                return "Email уже используется"; 
+            }
         }
     }
 }
