@@ -10,7 +10,18 @@ namespace DDMLib
     {
         public List<string> Validate(Supplier supplier)
         {
-            throw new NotImplementedException();
+            List<string> errors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(supplier.Name))
+            {
+                errors.Add("Название обязательно");
+            }
+            else if (supplier.Name.Length > 50)
+            {
+                errors.Add("Название не должно превышать 50 символов");
+            }
+
+
         }
     }
 }

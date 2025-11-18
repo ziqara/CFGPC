@@ -4,6 +4,26 @@ using DDMLib;
 
 public class MySqlSupplierRepository : ISupplierRepository
 {
+    public bool AddSupplier(Supplier supplier)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool existsByEmail(string email)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool existsByInn(int inn)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool existsByNameInsensitive(string name)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public List<Supplier> ReadAllSuppliers()
     {
         List<Supplier> suppliers = new List<Supplier>();
