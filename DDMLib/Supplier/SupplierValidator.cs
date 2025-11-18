@@ -21,7 +21,18 @@ namespace DDMLib
                 errors.Add("Название не должно превышать 50 символов");
             }
 
-
+            if (string.IsNullOrWhiteSpace(supplier.ContactEmail))
+            {
+                errors.Add("Email обязателен");
+            }
+            else
+            {
+                string emailValidation = UserService.ValidateEmail(supplier.ContactEmail);
+                if (!string.IsNullOrEmpty(emailValidation))
+                {
+                    errors.Add("Некорректный email");
+                }
+            }
         }
     }
 }
