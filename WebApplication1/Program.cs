@@ -1,4 +1,5 @@
-using DDMLib;  
+using DDMLib;
+using DDMLib.Component;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,9 @@ builder.Services.AddScoped<AccountService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SessionManager>();
+
+builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
+builder.Services.AddScoped<ComponentService>();
 
 var app = builder.Build();
 
