@@ -5,7 +5,7 @@ using System.Linq;
 using DDMLib.Component;
 using DDMLib;
 
-namespace ClientWebApp.Pages
+namespace WebApplication1.Pages
 {
     public class ComponentsPageModel : PageModel
     {
@@ -20,6 +20,7 @@ namespace ClientWebApp.Pages
 
         public void OnGet([FromQuery] string category = "cpu")
         {
+            Console.WriteLine("OnGet вызван с category: " + category);
             try
             {
                 Components = componentService_.GetComponentsByCategory(category);
