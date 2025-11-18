@@ -33,6 +33,16 @@ namespace DDMLib
                     errors.Add("Некорректный email");
                 }
             }
+
+            if (!string.IsNullOrWhiteSpace(supplier.Phone))
+            {
+                if (!supplier.Phone.All(char.IsDigit) || supplier.Phone.Length != 11)
+                {
+                    errors.Add("Некорректный номер телефона");
+                }
+            }
+
+            return errors;
         }
     }
 }
