@@ -23,8 +23,8 @@ namespace WindowsFormsApp1
             random = new Random();
             btnCloseChildForm.Visible = false;
             logobox.Visible = false;
-            this.Text = string.Empty;
-            this.ControlBox = false;
+            //this.Text = string.Empty;
+            //this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             this.lblTitile.MouseDown += panelTitle_MouseDown;
         }

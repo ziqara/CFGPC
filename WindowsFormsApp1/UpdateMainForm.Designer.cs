@@ -240,7 +240,7 @@
             this.lblTitile.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTitile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblTitile.ForeColor = System.Drawing.Color.White;
-            this.lblTitile.Location = new System.Drawing.Point(187, 27);
+            this.lblTitile.Location = new System.Drawing.Point(178, 27);
             this.lblTitile.Name = "lblTitile";
             this.lblTitile.Size = new System.Drawing.Size(374, 29);
             this.lblTitile.TabIndex = 0;
@@ -288,10 +288,11 @@
             this.Controls.Add(this.panelDekstopPanel);
             this.Controls.Add(this.panelTitle);
             this.Controls.Add(this.panelMenu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(969, 558);
             this.Name = "UpdateMainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "UpdateMainForm";
+            this.Text = "Панель администрирования";
             this.panelMenu.ResumeLayout(false);
             this.panelLogo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logobox)).EndInit();
