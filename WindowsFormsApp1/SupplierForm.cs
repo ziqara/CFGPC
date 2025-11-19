@@ -22,8 +22,8 @@ namespace WindowsFormsApp1
 
             supplierDataTable.CellFormatting += SupplierGridView_CellFormatting;
             supplierDataTable.CellToolTipTextNeeded += SupplierGridView_CellToolTipTextNeeded;
-            DataTableB();
             this.Shown += SupplierForm_Shown;
+            ThemeColor.ThemeChanged += ApplyTableTheme;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -115,53 +115,58 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void DataTableB()
+        private void ApplyTableTheme()
         {
-            // Настройка внешнего вида
+            if (supplierDataTable == null || supplierDataTable.IsDisposed)
+                return;
+
+            // Общие свойства таблицы
             supplierDataTable.BackgroundColor = Color.FromArgb(248, 249, 250);
             supplierDataTable.GridColor = Color.FromArgb(206, 212, 218);
             supplierDataTable.BorderStyle = BorderStyle.FixedSingle;
             supplierDataTable.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+
             supplierDataTable.RowHeadersVisible = false;
             supplierDataTable.AllowUserToAddRows = false;
             supplierDataTable.AllowUserToDeleteRows = false;
-            supplierDataTable.ReadOnly = true; // <-- Только для чтения (нельзя редактировать ячейки)
-            supplierDataTable.MultiSelect = false; // Только одна строка
+            supplierDataTable.ReadOnly = true;
+            supplierDataTable.MultiSelect = false;
             supplierDataTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             supplierDataTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Отключаем визуальные эффекты выделения
             supplierDataTable.EnableHeadersVisualStyles = false;
 
-            // Настройка заголовков колонок
-            supplierDataTable.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 58, 64);
-            supplierDataTable.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(248, 249, 250);
+            // Заголовки колонок
+            supplierDataTable.ColumnHeadersDefaultCellStyle.BackColor = ThemeColor.PrimaryColor;
+            supplierDataTable.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             supplierDataTable.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
-            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 58, 64);
-            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.FromArgb(248, 249, 250);
+            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionBackColor = ThemeColor.PrimaryColor;
+            supplierDataTable.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
             supplierDataTable.ColumnHeadersHeight = 30;
 
-            // Настройка строк
+            // Строки
             supplierDataTable.DefaultCellStyle.BackColor = Color.FromArgb(248, 249, 250);
             supplierDataTable.DefaultCellStyle.ForeColor = Color.FromArgb(52, 58, 64);
             supplierDataTable.DefaultCellStyle.Font = new Font("Arial", 9);
 
-            // Подсвечивание при выборе строки
-            supplierDataTable.DefaultCellStyle.SelectionBackColor = Color.FromArgb(206, 212, 218); // Более заметный серый
+            supplierDataTable.DefaultCellStyle.SelectionBackColor = Color.FromArgb(206, 212, 218);
             supplierDataTable.DefaultCellStyle.SelectionForeColor = Color.FromArgb(52, 58, 64);
 
-            // Убрали чередование строк
-            // supplierDataTable.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(233, 236, 239);
+            supplierDataTable.AllowUserToResizeColumns = false;
+            supplierDataTable.AllowUserToResizeRows = false;
 
-            // Высота строк
             supplierDataTable.RowTemplate.Height = 25;
-
-            Color accentColor = Color.FromArgb(108, 117, 125);
+            foreach (DataGridViewRow row in supplierDataTable.Rows)
+            {
+                row.Height = supplierDataTable.RowTemplate.Height;
+            }
+            supplierDataTable.ClearSelection();
         }
 
         private void SupplierForm_Shown(object sender, EventArgs e)
         {
             LoadTheme();
+            ApplyTableTheme();
         }
     }
 }

@@ -36,21 +36,20 @@ namespace WindowsFormsApp1
 
         private void ActivateButton(object btnSender)
         {
-            if (btnSender != null) 
+            if (btnSender != null && currentButton != (Button)btnSender)
             {
-                if (currentButton != (Button)btnSender) 
-                {
-                    DisableButton();
-                    Color color = SelectThemeColor();
-                    currentButton = (Button)btnSender;
-                    currentButton.BackColor = color;
-                    currentButton.ForeColor = Color.White;
-                    currentButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-                    panelTitle.BackColor = color;
-                    panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.5);
-                    ThemeColor.PrimaryColor = color;
-                    ThemeColor.SecondaryColor = ThemeColor.ChangeColorBrightness(color, -0.5);
-                }
+                DisableButton();
+
+                Color color = SelectThemeColor();
+                currentButton = (Button)btnSender;
+
+                currentButton.BackColor = color;
+                currentButton.ForeColor = Color.White;
+                currentButton.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular);
+
+                panelTitle.BackColor = color;
+                panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.5);
+                ThemeColor.SetTheme(color, ThemeColor.ChangeColorBrightness(color, -0.5));
             }
         }
 
