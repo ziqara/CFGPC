@@ -56,25 +56,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        public void LoadTheme()
-        {
-            foreach (Control btns in this.Controls)
-            {
-                if (btns.GetType() == typeof(Button))
-                {
-                    Button btn = (Button)btns;
-                    btn.BackColor = ThemeColor.PrimaryColor;
-                    btn.ForeColor = Color.White;
-                    btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
-                }
-            }
-
-            label1.ForeColor = ThemeColor.PrimaryColor;
-            cbxPhone.ForeColor = ThemeColor.PrimaryColor;
-            cbxAddres.ForeColor = ThemeColor.PrimaryColor;
-
-        }
-
         private void SupplierGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
@@ -120,6 +101,20 @@ namespace WindowsFormsApp1
             if (supplierDataTable == null || supplierDataTable.IsDisposed)
                 return;
 
+            foreach (Control btns in this.Controls)
+            {
+                if (btns.GetType() == typeof(Button))
+                {
+                    Button btn = (Button)btns;
+                    btn.BackColor = ThemeColor.PrimaryColor;
+                    btn.ForeColor = Color.White;
+                    btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
+                }
+            }
+
+            label1.ForeColor = ThemeColor.PrimaryColor;
+            cbxPhone.ForeColor = ThemeColor.PrimaryColor;
+            cbxAddres.ForeColor = ThemeColor.PrimaryColor;
             // Общие свойства таблицы
             supplierDataTable.BackgroundColor = Color.FromArgb(248, 249, 250);
             supplierDataTable.GridColor = Color.FromArgb(206, 212, 218);
@@ -165,7 +160,6 @@ namespace WindowsFormsApp1
 
         private void SupplierForm_Shown(object sender, EventArgs e)
         {
-            LoadTheme();
             ApplyTableTheme();
         }
     }

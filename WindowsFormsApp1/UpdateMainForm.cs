@@ -61,7 +61,7 @@ namespace WindowsFormsApp1
                 {
                     previosBtn.BackColor = Color.FromArgb(73, 80, 87);
                     previosBtn.ForeColor = Color.White;
-                    previosBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                    previosBtn.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular);
                 }
             }
         }

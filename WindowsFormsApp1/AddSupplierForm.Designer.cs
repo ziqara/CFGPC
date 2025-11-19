@@ -40,93 +40,109 @@
             this.txtPhone = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.opcPhone = new System.Windows.Forms.Label();
+            this.opcAddres = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 61);
+            this.label1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(50, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.Size = new System.Drawing.Size(38, 16);
             this.label1.TabIndex = 0;
-            this.label1.Text = "ИНН";
+            this.label1.Text = "ИНН:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 35);
+            this.label2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(13, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.Size = new System.Drawing.Size(75, 16);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Название";
+            this.label2.Text = "Название:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(35, 87);
+            this.label3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(41, 69);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.Size = new System.Drawing.Size(47, 16);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Email";
+            this.label3.Text = "Email:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 113);
+            this.label4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(18, 95);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 13);
+            this.label4.Size = new System.Drawing.Size(70, 16);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Телефон";
+            this.label4.Text = "Телефон:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(35, 139);
+            this.label5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(37, 123);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.Size = new System.Drawing.Size(51, 16);
             this.label5.TabIndex = 4;
-            this.label5.Text = "Адрес";
+            this.label5.Text = "Адрес:";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(76, 32);
+            this.txtName.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtName.Location = new System.Drawing.Point(88, 40);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(100, 20);
+            this.txtName.Size = new System.Drawing.Size(174, 22);
             this.txtName.TabIndex = 5;
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(76, 84);
+            this.txtEmail.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtEmail.Location = new System.Drawing.Point(88, 66);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(100, 20);
+            this.txtEmail.Size = new System.Drawing.Size(174, 22);
             this.txtEmail.TabIndex = 6;
             // 
             // txtInn
             // 
-            this.txtInn.Location = new System.Drawing.Point(76, 58);
+            this.txtInn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtInn.Location = new System.Drawing.Point(88, 13);
             this.txtInn.Name = "txtInn";
-            this.txtInn.Size = new System.Drawing.Size(100, 20);
+            this.txtInn.Size = new System.Drawing.Size(174, 22);
             this.txtInn.TabIndex = 7;
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(76, 136);
+            this.txtAddress.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtAddress.Location = new System.Drawing.Point(88, 122);
+            this.txtAddress.Multiline = true;
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(100, 20);
+            this.txtAddress.Size = new System.Drawing.Size(174, 20);
             this.txtAddress.TabIndex = 8;
+            this.txtAddress.TextChanged += new System.EventHandler(this.txtAddress_TextChanged);
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(76, 110);
+            this.txtPhone.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtPhone.Location = new System.Drawing.Point(88, 94);
             this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(100, 20);
+            this.txtPhone.Size = new System.Drawing.Size(174, 22);
             this.txtPhone.TabIndex = 9;
+            this.txtPhone.TextChanged += new System.EventHandler(this.txtPhone_TextChanged);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(21, 162);
+            this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnCancel.Location = new System.Drawing.Point(88, 148);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(75, 29);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -134,19 +150,44 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(101, 162);
+            this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSave.Location = new System.Drawing.Point(169, 148);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Size = new System.Drawing.Size(93, 29);
             this.btnSave.TabIndex = 11;
             this.btnSave.Text = "Сохранить";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // opcPhone
+            // 
+            this.opcPhone.AutoSize = true;
+            this.opcPhone.BackColor = System.Drawing.Color.White;
+            this.opcPhone.Enabled = false;
+            this.opcPhone.Location = new System.Drawing.Point(133, 98);
+            this.opcPhone.Name = "opcPhone";
+            this.opcPhone.Size = new System.Drawing.Size(87, 13);
+            this.opcPhone.TabIndex = 12;
+            this.opcPhone.Text = "Дополнительно";
+            // 
+            // opcAddres
+            // 
+            this.opcAddres.AutoSize = true;
+            this.opcAddres.BackColor = System.Drawing.Color.White;
+            this.opcAddres.Enabled = false;
+            this.opcAddres.Location = new System.Drawing.Point(133, 125);
+            this.opcAddres.Name = "opcAddres";
+            this.opcAddres.Size = new System.Drawing.Size(87, 13);
+            this.opcAddres.TabIndex = 13;
+            this.opcAddres.Text = "Дополнительно";
+            // 
             // AddSupplierForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(280, 188);
+            this.Controls.Add(this.opcAddres);
+            this.Controls.Add(this.opcPhone);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtPhone);
@@ -159,8 +200,10 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "AddSupplierForm";
-            this.Text = "AddSupplierForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Добавление поставщика";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,5 +223,7 @@
         private System.Windows.Forms.TextBox txtPhone;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Label opcPhone;
+        private System.Windows.Forms.Label opcAddres;
     }
 }
