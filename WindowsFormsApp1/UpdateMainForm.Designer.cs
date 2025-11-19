@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateMainForm));
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.btnReviews = new System.Windows.Forms.Button();
             this.btnWarrious = new System.Windows.Forms.Button();
             this.btnClients = new System.Windows.Forms.Button();
             this.btnSupplier = new System.Windows.Forms.Button();
@@ -37,13 +38,13 @@
             this.btnConfig = new System.Windows.Forms.Button();
             this.btnOrders = new System.Windows.Forms.Button();
             this.panelLogo = new System.Windows.Forms.Panel();
+            this.logobox = new System.Windows.Forms.PictureBox();
             this.panelTitle = new System.Windows.Forms.Panel();
             this.lblTitile = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.panelDekstopPanel = new System.Windows.Forms.Panel();
-            this.btnReviews = new System.Windows.Forms.Button();
             this.panelMenu.SuspendLayout();
             this.panelLogo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logobox)).BeginInit();
             this.panelTitle.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,6 +64,25 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(220, 519);
             this.panelMenu.TabIndex = 0;
+            // 
+            // btnReviews
+            // 
+            this.btnReviews.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnReviews.FlatAppearance.BorderSize = 0;
+            this.btnReviews.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReviews.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnReviews.ForeColor = System.Drawing.Color.White;
+            this.btnReviews.Image = ((System.Drawing.Image)(resources.GetObject("btnReviews.Image")));
+            this.btnReviews.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReviews.Location = new System.Drawing.Point(0, 440);
+            this.btnReviews.Name = "btnReviews";
+            this.btnReviews.Size = new System.Drawing.Size(220, 60);
+            this.btnReviews.TabIndex = 7;
+            this.btnReviews.Text = "     Отзывы";
+            this.btnReviews.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReviews.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnReviews.UseVisualStyleBackColor = true;
+            this.btnReviews.Click += new System.EventHandler(this.btnReviews_Click_1);
             // 
             // btnWarrious
             // 
@@ -181,12 +201,23 @@
             // panelLogo
             // 
             this.panelLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
-            this.panelLogo.Controls.Add(this.label1);
+            this.panelLogo.Controls.Add(this.logobox);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogo.Location = new System.Drawing.Point(0, 0);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Size = new System.Drawing.Size(220, 80);
             this.panelLogo.TabIndex = 1;
+            // 
+            // logobox
+            // 
+            this.logobox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logobox.Image = ((System.Drawing.Image)(resources.GetObject("logobox.Image")));
+            this.logobox.Location = new System.Drawing.Point(0, 0);
+            this.logobox.Name = "logobox";
+            this.logobox.Size = new System.Drawing.Size(220, 80);
+            this.logobox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.logobox.TabIndex = 0;
+            this.logobox.TabStop = false;
             // 
             // panelTitle
             // 
@@ -210,18 +241,6 @@
             this.lblTitile.TabIndex = 0;
             this.lblTitile.Text = "Главная";
             // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(16, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(180, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Digital Dream\'s Machine";
-            // 
             // panelDekstopPanel
             // 
             this.panelDekstopPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -229,25 +248,6 @@
             this.panelDekstopPanel.Name = "panelDekstopPanel";
             this.panelDekstopPanel.Size = new System.Drawing.Size(733, 439);
             this.panelDekstopPanel.TabIndex = 2;
-            // 
-            // btnReviews
-            // 
-            this.btnReviews.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReviews.FlatAppearance.BorderSize = 0;
-            this.btnReviews.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReviews.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnReviews.ForeColor = System.Drawing.Color.White;
-            this.btnReviews.Image = ((System.Drawing.Image)(resources.GetObject("btnReviews.Image")));
-            this.btnReviews.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReviews.Location = new System.Drawing.Point(0, 440);
-            this.btnReviews.Name = "btnReviews";
-            this.btnReviews.Size = new System.Drawing.Size(220, 60);
-            this.btnReviews.TabIndex = 7;
-            this.btnReviews.Text = "     Отзывы";
-            this.btnReviews.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReviews.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnReviews.UseVisualStyleBackColor = true;
-            this.btnReviews.Click += new System.EventHandler(this.btnReviews_Click_1);
             // 
             // UpdateMainForm
             // 
@@ -262,7 +262,7 @@
             this.Text = "UpdateMainForm";
             this.panelMenu.ResumeLayout(false);
             this.panelLogo.ResumeLayout(false);
-            this.panelLogo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logobox)).EndInit();
             this.panelTitle.ResumeLayout(false);
             this.panelTitle.PerformLayout();
             this.ResumeLayout(false);
@@ -281,8 +281,8 @@
         private System.Windows.Forms.Button btnSupplier;
         private System.Windows.Forms.Panel panelTitle;
         private System.Windows.Forms.Label lblTitile;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelDekstopPanel;
         private System.Windows.Forms.Button btnReviews;
+        private System.Windows.Forms.PictureBox logobox;
     }
 }

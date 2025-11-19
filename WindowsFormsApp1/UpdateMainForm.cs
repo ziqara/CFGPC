@@ -48,7 +48,7 @@ namespace WindowsFormsApp1
                 currentButton.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular);
 
                 panelTitle.BackColor = color;
-                panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.5);
+                panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.4);
                 ThemeColor.SetTheme(color, ThemeColor.ChangeColorBrightness(color, -0.5));
             }
         }
