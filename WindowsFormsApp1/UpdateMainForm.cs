@@ -21,6 +21,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
             random = new Random();
             btnCloseChildForm.Visible = false;
+            logobox.Visible = false;
         }
 
         private Color SelectThemeColor()
@@ -52,6 +53,7 @@ namespace WindowsFormsApp1
                 panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.4);
                 ThemeColor.SetTheme(color, ThemeColor.ChangeColorBrightness(color, -0.5));
                 btnCloseChildForm.Visible = true;
+                logobox.Visible = true;
             }
         }
 
@@ -141,6 +143,7 @@ namespace WindowsFormsApp1
             panelLogo.BackColor = Color.FromArgb(33, 37, 41);
             currentButton = null;
             btnCloseChildForm.Visible = false;
+            logobox.Visible = false;
         }
     }
 }
