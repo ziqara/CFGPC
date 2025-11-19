@@ -25,6 +25,8 @@ namespace WindowsFormsApp1
             logobox.Visible = false;
             this.Text = string.Empty;
             this.ControlBox = false;
+            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            this.lblTitile.MouseDown += panelTitle_MouseDown;
         }
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]
@@ -140,8 +142,6 @@ namespace WindowsFormsApp1
                 activeForm.Close();
                 Reset();
             }
-
-
         }
 
         private void Reset()
