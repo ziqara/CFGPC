@@ -22,8 +22,8 @@ namespace WindowsFormsApp1
 
             supplierDataTable.CellFormatting += SupplierGridView_CellFormatting;
             supplierDataTable.CellToolTipTextNeeded += SupplierGridView_CellToolTipTextNeeded;
-
             DataTableB();
+            this.Shown += SupplierForm_Shown;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -54,6 +54,25 @@ namespace WindowsFormsApp1
                 MessageBox.Show($"Вероятно, проблемы в соединении с БД.\n\n{ex.Message}",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void LoadTheme()
+        {
+            foreach (Control btns in this.Controls)
+            {
+                if (btns.GetType() == typeof(Button))
+                {
+                    Button btn = (Button)btns;
+                    btn.BackColor = ThemeColor.PrimaryColor;
+                    btn.ForeColor = Color.White;
+                    btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
+                }
+            }
+
+            label1.ForeColor = ThemeColor.PrimaryColor;
+            cbxPhone.ForeColor = ThemeColor.PrimaryColor;
+            cbxAddres.ForeColor = ThemeColor.PrimaryColor;
+
         }
 
         private void SupplierGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -138,6 +157,11 @@ namespace WindowsFormsApp1
             supplierDataTable.RowTemplate.Height = 25;
 
             Color accentColor = Color.FromArgb(108, 117, 125);
+        }
+
+        private void SupplierForm_Shown(object sender, EventArgs e)
+        {
+            LoadTheme();
         }
     }
 }

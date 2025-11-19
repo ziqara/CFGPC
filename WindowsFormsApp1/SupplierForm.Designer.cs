@@ -137,6 +137,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Поставщики";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.SupplierForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.supplierDataTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -9,22 +9,28 @@ namespace WindowsFormsApp1
 {
     public static class ThemeColor
     {
+        public static Color PrimaryColor { get; set; }
+        public static Color SecondaryColor { get; set; }
+
         public static List<string> ColorList = new List<string>()
         {
-            "#004D40",  // темный бирюзовый (добавляет свежести, сочетается с синим)
-            "#BF360C",  // темный красно-оранжевый (комплементарный акцент)
-            "#4A148C",  // темный фиолетовый (сочетается с синим через холодные тона)
-            "#880E4F",  // темный малиновый (добавляет глубины)
-            "#B71C1C",  // темный красный (контрастный акцент)
-            "#3E2723",  // темный пурпурный (темный, нейтральный)
-            "#2E7D32",  // темный зеленый (комплементарный к синему)
-            "#880E4F",  // темный розовый (мягкий акцент)
-            "#3E2723"   // темный темно-красный (глубокий, сочетается)
+            "#1B5E20", // Dark Emerald Green — глубокий зелёный
+            "#2E7D32", // Forest Green — насыщенный зелёный
+            "#004D40", // Teal Dark — тёмная бирюза
+            "#00695C", // Deep Teal — насыщенная бирюза
+            "#0D47A1", // Dark Blue — тёмный насыщенный синий
+            "#1976D2", // Blue — средний насыщенный синий
+            "#1A237E", // Indigo Dark — тёмный индиго
+            "#283593", // Deep Indigo — насыщенный индиго
+            "#4A148C", // Plum Dark — глубокий фиолетовый
+            "#6A1B9A", // Purple — насыщенный фиолетовый
+            "#311B92", // Deep Purple — глубокий пурпурный
+            "#B71C1C", // Crimson Dark — тёмный красный
         };
 
         public static Color ChangeColorBrightness(Color color, double correctionFactor)
         {
-            double red = color.R;  // Исправлено: R вместо A
+            double red = color.R; 
             double green = color.G;
             double blue = color.B;
 
@@ -42,7 +48,7 @@ namespace WindowsFormsApp1
                 blue = (255 - blue) * correctionFactor + blue;
             }
 
-            return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue); // Исправлено: FromArgb
+            return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
         }
     }
 }
