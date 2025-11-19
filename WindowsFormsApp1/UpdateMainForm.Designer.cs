@@ -233,25 +233,24 @@
             this.panelTitle.Name = "panelTitle";
             this.panelTitle.Size = new System.Drawing.Size(733, 80);
             this.panelTitle.TabIndex = 1;
+            this.panelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitle_MouseDown);
             // 
             // lblTitile
             // 
             this.lblTitile.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblTitile.AutoSize = true;
             this.lblTitile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblTitile.ForeColor = System.Drawing.Color.White;
-            this.lblTitile.Location = new System.Drawing.Point(308, 26);
+            this.lblTitile.Location = new System.Drawing.Point(187, 27);
             this.lblTitile.Name = "lblTitile";
-            this.lblTitile.Size = new System.Drawing.Size(110, 29);
+            this.lblTitile.Size = new System.Drawing.Size(374, 29);
             this.lblTitile.TabIndex = 0;
             this.lblTitile.Text = "Главная";
+            this.lblTitile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelDekstopPanel
             // 
-            this.panelDekstopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDekstopPanel.Controls.Add(this.pictureBox1);
+            this.panelDekstopPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDekstopPanel.Location = new System.Drawing.Point(220, 80);
             this.panelDekstopPanel.Name = "panelDekstopPanel";
             this.panelDekstopPanel.Size = new System.Drawing.Size(733, 439);
@@ -274,9 +273,9 @@
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(71, 87);
+            this.pictureBox1.Location = new System.Drawing.Point(33, 68);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(602, 250);
+            this.pictureBox1.Size = new System.Drawing.Size(664, 265);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -289,6 +288,7 @@
             this.Controls.Add(this.panelDekstopPanel);
             this.Controls.Add(this.panelTitle);
             this.Controls.Add(this.panelMenu);
+            this.MinimumSize = new System.Drawing.Size(969, 558);
             this.Name = "UpdateMainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UpdateMainForm";
@@ -296,7 +296,6 @@
             this.panelLogo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logobox)).EndInit();
             this.panelTitle.ResumeLayout(false);
-            this.panelTitle.PerformLayout();
             this.panelDekstopPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,7 +23,15 @@ namespace WindowsFormsApp1
             random = new Random();
             btnCloseChildForm.Visible = false;
             logobox.Visible = false;
+            this.Text = string.Empty;
+            this.ControlBox = false;
         }
+
+        [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.dll", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hWnd, int msg, int wParam, int lParam);
 
         private Color SelectThemeColor()
         {
@@ -144,6 +153,12 @@ namespace WindowsFormsApp1
             currentButton = null;
             btnCloseChildForm.Visible = false;
             logobox.Visible = false;
+        }
+
+        private void panelTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 }
