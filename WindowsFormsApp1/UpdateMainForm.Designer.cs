@@ -42,6 +42,7 @@
             this.panelTitle = new System.Windows.Forms.Panel();
             this.lblTitile = new System.Windows.Forms.Label();
             this.panelDekstopPanel = new System.Windows.Forms.Panel();
+            this.btnCloseChildForm = new System.Windows.Forms.Button();
             this.panelMenu.SuspendLayout();
             this.panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logobox)).BeginInit();
@@ -222,6 +223,7 @@
             // panelTitle
             // 
             this.panelTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
+            this.panelTitle.Controls.Add(this.btnCloseChildForm);
             this.panelTitle.Controls.Add(this.lblTitile);
             this.panelTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTitle.Location = new System.Drawing.Point(220, 0);
@@ -250,6 +252,19 @@
             this.panelDekstopPanel.Name = "panelDekstopPanel";
             this.panelDekstopPanel.Size = new System.Drawing.Size(733, 439);
             this.panelDekstopPanel.TabIndex = 2;
+            // 
+            // btnCloseChildForm
+            // 
+            this.btnCloseChildForm.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnCloseChildForm.FlatAppearance.BorderSize = 0;
+            this.btnCloseChildForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCloseChildForm.Image = ((System.Drawing.Image)(resources.GetObject("btnCloseChildForm.Image")));
+            this.btnCloseChildForm.Location = new System.Drawing.Point(0, 0);
+            this.btnCloseChildForm.Name = "btnCloseChildForm";
+            this.btnCloseChildForm.Size = new System.Drawing.Size(75, 80);
+            this.btnCloseChildForm.TabIndex = 0;
+            this.btnCloseChildForm.UseVisualStyleBackColor = true;
+            this.btnCloseChildForm.Click += new System.EventHandler(this.btnCloseChildForm_Click);
             // 
             // UpdateMainForm
             // 
@@ -286,5 +301,6 @@
         private System.Windows.Forms.Panel panelDekstopPanel;
         private System.Windows.Forms.Button btnReviews;
         private System.Windows.Forms.PictureBox logobox;
+        private System.Windows.Forms.Button btnCloseChildForm;
     }
 }

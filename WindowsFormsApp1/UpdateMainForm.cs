@@ -20,6 +20,7 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             random = new Random();
+            btnCloseChildForm.Visible = false;
         }
 
         private Color SelectThemeColor()
@@ -50,6 +51,7 @@ namespace WindowsFormsApp1
                 panelTitle.BackColor = color;
                 panelLogo.BackColor = ThemeColor.ChangeColorBrightness(color, -0.4);
                 ThemeColor.SetTheme(color, ThemeColor.ChangeColorBrightness(color, -0.5));
+                btnCloseChildForm.Visible = true;
             }
         }
 
@@ -118,6 +120,27 @@ namespace WindowsFormsApp1
         private void btnReviews_Click_1(object sender, EventArgs e)
         {
             ActivateButton(sender);
+        }
+
+        private void btnCloseChildForm_Click(object sender, EventArgs e)
+        {
+            if (activeForm != null)
+            {
+                activeForm.Close();
+                Reset();
+            }
+
+
+        }
+
+        private void Reset()
+        {
+            DisableButton();
+            lblTitile.Text = "Главная";
+            panelTitle.BackColor = Color.FromArgb(73, 80, 87);
+            panelLogo.BackColor = Color.FromArgb(33, 37, 41);
+            currentButton = null;
+            btnCloseChildForm.Visible = false;
         }
     }
 }
