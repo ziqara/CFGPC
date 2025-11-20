@@ -124,7 +124,7 @@
             this.txtAddress.Location = new System.Drawing.Point(88, 122);
             this.txtAddress.Multiline = true;
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(174, 20);
+            this.txtAddress.Size = new System.Drawing.Size(174, 66);
             this.txtAddress.TabIndex = 8;
             this.txtAddress.TextChanged += new System.EventHandler(this.txtAddress_TextChanged);
             // 
@@ -140,7 +140,7 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnCancel.Location = new System.Drawing.Point(88, 148);
+            this.btnCancel.Location = new System.Drawing.Point(88, 194);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 29);
             this.btnCancel.TabIndex = 10;
@@ -151,7 +151,7 @@
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSave.Location = new System.Drawing.Point(169, 148);
+            this.btnSave.Location = new System.Drawing.Point(169, 194);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(93, 29);
             this.btnSave.TabIndex = 11;
@@ -175,7 +175,7 @@
             this.opcAddres.AutoSize = true;
             this.opcAddres.BackColor = System.Drawing.Color.White;
             this.opcAddres.Enabled = false;
-            this.opcAddres.Location = new System.Drawing.Point(133, 125);
+            this.opcAddres.Location = new System.Drawing.Point(133, 148);
             this.opcAddres.Name = "opcAddres";
             this.opcAddres.Size = new System.Drawing.Size(87, 13);
             this.opcAddres.TabIndex = 13;
@@ -185,7 +185,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 188);
+            this.ClientSize = new System.Drawing.Size(280, 230);
             this.Controls.Add(this.opcAddres);
             this.Controls.Add(this.opcPhone);
             this.Controls.Add(this.btnSave);
