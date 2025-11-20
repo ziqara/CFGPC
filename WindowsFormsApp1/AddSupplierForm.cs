@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DDMLib;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WindowsFormsApp1
 {
@@ -77,6 +78,30 @@ namespace WindowsFormsApp1
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void txtPhone_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtPhone.Text))
+            {
+                opcPhone.Visible = false;
+            }
+            else
+            {
+                opcPhone.Visible = true;
+            }
+        }
+
+        private void txtAddress_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtAddress.Text))
+            {
+                opcAddres.Visible = false;
+            }
+            else
+            {
+                opcAddres.Visible = true;
+            }
         }
     }
 }
