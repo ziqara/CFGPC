@@ -34,5 +34,10 @@ namespace DDMTests
             // Проверка, что метод репозитория был вызван
             mockRepository.Verify(repo => repo.GetUserConfigurations(testUserEmail), Times.Once);
         }
+
+        [TestMethod]
+        public void TestGetUserConfigurations_WithConfigAndComponents_ReturnsConfigurationWithComponents()
+        {
+        }
     }
 }
