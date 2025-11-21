@@ -117,7 +117,33 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsOtherByNameInsensitive(string name, int currentInn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"
+                SELECT COUNT(*)
+                FROM suppliers
+                WHERE LOWER(name) = LOWER(@name)
+                  AND inn <> @currentInn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@currentInn", currentInn);
+
+                    object scalar = cmd.ExecuteScalar();
+                    long count = Convert.ToInt64(scalar);
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public List<Supplier> ReadAllSuppliers()
