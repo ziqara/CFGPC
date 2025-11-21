@@ -38,6 +38,48 @@ namespace DDMTests
         [TestMethod]
         public void TestGetUserConfigurations_WithConfigAndComponents_ReturnsConfigurationWithComponents()
         {
+            // 1. Arrange (Подготовка)
+            string testUserEmail = "user@example.com";
+
+            // Создание объекта Configuration
+            Configuration config = new Configuration
+            {
+                ConfigId = 1,
+                ConfigName = "Игровая ракета",
+                Description = "Для 4K игр",
+                TotalPrice = 150000,
+                TargetUse = "gaming",
+                Status = "draft",
+                IsPreset = false,
+                CreatedDate = new System.DateTime(2025, 11, 18, 10, 0, 0),
+                UserEmail = testUserEmail,
+                Rgb = true,
+                OtherOptions = "Тихая система"
+            };
+
+            // Создание объектов Component
+            DDMLib.Component.Component gpuComponent = new DDMLib.Component.Component
+            {
+                ComponentId = 101,
+                Name = "RTX 4090",
+                Type = "gpu",
+            };
+
+            DDMLib.Component.Component cpuComponent = new DDMLib.Component.Component
+            {
+                ComponentId = 102,
+                Name = "Intel i9-14900K",
+                Type = "cpu",
+            };
+
+            // Создание объекта ConfigurationDto
+            ConfigurationDto configDto = new ConfigurationDto
+            {
+                Configuration = config,
+                Components = new List<DDMLib.Component.Component> { gpuComponent, cpuComponent }
+            };
+
+            List<ConfigurationDto> expectedConfigurations = new List<ConfigurationDto> { configDto };
         }
     }
 }
