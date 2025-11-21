@@ -405,5 +405,35 @@ namespace DDMTests
             repo.Verify(r => r.existsOtherByEmail("dup@example.com", 123456789), Times.Once);
             repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        [DataRow("123")]
+        [DataRow("123456789123")]
+        [DataRow("88ABC777")]
+        public void UpdateSupplier_InvalidPhone_ReturnsErrorMessage(string phone)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Тест",
+                ContactEmail = "valid@example.com",
+                Phone = phone,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Некорректный номер телефона", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
