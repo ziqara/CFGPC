@@ -14,5 +14,10 @@ namespace DDMLib.Configuration
         {
             configurationRepository_ = configurationRepository ?? throw new ArgumentNullException(nameof(configurationRepository));
         }
+
+        public List<ConfigurationDto> GetUserConfigurations(string userEmail)
+        {
+            return configurationRepository_.GetUserConfigurations(userEmail);
+        }
     }
 }
