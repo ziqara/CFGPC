@@ -26,7 +26,8 @@ namespace DDMLib.Component
                 throw new ArgumentException("Недопустимое значение категории.", nameof(category));
             }
 
-            List<ComponentDto> result = new List<ComponentDto>();
+            List<Component> components = new List<Component>();
+            List<int> componentIds = new List<int>();
 
             using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
             {
@@ -34,9 +35,9 @@ namespace DDMLib.Component
                 {
                     connection.Open();
                     string componentQuery = @"
-                        SELECT component_id, name, brand, model, type, price, stock_quantity, description, is_available, photo_url, supplier_id
+                        SELECT componentId, name, brand, model, componentType, price, stockQuantity, description, isAvailable, photoUrl, supplierInn
                         FROM components
-                        WHERE type = @category";
+                        WHERE componentType = @category";
 
                     MySqlCommand command = new MySqlCommand(componentQuery, connection);
                     command.Parameters.AddWithValue("@category", category);
@@ -46,16 +47,8 @@ namespace DDMLib.Component
                         while (reader.Read())
                         {
                             Component component = MapComponentFromReader(reader);
-
-                            object spec = GetSpecificSpec(connection, component.ComponentId, category);
-
-                            ComponentDto dto = new ComponentDto
-                            {
-                                Component = component,
-                                Specs = spec
-                            };
-
-                            result.Add(dto);
+                            components.Add(component);
+                            componentIds.Add(component.ComponentId);
                         }
                     }
                 }
@@ -64,9 +57,301 @@ namespace DDMLib.Component
                     ErrorLogger.LogError("GetComponentsByCategory", ex.Message);
                     throw;
                 }
-
-                return result;
             }
+
+            Dictionary<int, object> specMap = new Dictionary<int, object>();
+
+            if (componentIds.Any())
+            {
+                if (category == "gpu")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, pcieVersion, tdp, vramGb
+                            FROM gpus
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iPcie = specReader.GetOrdinal("pcieVersion");
+                                int iTdp = specReader.GetOrdinal("tdp");
+                                int iVram = specReader.GetOrdinal("vramGb");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                                var spec = new GpuSpec
+                                {
+                                    PcieVersion = GetStringOrEmpty(iPcie),
+                                    Tdp = GetInt32OrZero(iTdp),
+                                    VramGb = GetInt32OrZero(iVram)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "ram")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, ramType, capacityGb, speedMhz, slotsNeeded
+                            FROM rams
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iType = specReader.GetOrdinal("ramType");
+                                int iCap = specReader.GetOrdinal("capacityGb");
+                                int iSpeed = specReader.GetOrdinal("speedMhz");
+                                int iSlots = specReader.GetOrdinal("slotsNeeded");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                                var spec = new RamSpec
+                                {
+                                    Type = GetStringOrEmpty(iType),
+                                    CapacityGb = GetInt32OrZero(iCap),
+                                    SpeedMhz = GetInt32OrZero(iSpeed),
+                                    SlotsNeeded = GetInt32OrZero(iSlots)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "cpu")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, socket, cores, tdp
+                            FROM cpus
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iSocket = specReader.GetOrdinal("socket");
+                                int iCores = specReader.GetOrdinal("cores");
+                                int iTdp = specReader.GetOrdinal("tdp");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                                var spec = new CpuSpec
+                                {
+                                    Socket = GetStringOrEmpty(iSocket),
+                                    Cores = GetInt32OrZero(iCores),
+                                    Tdp = GetInt32OrZero(iTdp)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "motherboard")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, socket, chipset, ramType, pcieVersion, formFactor
+                            FROM motherboards
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iSocket = specReader.GetOrdinal("socket");
+                                int iChipset = specReader.GetOrdinal("chipset");
+                                int iRamType = specReader.GetOrdinal("ramType");
+                                int iPcie = specReader.GetOrdinal("pcieVersion");
+                                int iFormFactor = specReader.GetOrdinal("formFactor");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+
+                                var spec = new MotherboardSpec
+                                {
+                                    Socket = GetStringOrEmpty(iSocket),
+                                    Chipset = GetStringOrEmpty(iChipset),
+                                    RamType = GetStringOrEmpty(iRamType),
+                                    PcieVersion = GetStringOrEmpty(iPcie),
+                                    FormFactor = GetStringOrEmpty(iFormFactor)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "storage")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, interface, capacityGb
+                            FROM storages
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iInterface = specReader.GetOrdinal("interface");
+                                int iCapacity = specReader.GetOrdinal("capacityGb");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                                var spec = new StorageSpec
+                                {
+                                    Interface = GetStringOrEmpty(iInterface),
+                                    CapacityGb = GetInt32OrZero(iCapacity)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "psu")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, wattage, efficiencyRating
+                            FROM psus
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iWattage = specReader.GetOrdinal("wattage");
+                                int iEfficiency = specReader.GetOrdinal("efficiencyRating");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+
+                                var spec = new PsuSpec
+                                {
+                                    Wattage = GetInt32OrZero(iWattage),
+                                    EfficiencyRating = GetStringOrEmpty(iEfficiency)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "case")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, formFactor, size
+                            FROM cases
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iFormFactor = specReader.GetOrdinal("formFactor");
+                                int iSize = specReader.GetOrdinal("size");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+
+                                var spec = new CaseSpec
+                                {
+                                    FormFactor = GetStringOrEmpty(iFormFactor),
+                                    Size = GetStringOrEmpty(iSize)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+                else if (category == "cooling")
+                {
+                    using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                    {
+                        connection.Open();
+                        string specQuery = @"
+                            SELECT componentId, coolerType, tdpSupport, fanRpm, size, isRgb
+                            FROM coolings
+                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+
+                        MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
+                        using (MySqlDataReader specReader = specCommand.ExecuteReader())
+                        {
+                            while (specReader.Read())
+                            {
+                                int compId = specReader.GetInt32("componentId");
+                                int iCoolerType = specReader.GetOrdinal("coolerType");
+                                int iTdpSupport = specReader.GetOrdinal("tdpSupport");
+                                int iFanRpm = specReader.GetOrdinal("fanRpm");
+                                int iSize = specReader.GetOrdinal("size");
+                                int iIsRgb = specReader.GetOrdinal("isRgb");
+
+                                Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
+                                Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
+                                Func<int, bool> GetBoolOrFalse = i => specReader.IsDBNull(i) ? false : specReader.GetBoolean(i);
+
+                                var spec = new CoolingSpec
+                                {
+                                    CoolerType = GetStringOrEmpty(iCoolerType),
+                                    TdpSupport = GetInt32OrZero(iTdpSupport),
+                                    FanRpm = GetInt32OrZero(iFanRpm),
+                                    Size = GetStringOrEmpty(iSize),
+                                    IsRgb = GetBoolOrFalse(iIsRgb)
+                                };
+                                specMap[compId] = spec;
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<ComponentDto> result = new List<ComponentDto>();
+            foreach (var comp in components)
+            {
+                object spec = specMap.ContainsKey(comp.ComponentId) ? specMap[comp.ComponentId] : null;
+                result.Add(new ComponentDto
+                {
+                    Component = comp,
+                    Specs = spec
+                });
+            }
+
+            return result;
         }
 
         private Component MapComponentFromReader(MySqlDataReader reader)
@@ -75,13 +360,13 @@ namespace DDMLib.Component
             int iName = reader.GetOrdinal("name");
             int iBrand = reader.GetOrdinal("brand");
             int iModel = reader.GetOrdinal("model");
-            int iType = reader.GetOrdinal("type");
+            int iType = reader.GetOrdinal("componentType");
             int iPrice = reader.GetOrdinal("price");
             int iStock = reader.GetOrdinal("stockQuantity");
             int iDesc = reader.GetOrdinal("description");
             int iAvailable = reader.GetOrdinal("isAvailable");
             int iPhoto = reader.GetOrdinal("photoUrl");
-            int iSupplier = reader.GetOrdinal("supplierId");
+            int iSupplier = reader.GetOrdinal("supplierInn");
 
             Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);
             Func<int, int> GetInt32OrZero = i => reader.IsDBNull(i) ? 0 : reader.GetInt32(i);
@@ -102,237 +387,6 @@ namespace DDMLib.Component
                 PhotoUrl = GetStringOrEmpty(iPhoto),
                 SupplierId = GetInt32OrZero(iSupplier)
             };
-        }
-
-        private object GetSpecificSpec(MySqlConnection connection, int componentId, string category)
-        {
-            MySqlCommand specCommand;
-            MySqlDataReader specReader;
-
-            switch (category.ToLower())
-            {
-                case "gpu":
-                    specCommand = new MySqlCommand(@"
-                        SELECT pcie_version, tdp, vramGb
-                        FROM gpus
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iPcie = specReader.GetOrdinal("pcieVersion");
-                            int iTdp = specReader.GetOrdinal("tdp");
-                            int iVram = specReader.GetOrdinal("vramGb");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-
-                            return new GpuSpec
-                            {
-                                PcieVersion = GetStringOrEmpty(iPcie),
-                                Tdp = GetInt32OrZero(iTdp),
-                                VramGb = GetInt32OrZero(iVram)
-                            };
-                        }
-                    }
-                    break;
-                case "ram":
-                    specCommand = new MySqlCommand(@"
-                        SELECT type, capacityGb, speedMhz, slotsNeeded
-                        FROM rams
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iType = specReader.GetOrdinal("type");
-                            int iCap = specReader.GetOrdinal("capacityGb");
-                            int iSpeed = specReader.GetOrdinal("speedMhz");
-                            int iSlots = specReader.GetOrdinal("slotsNeeded");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-
-                            return new RamSpec
-                            {
-                                Type = GetStringOrEmpty(iType),
-                                CapacityGb = GetInt32OrZero(iCap),
-                                SpeedMhz = GetInt32OrZero(iSpeed),
-                                SlotsNeeded = GetInt32OrZero(iSlots)
-                            };
-                        }
-                    }
-                    break;
-                case "cpu":
-                    specCommand = new MySqlCommand(@"
-                        SELECT socket, cores, tdp
-                        FROM cpus
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iSocket = specReader.GetOrdinal("socket");
-                            int iCores = specReader.GetOrdinal("cores");
-                            int iTdp = specReader.GetOrdinal("tdp");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-
-                            return new CpuSpec
-                            {
-                                Socket = GetStringOrEmpty(iSocket),
-                                Cores = GetInt32OrZero(iCores),
-                                Tdp = GetInt32OrZero(iTdp)
-                            };
-                        }
-                    }
-                    break;
-                case "motherboard":
-                    specCommand = new MySqlCommand(@"
-                        SELECT socket, chipset, ramType, pcieVersion, formFactor
-                        FROM motherboards
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iSocket = specReader.GetOrdinal("socket");
-                            int iChipset = specReader.GetOrdinal("chipset");
-                            int iRamType = specReader.GetOrdinal("ramType");
-                            int iPcie = specReader.GetOrdinal("pcieVersion");
-                            int iFormFactor = specReader.GetOrdinal("formFactor");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-
-                            return new MotherboardSpec
-                            {
-                                Socket = GetStringOrEmpty(iSocket),
-                                Chipset = GetStringOrEmpty(iChipset),
-                                RamType = GetStringOrEmpty(iRamType),
-                                PcieVersion = GetStringOrEmpty(iPcie),
-                                FormFactor = GetStringOrEmpty(iFormFactor)
-                            };
-                        }
-                    }
-                    break;
-                case "storage":
-                    specCommand = new MySqlCommand(@"
-                        SELECT interface, capacityGb
-                        FROM storages
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iInterface = specReader.GetOrdinal("interface");
-                            int iCapacity = specReader.GetOrdinal("capacityGb");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-
-                            return new StorageSpec
-                            {
-                                Interface = GetStringOrEmpty(iInterface),
-                                CapacityGb = GetInt32OrZero(iCapacity)
-                            };
-                        }
-                    }
-                    break;
-                case "psu":
-                    specCommand = new MySqlCommand(@"
-                        SELECT wattage, efficiencyRating
-                        FROM psus
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iWattage = specReader.GetOrdinal("wattage");
-                            int iEfficiency = specReader.GetOrdinal("efficiencyRating");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-
-                            return new PsuSpec
-                            {
-                                Wattage = GetInt32OrZero(iWattage),
-                                EfficiencyRating = GetStringOrEmpty(iEfficiency)
-                            };
-                        }
-                    }
-                    break;
-                case "case":
-                    specCommand = new MySqlCommand(@"
-                        SELECT formFactor, size
-                        FROM cases
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iFormFactor = specReader.GetOrdinal("formFactor");
-                            int iSize = specReader.GetOrdinal("size");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-
-                            return new CaseSpec
-                            {
-                                FormFactor = GetStringOrEmpty(iFormFactor),
-                                Size = GetStringOrEmpty(iSize)
-                            };
-                        }
-                    }
-                    break;
-                case "cooling":
-                    specCommand = new MySqlCommand(@"
-                        SELECT coolerType, tdpSupport, fanRpm, size, isRgb
-                        FROM coolings
-                        WHERE componentId = @componentId", connection);
-                    specCommand.Parameters.AddWithValue("@componentId", componentId);
-
-                    using (specReader = specCommand.ExecuteReader())
-                    {
-                        if (specReader.Read())
-                        {
-                            int iCoolerType = specReader.GetOrdinal("coolerType");
-                            int iTdpSupport = specReader.GetOrdinal("tdpSupport");
-                            int iFanRpm = specReader.GetOrdinal("fanRpm");
-                            int iSize = specReader.GetOrdinal("size");
-                            int iIsRgb = specReader.GetOrdinal("isRgb");
-
-                            Func<int, string> GetStringOrEmpty = i => specReader.IsDBNull(i) ? string.Empty : specReader.GetString(i);
-                            Func<int, int> GetInt32OrZero = i => specReader.IsDBNull(i) ? 0 : specReader.GetInt32(i);
-                            Func<int, bool> GetBoolOrFalse = i => specReader.IsDBNull(i) ? false : specReader.GetBoolean(i);
-
-                            return new CoolingSpec
-                            {
-                                CoolerType = GetStringOrEmpty(iCoolerType),
-                                TdpSupport = GetInt32OrZero(iTdpSupport),
-                                FanRpm = GetInt32OrZero(iFanRpm),
-                                Size = GetStringOrEmpty(iSize),
-                                IsRgb = GetBoolOrFalse(iIsRgb)
-                            };
-                        }
-                    }
-                    break;
-            }
-
-            return null;
         }
     }
 }
