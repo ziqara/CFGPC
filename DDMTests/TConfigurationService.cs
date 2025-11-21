@@ -89,6 +89,16 @@ namespace DDMTests
 
             // Создание тестируемого сервиса с подставленным моком
             ConfigurationService service = new ConfigurationService(mockRepository.Object);
+
+            // 2. Act (Действие)
+            List<ConfigurationDto> result = service.GetUserConfigurations(testUserEmail);
+
+            // 3. Assert (Проверка)
+            Assert.IsNotNull(result); // Проверка, что результат не null
+            Assert.AreEqual(1, result.Count); // Проверка, что количество конфигураций = 1
+
+            // Проверка, что метод репозитория был вызван
+            mockRepository.Verify(repo => repo.GetUserConfigurations(testUserEmail), Times.Once);
         }
     }
 }
