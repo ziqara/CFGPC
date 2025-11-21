@@ -80,6 +80,15 @@ namespace DDMTests
             };
 
             List<ConfigurationDto> expectedConfigurations = new List<ConfigurationDto> { configDto };
+
+            // Настройка мока
+            Mock<IConfigurationRepository> mockRepository = new Mock<IConfigurationRepository>();
+            mockRepository
+                .Setup(repo => repo.GetUserConfigurations(testUserEmail))
+                .Returns(expectedConfigurations);
+
+            // Создание тестируемого сервиса с подставленным моком
+            ConfigurationService service = new ConfigurationService(mockRepository.Object);
         }
     }
 }
