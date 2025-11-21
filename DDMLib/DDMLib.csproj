@@ -164,6 +164,7 @@
     <Compile Include="Component\StorageSpec.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationComponent.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="Session\SessionData.cs" />
     <Compile Include="Session\SessionManager.cs" />
