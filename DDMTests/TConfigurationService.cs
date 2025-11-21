@@ -170,7 +170,7 @@ namespace DDMTests
             ConfigurationService service = new ConfigurationService(mockRepository.Object);
 
             // 2. Act (Действие)
-            var result = service.GetUserConfigurations(testUserEmail);
+            List<ConfigurationDto> result = service.GetUserConfigurations(testUserEmail);
 
             // 3. Assert (Проверка)
             Assert.IsNotNull(result); // Проверка, что результат не null
@@ -178,6 +178,23 @@ namespace DDMTests
 
             // Проверка, что метод репозитория был вызван
             mockRepository.Verify(repo => repo.GetUserConfigurations(testUserEmail), Times.Once);
+
+            // Получаем первую (и единственную) конфигурацию из результата
+            ConfigurationDto firstConfigDto = result[0];
+
+            // Проверяем основные поля конфигурации
+            Assert.AreEqual("Черновик 1", firstConfigDto.Configuration.ConfigName);
+            Assert.AreEqual("", firstConfigDto.Configuration.Description); // Проверка пустого описания
+            Assert.AreEqual(0, firstConfigDto.Configuration.TotalPrice); // Проверка нулевой цены
+            Assert.AreEqual("office", firstConfigDto.Configuration.TargetUse); // Проверка цели
+            Assert.AreEqual("draft", firstConfigDto.Configuration.Status); // Проверка статуса "Черновик"
+            Assert.AreEqual(new System.DateTime(2025, 11, 17, 15, 30, 0), firstConfigDto.Configuration.CreatedDate); // Проверка даты
+            Assert.AreEqual(false, firstConfigDto.Configuration.Rgb); // Проверка отсутствия RGB
+            Assert.AreEqual("", firstConfigDto.Configuration.OtherOptions); // Проверка пустых опций
+
+            // Проверяем список компонентов (ожидается пустой список)
+            Assert.IsNotNull(firstConfigDto.Components); // Проверка, что список компонентов не null
+            Assert.AreEqual(0, firstConfigDto.Components.Count); // Проверка, что количество компонентов = 0
         }
     }
 }
