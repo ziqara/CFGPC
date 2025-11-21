@@ -17,5 +17,11 @@ namespace DDMLib
         bool existsByNameInsensitive(string name);
 
         bool existsByEmail(string email);
+
+        bool existsOtherByNameInsensitive(string name, int currentInn);
+
+        bool existsOtherByEmail(string email, int currentInn);
+
+        bool UpdateSupplier(Supplier supplier);
     }
 }

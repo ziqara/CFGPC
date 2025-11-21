@@ -44,5 +44,10 @@ namespace DDMLib
 
             return string.Empty;
         }
+
+        public string UpdateSupplier(Supplier supplier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
