@@ -28,6 +28,11 @@ namespace DDMTests
             ConfigurationService service = new ConfigurationService(mockRepository.Object);
 
             List<ConfigurationDto> result = service.GetUserConfigurations(testUserEmail);
+
+            Assert.IsNotNull(result); // Проверка, что результат не null
+            Assert.AreEqual(0, result.Count); // Проверка, что Count = 0
+            // Проверка, что метод репозитория был вызван
+            mockRepository.Verify(repo => repo.GetUserConfigurations(testUserEmail), Times.Once);
         }
     }
 }
