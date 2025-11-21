@@ -128,5 +128,10 @@ namespace DDMTests
             Assert.AreEqual("Intel i9-14900K", secondComponent.Name);
             Assert.AreEqual("cpu", secondComponent.Type);
         }
+
+        [TestMethod]
+        public void TestGetUserConfigurations_WithConfigButNoComponents_ReturnsConfigurationWithEmptyComponentsList()
+        {
+        }
     }
 }
