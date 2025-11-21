@@ -344,6 +344,34 @@ namespace DDMTests
             repo.Verify(r => r.UpdateSupplier(supplier), Times.Once);
         }
 
+        [TestMethod]
+        public void UpdateSupplier_DuplicateName_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ооо ромашка", // существует с другим ИНН
+                ContactEmail = "new@example.com",
+                Phone = "79991234567",
+                Address = null
+            };
 
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.existsOtherByNameInsensitive("ооо ромашка", 123456789))
+                .Returns(true); // уже есть другой поставщик с таким именем
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Поставщик с таким названием уже есть", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive("ооо ромашка", 123456789), Times.Once);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
