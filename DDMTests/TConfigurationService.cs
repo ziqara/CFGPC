@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DDMLib.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,17 @@ namespace DDMTests
         [TestMethod]
         public void TestGetUserConfigurations_EmptyList_ReturnsEmptyList()
         {
+            Mock<IConfigurationRepository> mockRepository = new Mock<IConfigurationRepository>();
+            string testUserEmail = "test@example.com"; // Исходные данные
+            List<ConfigurationDto> expectedConfigurations = new List<ConfigurationDto>(); // Пустой список
+
+            // Настройка поведения мока
+            mockRepository
+                .Setup(repo => repo.GetUserConfigurations(testUserEmail))
+                .Returns(expectedConfigurations);
+
+            // Создание тестируемого сервиса с подставленным моком
+            ConfigurationService service = new ConfigurationService(mockRepository.Object);
         }
     }
 }
