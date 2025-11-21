@@ -47,35 +47,32 @@ namespace DDMTests
         [DataRow(123456789, "ООО Альфа", "alpha@example.com", null, null)]
         [DataRow(223344556, "ООО Бета", "beta@example.com", "", "")]
         [DataRow(998877665, "ООО Гамма", "gamma@example.com", "79991234567", "г. Москва, ул. Ленина, д. 5")]
-        public void CreateSupplier_ValidData(int[] inns, string[] names, string[] emails, string[] phones, string[] addresses)
+        public void CreateSupplier_ValidData(int inn, string name, string email, string phone, string address)
         {
-            for (int i = 0; i < inns.Length; i++)
+            // Arrange
+            Supplier supplier = new Supplier(inn)
             {
-                // Arrange
-                Supplier supplier = new Supplier(inns[i])
-                {
-                    Name = names[i],
-                    ContactEmail = emails[i],
-                    Phone = phones[i],
-                    Address = addresses[i]
-                };
+                Name = name,
+                ContactEmail = email,
+                Phone = phone,
+                Address = address
+            };
 
-                Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
 
-                repo.Setup(r => r.existsByNameInsensitive(names[i])).Returns(false);
-                repo.Setup(r => r.existsByEmail(emails[i])).Returns(false);
-                repo.Setup(r => r.existsByInn(inns[i])).Returns(false);
-                repo.Setup(r => r.AddSupplier(supplier)).Returns(true);
+            repo.Setup(r => r.existsByNameInsensitive(name)).Returns(false);
+            repo.Setup(r => r.existsByEmail(email)).Returns(false);
+            repo.Setup(r => r.existsByInn(inn)).Returns(false);
+            repo.Setup(r => r.AddSupplier(supplier)).Returns(true);
 
-                SupplierService service = new SupplierService(repo.Object);
+            SupplierService service = new SupplierService(repo.Object);
 
-                // Act
-                string result = service.CreateSupplier(supplier);
+            // Act
+            string result = service.CreateSupplier(supplier);
 
-                // Assert
-                Assert.AreEqual("", result);
-                repo.Verify(r => r.AddSupplier(supplier), Times.Once);
-            }
+            // Assert
+            Assert.AreEqual(string.Empty, result);
+            repo.Verify(r => r.AddSupplier(supplier), Times.Once);
         }
 
         [TestMethod]
@@ -476,7 +473,7 @@ namespace DDMTests
             {
                 Name = "ООО Альфа",
                 ContactEmail = "alpha@example.com",
-                Phone = "79991234567",                  // 11 цифр
+                Phone = "79991234567",               
                 Address = "г. Москва, ул. Примерная, д. 1"
             };
 
@@ -489,7 +486,7 @@ namespace DDMTests
 
             repo.Setup(r => r.UpdateSupplier(supplier)).Returns(false);
 
-            SupplierValidator validator = new SupplierValidator(); // реальный валидатор
+            SupplierValidator validator = new SupplierValidator();
             SupplierService service = new SupplierService(repo.Object, validator);
 
             // Act
