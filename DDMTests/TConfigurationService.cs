@@ -26,6 +26,8 @@ namespace DDMTests
 
             // Создание тестируемого сервиса с подставленным моком
             ConfigurationService service = new ConfigurationService(mockRepository.Object);
+
+            List<ConfigurationDto> result = service.GetUserConfigurations(testUserEmail);
         }
     }
 }
