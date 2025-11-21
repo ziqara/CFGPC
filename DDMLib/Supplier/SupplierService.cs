@@ -52,7 +52,7 @@ namespace DDMLib
         public string UpdateSupplier(Supplier supplier)
         {
             if (supplier == null)
-                throw new ArgumentNullException(nameof(supplier));
+                throw new ArgumentNullException("supplier");
 
             List<string> errors = validator_.Validate(supplier);
             if (errors.Count > 0)
@@ -60,14 +60,14 @@ namespace DDMLib
                 return string.Join("\n", errors);
             }
 
-            if (repo_.existsByNameInsensitive(supplier.Name))
+            if (repo_.existsOtherByNameInsensitive(supplier.Name, supplier.Inn))
             {
                 return "Поставщик с таким названием уже есть";
             }
 
-            if (repo_.existsByEmail(supplier.ContactEmail))
+            if (repo_.existsOtherByEmail(supplier.ContactEmail, supplier.Inn))
             {
-                return "Email уже используется";
+                return "Email уже используется другим поставщиком";
             }
 
             bool ok = repo_.UpdateSupplier(supplier);
