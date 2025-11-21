@@ -435,5 +435,37 @@ namespace DDMTests
             repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
             repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        public void UpdateSupplier_MultipleValidationErrors_ReturnsAggregatedMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "",
+                ContactEmail = "bad@@example",
+                Phone = "invalid###",
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            string expected =
+                "Название обязательно\n" +
+                "Некорректный email\n" +
+                "Некорректный номер телефона";
+
+            Assert.AreEqual(expected, result);
+            repo.Verify(r => r.existsOtherByNameInsensitive(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
