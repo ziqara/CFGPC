@@ -11,10 +11,14 @@ namespace DDMLib
         private readonly ISupplierRepository repo_;
         private readonly SupplierValidator validator_;
 
-        public SupplierService(ISupplierRepository repo)
+        public SupplierService(ISupplierRepository repo, SupplierValidator validator = null)
         {
+            if (repo == null)
+                throw new ArgumentNullException(nameof(repo));
+
             repo_ = repo;
-            validator_ = new SupplierValidator();
+            // если валидатор не передали – создаём обычный
+            validator_ = validator ?? new SupplierValidator();
         }
 
         public List<Supplier> GetAllSuppliers()
