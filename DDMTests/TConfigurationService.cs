@@ -10,5 +10,9 @@ namespace DDMTests
     [TestClass]
     public class TConfigurationService
     {
+        [TestMethod]
+        public void TestGetUserConfigurations_EmptyList_ReturnsEmptyList()
+        {
+        }
     }
 }
