@@ -112,7 +112,33 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsOtherByEmail(string email, int currentInn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"
+                SELECT COUNT(*)
+                FROM suppliers
+                WHERE contactEmail = @mail
+                  AND inn <> @currentInn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@mail", email);
+                    cmd.Parameters.AddWithValue("@currentInn", currentInn);
+
+                    object scalar = cmd.ExecuteScalar();
+                    long count = Convert.ToInt64(scalar);
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsOtherByNameInsensitive(string name, int currentInn)
