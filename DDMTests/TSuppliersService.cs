@@ -373,5 +373,37 @@ namespace DDMTests
             repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
             repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
         }
+
+        [TestMethod]
+        public void UpdateSupplier_DuplicateEmail_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Новый",
+                ContactEmail = "dup@example.com",
+                Phone = "79991234567",
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.existsOtherByNameInsensitive("ООО Новый", 123456789))
+                .Returns(false);
+            repo.Setup(r => r.existsOtherByEmail("dup@example.com", 123456789))
+                .Returns(true); // email занят другим поставщиком
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Email уже используется другим поставщиком", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive("ООО Новый", 123456789), Times.Once);
+            repo.Verify(r => r.existsOtherByEmail("dup@example.com", 123456789), Times.Once);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
     }
 }
