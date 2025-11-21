@@ -99,6 +99,34 @@ namespace DDMTests
 
             // Проверка, что метод репозитория был вызван
             mockRepository.Verify(repo => repo.GetUserConfigurations(testUserEmail), Times.Once);
+
+            // Получаем первую (и единственную) конфигурацию из результата
+            ConfigurationDto firstConfigDto = result[0];
+
+            // Проверяем основные поля конфигурации
+            Assert.AreEqual("Игровая ракета", firstConfigDto.Configuration.ConfigName);
+            Assert.AreEqual("Для 4K игр", firstConfigDto.Configuration.Description);
+            Assert.AreEqual(150000, firstConfigDto.Configuration.TotalPrice);
+            Assert.AreEqual("gaming", firstConfigDto.Configuration.TargetUse);
+            Assert.AreEqual("draft", firstConfigDto.Configuration.Status); // "draft" -> "Черновик"
+            Assert.AreEqual(new System.DateTime(2025, 11, 18, 10, 0, 0), firstConfigDto.Configuration.CreatedDate);
+            Assert.AreEqual(true, firstConfigDto.Configuration.Rgb); // RGB: Да
+            Assert.AreEqual("Тихая система", firstConfigDto.Configuration.OtherOptions);
+
+            // Проверяем список компонентов
+            Assert.IsNotNull(firstConfigDto.Components); // Проверка, что список компонентов не null
+            Assert.AreEqual(2, firstConfigDto.Components.Count); // Проверка, что количество компонентов = 2
+
+            // Проверяем, что компоненты содержат ожидаемые значения (можно проверить по порядку или по ID)
+            // Проверка первого компонента (GPU)
+            DDMLib.Component.Component firstComponent = firstConfigDto.Components[0];
+            Assert.AreEqual("RTX 4090", firstComponent.Name);
+            Assert.AreEqual("gpu", firstComponent.Type);
+
+            // Проверка второго компонента (CPU)
+            DDMLib.Component.Component secondComponent = firstConfigDto.Components[1];
+            Assert.AreEqual("Intel i9-14900K", secondComponent.Name);
+            Assert.AreEqual("cpu", secondComponent.Type);
         }
     }
 }
