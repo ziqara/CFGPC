@@ -132,6 +132,33 @@ namespace DDMTests
         [TestMethod]
         public void TestGetUserConfigurations_WithConfigButNoComponents_ReturnsConfigurationWithEmptyComponentsList()
         {
+            // 1. Arrange (Подготовка)
+            string testUserEmail = "another@example.com";
+
+            // Создание объекта Configuration
+            Configuration config = new Configuration
+            {
+                ConfigId = 2,
+                ConfigName = "Черновик 1",
+                Description = "", // Пустое описание
+                TotalPrice = 0, // Нулевая цена
+                TargetUse = "office", // Цель - офис
+                Status = "draft", // Статус - черновик
+                IsPreset = false,
+                CreatedDate = new System.DateTime(2025, 11, 17, 15, 30, 0), // Дата создания
+                UserEmail = testUserEmail,
+                Rgb = false, // Нет RGB
+                OtherOptions = "" // Нет других опций
+            };
+
+            // Создание объекта ConfigurationDto с ПУСТЫМ списком компонентов
+            ConfigurationDto configDto = new ConfigurationDto
+            {
+                Configuration = config,
+                Components = new List<DDMLib.Component.Component>() // Пустой список
+            };
+
+            List<ConfigurationDto> expectedConfigurations = new List<ConfigurationDto> { configDto };
         }
     }
 }
