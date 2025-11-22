@@ -51,7 +51,32 @@ namespace DDMLib
 
         public string UpdateSupplier(Supplier supplier)
         {
-            throw new NotImplementedException();
+            if (supplier == null)
+                throw new ArgumentNullException("supplier");
+
+            List<string> errors = validator_.Validate(supplier);
+            if (errors.Count > 0)
+            {
+                return string.Join("\n", errors);
+            }
+
+            if (repo_.existsOtherByNameInsensitive(supplier.Name, supplier.Inn))
+            {
+                return "Поставщик с таким названием уже есть";
+            }
+
+            if (repo_.existsOtherByEmail(supplier.ContactEmail, supplier.Inn))
+            {
+                return "Email уже используется другим поставщиком";
+            }
+
+            bool ok = repo_.UpdateSupplier(supplier);
+            if (!ok)
+            {
+                return "Не удалось сохранить изменения поставщика. Повторите попытку позже.";
+            }
+
+            return string.Empty;
         }
     }
 }

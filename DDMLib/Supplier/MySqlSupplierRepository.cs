@@ -112,12 +112,64 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool existsOtherByEmail(string email, int currentInn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"
+                SELECT COUNT(*)
+                FROM suppliers
+                WHERE contactEmail = @mail
+                  AND inn <> @currentInn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@mail", email);
+                    cmd.Parameters.AddWithValue("@currentInn", currentInn);
+
+                    object scalar = cmd.ExecuteScalar();
+                    long count = Convert.ToInt64(scalar);
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsOtherByNameInsensitive(string name, int currentInn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"
+                SELECT COUNT(*)
+                FROM suppliers
+                WHERE LOWER(name) = LOWER(@name)
+                  AND inn <> @currentInn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@currentInn", currentInn);
+
+                    object scalar = cmd.ExecuteScalar();
+                    long count = Convert.ToInt64(scalar);
+                    return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public List<Supplier> ReadAllSuppliers()
@@ -159,6 +211,50 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool UpdateSupplier(Supplier supplier)
     {
-        throw new NotImplementedException();
+        if (supplier == null)
+            throw new ArgumentNullException("supplier");
+
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"
+                    UPDATE suppliers
+                    SET
+                        name         = @name,
+                        contactEmail = @mail,
+                        phone        = @phone,
+                        address      = @addr
+                    WHERE inn = @inn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", supplier.Inn);
+                    cmd.Parameters.AddWithValue("@name", supplier.Name == null ? (object)DBNull.Value : (object)supplier.Name.Trim());
+                    cmd.Parameters.AddWithValue("@mail", supplier.ContactEmail == null ? (object)DBNull.Value : (object)supplier.ContactEmail.Trim());
+
+                    if (string.IsNullOrWhiteSpace(supplier.Phone))
+                        cmd.Parameters.AddWithValue("@phone", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("@phone", supplier.Phone.Trim());
+
+                    if (string.IsNullOrWhiteSpace(supplier.Address))
+                        cmd.Parameters.AddWithValue("@addr", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("@addr", supplier.Address.Trim());
+
+                    int rows = cmd.ExecuteNonQuery();
+                    // если обновили ровно одну строку — успех
+                    return rows == 1;
+                }
+            }
+        }
+        catch
+        {
+            // для сервиса: UpdateSupplier вернул false → "Не удалось сохранить изменения..."
+            return false;
+        }
     }
 }

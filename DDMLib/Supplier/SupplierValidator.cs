@@ -34,9 +34,18 @@ namespace DDMLib
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(supplier.Phone))
+            string phone = supplier.Phone?.Trim();
+            if (string.IsNullOrEmpty(phone))
             {
-                if (!supplier.Phone.All(char.IsDigit) || supplier.Phone.Length != 11)
+                supplier.Phone = null;
+            }
+            else
+            {
+                if (!phone.All(char.IsDigit))
+                {
+                    errors.Add("Некорректный номер телефона");
+                }
+                else if (phone.Length != 11)
                 {
                     errors.Add("Некорректный номер телефона");
                 }
