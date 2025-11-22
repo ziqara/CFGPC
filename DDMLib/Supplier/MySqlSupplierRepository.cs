@@ -110,6 +110,16 @@ public class MySqlSupplierRepository : ISupplierRepository
         }
     }
 
+    public bool existsOtherByEmail(string email, int currentInn)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool existsOtherByNameInsensitive(string name, int currentInn)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Supplier> ReadAllSuppliers()
     {
         List<Supplier> suppliers = new List<Supplier>();
@@ -145,5 +155,10 @@ public class MySqlSupplierRepository : ISupplierRepository
         {
             throw; // ошибка пробрасывается в ui
         }
+    }
+
+    public bool UpdateSupplier(Supplier supplier)
+    {
+        throw new NotImplementedException();
     }
 }

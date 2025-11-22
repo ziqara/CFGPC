@@ -10,6 +10,7 @@ namespace DDMLib
     {
         List<Supplier> ReadAllSuppliers();
 
+
         bool AddSupplier(Supplier supplier);
 
         bool existsByInn(int inn);
@@ -17,5 +18,13 @@ namespace DDMLib
         bool existsByNameInsensitive(string name);
 
         bool existsByEmail(string email);
+
+
+        bool UpdateSupplier(Supplier supplier);
+
+        bool existsOtherByNameInsensitive(string name, int currentInn);
+
+        bool existsOtherByEmail(string email, int currentInn);
+
     }
 }

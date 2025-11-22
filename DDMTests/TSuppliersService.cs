@@ -309,5 +309,196 @@ namespace DDMTests
             Assert.AreNotEqual("", result);
             repo.Verify(r => r.AddSupplier(supplier), Times.Once);
         }
+
+        [TestMethod]
+        public void UpdateSupplier_ValidData_ChangesContacts_ReturnsEmptyString()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "new.alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Новая, д. 10"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.existsOtherByNameInsensitive("ООО Альфа", 123456789))
+                .Returns(false);
+            repo.Setup(r => r.existsOtherByEmail("new.alpha@example.com", 123456789))
+                .Returns(false);
+            repo.Setup(r => r.UpdateSupplier(supplier))
+                .Returns(true);
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual(string.Empty, result);
+            repo.Verify(r => r.existsOtherByNameInsensitive("ООО Альфа", 123456789), Times.Once);
+            repo.Verify(r => r.existsOtherByEmail("new.alpha@example.com", 123456789), Times.Once);
+            repo.Verify(r => r.UpdateSupplier(supplier), Times.Once);
+        }
+
+        [TestMethod]
+        public void UpdateSupplier_DuplicateName_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ооо ромашка", // существует с другим ИНН
+                ContactEmail = "new@example.com",
+                Phone = "79991234567",
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.existsOtherByNameInsensitive("ооо ромашка", 123456789))
+                .Returns(true); // уже есть другой поставщик с таким именем
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Поставщик с таким названием уже есть", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive("ооо ромашка", 123456789), Times.Once);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateSupplier_DuplicateEmail_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Новый",
+                ContactEmail = "dup@example.com",
+                Phone = "79991234567",
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.existsOtherByNameInsensitive("ООО Новый", 123456789))
+                .Returns(false);
+            repo.Setup(r => r.existsOtherByEmail("dup@example.com", 123456789))
+                .Returns(true); // email занят другим поставщиком
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Email уже используется другим поставщиком", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive("ООО Новый", 123456789), Times.Once);
+            repo.Verify(r => r.existsOtherByEmail("dup@example.com", 123456789), Times.Once);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        [DataRow("123")]
+        [DataRow("123456789123")]
+        [DataRow("88ABC777")]
+        public void UpdateSupplier_InvalidPhone_ReturnsErrorMessage(string phone)
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Тест",
+                ContactEmail = "valid@example.com",
+                Phone = phone,
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.AreEqual("Некорректный номер телефона", result);
+            repo.Verify(r => r.existsOtherByNameInsensitive(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateSupplier_MultipleValidationErrors_ReturnsAggregatedMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "",
+                ContactEmail = "bad@@example",
+                Phone = "invalid###",
+                Address = null
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            SupplierValidator validator = new SupplierValidator();
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            string expected =
+                "Название обязательно\n" +
+                "Некорректный email\n" +
+                "Некорректный номер телефона";
+
+            Assert.AreEqual(expected, result);
+            repo.Verify(r => r.existsOtherByNameInsensitive(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.existsOtherByEmail(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+            repo.Verify(r => r.UpdateSupplier(It.IsAny<Supplier>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateSupplier_UpdateReturnsFalse_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",                  // 11 цифр
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+
+            repo.Setup(r => r.existsByInn(It.IsAny<int>())).Returns(false);
+            repo.Setup(r => r.existsByNameInsensitive(It.IsAny<string>())).Returns(false);
+            repo.Setup(r => r.existsByEmail(It.IsAny<string>())).Returns(false);
+
+            repo.Setup(r => r.UpdateSupplier(supplier)).Returns(false);
+
+            SupplierValidator validator = new SupplierValidator(); // реальный валидатор
+            SupplierService service = new SupplierService(repo.Object, validator);
+
+            // Act
+            string result = service.UpdateSupplier(supplier);
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(result));
+
+            repo.Verify(r => r.UpdateSupplier(supplier), Times.Once);
+        }
     }
 }
