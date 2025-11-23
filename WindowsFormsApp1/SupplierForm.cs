@@ -162,5 +162,24 @@ namespace WindowsFormsApp1
         {
             ApplyTableTheme();
         }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (supplierDataTable.CurrentRow == null)
+            {
+                MessageBox.Show("Выберите поставщика.", "Нет выбранной строки");
+                return;
+            }
+
+            Supplier selected = supplierDataTable.CurrentRow.DataBoundItem as Supplier;
+
+            using (EditSupplierForm editForm = new EditSupplierForm(service_, selected))
+            {
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadSuppliers();
+                }
+            }
+        }
     }
 }

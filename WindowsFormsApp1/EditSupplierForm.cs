@@ -16,9 +16,23 @@ namespace WindowsFormsApp1
         private readonly SupplierService service_;
         private readonly Supplier supplier_;
 
-        public EditSupplierForm()
+        public EditSupplierForm(SupplierService service, Supplier supplier)
         {
             InitializeComponent();
+
+            service_ = service ?? throw new ArgumentNullException(nameof(service));
+            supplier_ = supplier ?? throw new ArgumentNullException(nameof(supplier));
+
+            FillFromSupplier();
+        }
+
+        private void FillFromSupplier()
+        {
+            txtInn.Text = supplier_.Inn.ToString();
+            txtName.Text = supplier_.Name;
+            txtEmail.Text = supplier_.ContactEmail;
+            txtPhone.Text = supplier_.Phone ?? "";
+            txtAddress.Text = supplier_.Address ?? "";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -28,7 +42,7 @@ namespace WindowsFormsApp1
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-
+           this.Close();
         }
     }
 }
