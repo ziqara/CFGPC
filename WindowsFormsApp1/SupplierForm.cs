@@ -155,7 +155,6 @@ namespace WindowsFormsApp1
             {
                 row.Height = supplierDataTable.RowTemplate.Height;
             }
-            supplierDataTable.ClearSelection();
         }
 
         private void SupplierForm_Shown(object sender, EventArgs e)

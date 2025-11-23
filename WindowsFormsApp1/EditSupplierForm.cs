@@ -37,7 +37,38 @@ namespace WindowsFormsApp1
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            supplier_.Name = txtName.Text.Trim();
+            supplier_.ContactEmail = txtEmail.Text.Trim();
 
+            string phone = txtPhone.Text.Trim();
+            supplier_.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone;
+
+            string addr = txtAddress.Text.Trim();
+            supplier_.Address = string.IsNullOrWhiteSpace(addr) ? null : addr;
+
+            try
+            {
+                string error = service_.UpdateSupplier(supplier_);
+                if (!string.IsNullOrEmpty(error))
+                {
+                    MessageBox.Show(error, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                MessageBox.Show("Изменения сохранены", "Успешно",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Вероятно, проблемы в соединении с БД:\n" + ex.Message,
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
