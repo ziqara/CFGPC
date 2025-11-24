@@ -158,3 +158,11 @@
 2025-11-24 19:46:57 | OnGet ComponentsPageModel | Загружено компонентов: 0
 2025-11-24 19:47:01 | OnGet ComponentsPageModel | Загружено компонентов: 0
 2025-11-24 19:47:01 | OnGet ComponentsPageModel | Загружено компонентов: 0
+2025-11-24 19:50:47 | OnGet ComponentsPageModel | Загружено компонентов: 0
+2025-11-24 19:50:59 | UserProfileModel OnGet | Started
+2025-11-24 19:50:59 | UserProfileModel OnGet | Profile loaded successfully.
+2025-11-24 19:51:04 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-24 19:51:04 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-24 19:51:29 | OnGet ComponentsPageModel | Загружено компонентов: 0
+2025-11-24 19:51:31 | OnGet ComponentsPageModel | Загружено компонентов: 0
+2025-11-24 19:51:31 | OnGet ComponentsPageModel | Загружено компонентов: 0
