@@ -50,5 +50,31 @@ namespace DDMLib.Configuration
                 OtherOptions = GetStringOrEmpty(iOther)
             };
         }
+
+        private List<DDMLib.Component.Component> GetComponentsForConfiguration(MySqlConnection connection, int configId)
+        {
+            List<DDMLib.Component.Component> components = new List<DDMLib.Component.Component>();
+
+            // Подзапрос для получения компонентов конкретной конфигурации
+            string componentQuery = @"
+                SELECT c.componentId, c.name, c.brand, c.model, c.type, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierId
+                FROM config_components cc
+                JOIN components c ON cc.componentId = c.componentId
+                WHERE cc.configId = @configId";
+
+            MySqlCommand command = new MySqlCommand(componentQuery, connection);
+            command.Parameters.AddWithValue("@configId", configId);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    DDMLib.Component.Component component = MapComponentFromReader(reader);
+                    components.Add(component);
+                }
+            }
+
+            return components;
+        }
     }
 }
