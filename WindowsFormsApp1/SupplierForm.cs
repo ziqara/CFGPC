@@ -155,12 +155,30 @@ namespace WindowsFormsApp1
             {
                 row.Height = supplierDataTable.RowTemplate.Height;
             }
-            supplierDataTable.ClearSelection();
         }
 
         private void SupplierForm_Shown(object sender, EventArgs e)
         {
             ApplyTableTheme();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (supplierDataTable.CurrentRow == null)
+            {
+                MessageBox.Show("Выберите поставщика.", "Нет выбранной строки");
+                return;
+            }
+
+            Supplier selected = supplierDataTable.CurrentRow.DataBoundItem as Supplier;
+
+            using (EditSupplierForm editForm = new EditSupplierForm(service_, selected))
+            {
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadSuppliers();
+                }
+            }
         }
     }
 }
