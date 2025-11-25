@@ -177,6 +177,11 @@ public class MySqlSupplierRepository : ISupplierRepository
         }
     }
 
+    public bool HasActiveOrders(int inn)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Supplier> ReadAllSuppliers()
     {
         List<Supplier> suppliers = new List<Supplier>();
