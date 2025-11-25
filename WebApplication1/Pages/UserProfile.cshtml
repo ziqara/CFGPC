@@ -140,6 +140,70 @@
                 box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
                 outline: none;
             }
+
+        /* Стили для карточек конфигураций */
+        .config-card {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .config-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+            .config-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            }
+
+        .config-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .config-meta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+        }
+
+            .config-meta span {
+                margin-right: 1rem;
+            }
+
+        .config-description {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .config-components {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 0;
+        }
+
+        .config-badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body>
@@ -287,6 +351,69 @@
                 </div>
             </div>
         </div>
+
+        <!-- Конфигурации пользователя -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10 col-xl-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-microchip me-2"></i>Ваши конфигурации
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (Model.UserConfigurations != null && Model.UserConfigurations.Any())
+                        {
+                            <div class="row">
+                                @foreach (var configDto in Model.UserConfigurations)
+                                {
+                                    <div class="col-md-6 mb-4">
+                                        <div class="config-card h-100">
+                                            <h5 class="config-name">@configDto.Configuration.ConfigName</h5>
+                                            <div class="config-meta">
+                                                <span><i class="fas fa-ruble-sign me-1"></i><strong>Цена:</strong> @configDto.Configuration.TotalPrice.ToString("F2") ₽</span>
+                                                <span><i class="fas fa-tag me-1"></i><strong>Цель:</strong> @configDto.Configuration.TargetUse</span>
+                                            </div>
+                                            <div class="config-meta">
+                                                <span><i class="fas fa-calendar-alt me-1"></i><strong>Создано:</strong> @configDto.Configuration.CreatedDate.ToString("dd.MM.yyyy")</span>
+                                                <span><i class="fas fa-sync-alt me-1"></i><strong>Статус:</strong> @configDto.Configuration.Status</span>
+                                            </div>
+                                            <p class="config-description">@configDto.Configuration.Description</p>
+                                            <ul class="config-components list-unstyled">
+                                                <li><strong>Компоненты:</strong></li>
+                                                @if (configDto.Components.Any())
+                                                {
+                                                    @foreach (var comp in configDto.Components.Take(3))
+                                                    {
+                                                        <li><i class="fas fa-chevron-right me-1"></i> @comp.Name (@comp.Type)</li>
+                                                    }
+                                                    @if (configDto.Components.Count > 3)
+                                                    {
+                                                        <li><i class="fas fa-ellipsis-h me-1"></i> и ещё @(configDto.Components.Count - 3)</li>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <li><i class="fas fa-times me-1"></i> Нет компонентов</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-box-open fa-2x mb-3"></i>
+                                <h5>У вас пока нет созданных конфигураций</h5>
+                                <p class="mb-0">Соберите свой первый ПК и он появится здесь.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -382,15 +509,15 @@
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
             @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
             {
                 <text>
-                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                        modal.show();
+                            var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                            modal.show();
                 </text>
             }
-            });
+                        });
         </script>
     }
 </body>

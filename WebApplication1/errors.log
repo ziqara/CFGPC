@@ -202,3 +202,7 @@
 2025-11-25 08:10:22 | OnGet ComponentsPageModel | Загружено компонентов: 1
 2025-11-25 08:10:25 | OnGet ComponentsPageModel | Загружено компонентов: 1
 2025-11-25 08:10:30 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 08:44:21 | UserProfileModel OnGet | Started
+2025-11-25 08:44:21 | GetUserConfigurations | There is already an open DataReader associated with this Connection which must be closed first.
+2025-11-25 08:44:21 | UserProfileModel LoadUserConfigurations | There is already an open DataReader associated with this Connection which must be closed first.
+2025-11-25 08:44:21 | UserProfileModel OnGet | Profile and configurations loaded successfully.
