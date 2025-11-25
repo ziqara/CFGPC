@@ -556,22 +556,24 @@ namespace DDMTests
         }
 
         [TestMethod]
-        public void DeleteSupplier_HasRelatedRecords_ReturnsFkErrorMessage()
+        public void DeleteSupplier_DatabaseError_ReturnsConnectionMessage()
         {
             // Arrange
-            Supplier supplier = new Supplier(987654321)
+            Supplier supplier = new Supplier(444444444)
             {
-                Name = "ООО Связанный",
-                ContactEmail = "alpha@example.com",
+                Name = "ООО ОшибкаБД",
+                ContactEmail = "err@example.com",
                 Phone = "79991234567",
-                Address = "г. Москва, ул. Примерная, д. 1"
+                Address = "г. Москва, ул. Ошибочная, д. 10"
             };
 
             Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
 
-            // Моделируем FK-ошибку через Exception с нужным текстом
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(false);
+
+            // Симулируем любую SQL/connection ошибку
             repo.Setup(r => r.DeleteByInn(supplier.Inn))
-                .Throws(new Exception("Cannot delete or update a parent row: a foreign key constraint fails"));
+                .Throws(new Exception("Timeout expired"));
 
             SupplierService service = new SupplierService(repo.Object);
 
@@ -579,9 +581,12 @@ namespace DDMTests
             string result = service.DeleteSupplier(supplier.Inn);
 
             // Assert
-            Assert.AreEqual("Невозможно удалить: есть связанные записи", result);
+            Assert.AreEqual("Вероятно, проблемы в соединении с БД: Timeout expired", result);
+
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
             repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
         }
+
 
     }
 }
