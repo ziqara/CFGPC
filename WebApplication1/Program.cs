@@ -1,5 +1,6 @@
 using DDMLib;
 using DDMLib.Component;
+using DDMLib.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +21,9 @@ builder.Services.AddScoped<SessionManager>();
 
 builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
 builder.Services.AddScoped<ComponentService>();
+
+builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
+builder.Services.AddScoped<ConfigurationService>();
 
 var app = builder.Build();
 
