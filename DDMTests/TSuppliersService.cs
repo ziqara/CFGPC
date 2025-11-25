@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DDMLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -522,5 +519,34 @@ namespace DDMTests
             Assert.AreEqual(string.Empty, result);
             repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
         }
+
+        [TestMethod]
+        public void DeleteSupplier_HasRelatedRecords_ReturnsFkErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(987654321)
+            {
+                Name = "ООО Связанный",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            // Моделируем FK-ошибку через Exception с нужным текстом
+            repo.Setup(r => r.DeleteByInn(supplier.Inn))
+                .Throws(new Exception("Cannot delete or update a parent row: a foreign key constraint fails"));
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual("Невозможно удалить: есть связанные записи", result);
+            repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
+        }
+
     }
 }
