@@ -26,5 +26,6 @@ namespace DDMLib
 
         bool existsOtherByEmail(string email, int currentInn);
 
+        bool DeleteByInn(int inn);
     }
 }

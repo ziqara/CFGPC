@@ -78,5 +78,10 @@ namespace DDMLib
 
             return string.Empty;
         }
+
+        public string DeleteSupplier(int inn)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

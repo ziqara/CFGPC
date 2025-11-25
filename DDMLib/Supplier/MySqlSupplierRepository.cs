@@ -35,6 +35,11 @@ public class MySqlSupplierRepository : ISupplierRepository
         }
     }
 
+    public bool DeleteByInn(int inn)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool existsByEmail(string email)
     {
         try
