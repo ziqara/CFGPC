@@ -527,6 +527,35 @@ namespace DDMTests
         }
 
         [TestMethod]
+        public void DeleteSupplier_HasRelatedRecords_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(987654321)
+            {
+                Name = "ООО Связанный",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            // Есть незавершённые заказы = удалить нельзя
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual("Невозможно удалить: есть связанные незавершённые заказы", result);
+
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
+            repo.Verify(r => r.DeleteByInn(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
         public void DeleteSupplier_HasRelatedRecords_ReturnsFkErrorMessage()
         {
             // Arrange
