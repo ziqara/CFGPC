@@ -76,5 +76,42 @@ namespace DDMLib.Configuration
 
             return components;
         }
+
+        private DDMLib.Component.Component MapComponentFromReader(MySqlDataReader reader)
+        {
+            // Получаем индексы колонок
+            int iId = reader.GetOrdinal("componentId");
+            int iName = reader.GetOrdinal("name");
+            int iBrand = reader.GetOrdinal("brand");
+            int iModel = reader.GetOrdinal("model");
+            int iType = reader.GetOrdinal("type");
+            int iPrice = reader.GetOrdinal("price");
+            int iStock = reader.GetOrdinal("stockQuantity");
+            int iDesc = reader.GetOrdinal("description");
+            int iAvailable = reader.GetOrdinal("isAvailable");
+            int iPhoto = reader.GetOrdinal("photoUrl");
+            int iSupplier = reader.GetOrdinal("supplierId");
+
+            // Функции для безопасного получения значений
+            Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);
+            Func<int, int> GetInt32OrZero = i => reader.IsDBNull(i) ? 0 : reader.GetInt32(i);
+            Func<int, decimal> GetDecimalOrZero = i => reader.IsDBNull(i) ? 0m : reader.GetDecimal(i);
+            Func<int, bool> GetBoolOrFalse = i => reader.IsDBNull(i) ? false : reader.GetBoolean(i);
+
+            return new DDMLib.Component.Component
+            {
+                ComponentId = GetInt32OrZero(iId),
+                Name = GetStringOrEmpty(iName),
+                Brand = GetStringOrEmpty(iBrand),
+                Model = GetStringOrEmpty(iModel),
+                Type = GetStringOrEmpty(iType),
+                Price = GetDecimalOrZero(iPrice),
+                StockQuantity = GetInt32OrZero(iStock),
+                Description = GetStringOrEmpty(iDesc),
+                IsAvailable = GetBoolOrFalse(iAvailable),
+                PhotoUrl = GetStringOrEmpty(iPhoto),
+                SupplierId = GetInt32OrZero(iSupplier)
+            };
+        }
     }
 }
