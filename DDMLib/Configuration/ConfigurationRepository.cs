@@ -11,7 +11,55 @@ namespace DDMLib.Configuration
     {
         public List<ConfigurationDto> GetUserConfigurations(string userEmail)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(userEmail))
+            {
+                throw new ArgumentException("User email cannot be null or empty.", nameof(userEmail));
+            }
+
+            List<ConfigurationDto> result = new List<ConfigurationDto>();
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Запрос для получения основных данных конфигураций
+                    string configurationQuery = @"
+                        SELECT configId, configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions
+                        FROM configurations
+                        WHERE userEmail = @userEmail";
+
+                    MySqlCommand command = new MySqlCommand(configurationQuery, connection);
+                    command.Parameters.AddWithValue("@userEmail", userEmail);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Configuration configuration = MapConfigurationFromReader(reader);
+
+                            // Получаем список компонентов для текущей конфигурации
+                            List<DDMLib.Component.Component> components = GetComponentsForConfiguration(connection, configuration.ConfigId);
+
+                            ConfigurationDto dto = new ConfigurationDto
+                            {
+                                Configuration = configuration,
+                                Components = components
+                            };
+
+                            result.Add(dto);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.LogError("GetUserConfigurations", ex.Message);
+                    throw; // Пробрасываем исключение выше
+                }
+            }
+
+            return result;
         }
 
         private Configuration MapConfigurationFromReader(MySqlDataReader reader)
