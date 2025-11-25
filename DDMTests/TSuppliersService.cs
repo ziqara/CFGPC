@@ -508,6 +508,11 @@ namespace DDMTests
             };
 
             Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            // Нет активных заказов = можно удалять
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(false);
+
+            // Удаление прошло успешно
             repo.Setup(r => r.DeleteByInn(supplier.Inn)).Returns(true);
 
             SupplierService service = new SupplierService(repo.Object);
@@ -517,6 +522,7 @@ namespace DDMTests
 
             // Assert
             Assert.AreEqual(string.Empty, result);
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
             repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
         }
 
