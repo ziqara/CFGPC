@@ -206,3 +206,24 @@
 2025-11-25 08:44:21 | GetUserConfigurations | There is already an open DataReader associated with this Connection which must be closed first.
 2025-11-25 08:44:21 | UserProfileModel LoadUserConfigurations | There is already an open DataReader associated with this Connection which must be closed first.
 2025-11-25 08:44:21 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:02:59 | UserProfileModel OnGet | Started
+2025-11-25 09:02:59 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-25 09:03:08 | UserProfileModel OnGet | Started
+2025-11-25 09:03:08 | UserProfileModel LoadUserConfigurations | Unknown column 'c.type' in 'field list'
+2025-11-25 09:03:08 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:06:54 | UserProfileModel OnGet | Started
+2025-11-25 09:06:54 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-25 09:07:25 | UserProfileModel OnGet | Started
+2025-11-25 09:07:25 | UserProfileModel LoadUserConfigurations | Unknown column 'c.supplierId' in 'field list'
+2025-11-25 09:07:25 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:11:21 | UserProfileModel OnGet | Started
+2025-11-25 09:11:21 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-25 09:11:32 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:11:33 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:11:34 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:11:39 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:12:00 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:12:01 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:13:05 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-25 09:13:17 | UserProfileModel OnGet | Started
+2025-11-25 09:13:17 | UserProfileModel OnGet | Profile and configurations loaded successfully.
