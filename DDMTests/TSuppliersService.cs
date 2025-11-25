@@ -497,5 +497,30 @@ namespace DDMTests
 
             repo.Verify(r => r.UpdateSupplier(supplier), Times.Once);
         }
+
+        [TestMethod]
+        public void DeleteSupplier_Success_ReturnsEmptyString()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+            repo.Setup(r => r.DeleteByInn(supplier.Inn)).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual(string.Empty, result);
+            repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
+        }
     }
 }
