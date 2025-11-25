@@ -227,3 +227,17 @@
 2025-11-25 09:13:05 | OnGet ComponentsPageModel | Загружено компонентов: 1
 2025-11-25 09:13:17 | UserProfileModel OnGet | Started
 2025-11-25 09:13:17 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:21:37 | UserProfileModel OnGet | Started
+2025-11-25 09:21:37 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:28:09 | UserProfileModel OnGet | Started
+2025-11-25 09:28:09 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-25 09:28:25 | UserProfileModel OnGet | Started
+2025-11-25 09:28:25 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:34:52 | UserProfileModel OnGet | Started
+2025-11-25 09:34:52 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-25 09:35:05 | UserProfileModel OnGet | Started
+2025-11-25 09:35:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:38:10 | UserProfileModel OnGet | Started
+2025-11-25 09:38:10 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-25 09:51:31 | UserProfileModel OnGet | Started
+2025-11-25 09:51:31 | UserProfileModel OnGet | Profile and configurations loaded successfully.

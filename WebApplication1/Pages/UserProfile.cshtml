@@ -152,6 +152,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer; /* Добавлен курсор */
         }
 
             .config-card:hover {
@@ -190,20 +191,38 @@
             font-size: 0.9rem;
             color: #555;
             line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .config-components {
-            font-size: 0.85rem;
-            color: #7f8c8d;
             margin-bottom: 0;
         }
 
-        .config-badge {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: none;
-            font-size: 0.7rem;
+        /* Единый стиль для статуса */
+        .config-status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+            .config-status-badge.draft {
+                background-color: #f39c12; /* Жёлтый */
+                color: white;
+            }
+
+            .config-status-badge.validated {
+                background-color: #27ae60; /* Зелёный */
+                color: white;
+            }
+
+            .config-status-badge.in_cart {
+                background-color: #3498db; /* Синий */
+                color: white;
+            }
+
+            .config-status-badge.ordered {
+                background-color: #9b59b6; /* Фиолетовый */
+                color: white;
+            }
     </style>
 </head>
 <body>
@@ -352,7 +371,7 @@
             </div>
         </div>
 
-        <!-- Конфигурации пользователя -->
+        <!-- Новый раздел: Конфигурации пользователя -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10 col-xl-8">
                 <div class="card shadow-lg border-0">
@@ -368,7 +387,8 @@
                                 @foreach (var configDto in Model.UserConfigurations)
                                 {
                                     <div class="col-md-6 mb-4">
-                                        <div class="config-card h-100">
+                                        <!-- Добавлен data-bs-toggle и data-bs-target -->
+                                        <div class="config-card h-100" data-bs-toggle="modal" data-bs-target="#configModal-@configDto.Configuration.ConfigId">
                                             <h5 class="config-name">@configDto.Configuration.ConfigName</h5>
                                             <div class="config-meta">
                                                 <span><i class="fas fa-ruble-sign me-1"></i><strong>Цена:</strong> @configDto.Configuration.TotalPrice.ToString("F2") ₽</span>
@@ -376,27 +396,103 @@
                                             </div>
                                             <div class="config-meta">
                                                 <span><i class="fas fa-calendar-alt me-1"></i><strong>Создано:</strong> @configDto.Configuration.CreatedDate.ToString("dd.MM.yyyy")</span>
-                                                <span><i class="fas fa-sync-alt me-1"></i><strong>Статус:</strong> @configDto.Configuration.Status</span>
+                                                <span>
+                                                    <i class="fas fa-sync-alt me-1"></i><strong>Статус:</strong>
+                                                    @{
+                                                        string statusClass = configDto.Configuration.Status switch
+                                                        {
+                                                            "draft" => "draft",
+                                                            "validated" => "validated",
+                                                            "in_cart" => "in_cart",
+                                                            "ordered" => "ordered",
+                                                            _ => "draft" // Значение по умолчанию
+                                                        };
+                                                        string statusText = configDto.Configuration.Status switch
+                                                        {
+                                                            "draft" => "Черновик",
+                                                            "validated" => "Проверена",
+                                                            "in_cart" => "В корзине",
+                                                            "ordered" => "Заказана",
+                                                            _ => "Неизвестный статус" // Текст по умолчанию
+                                                        };
+                                                    }
+                                                    <span class="config-status-badge @statusClass">@statusText</span>
+                                                </span>
                                             </div>
                                             <p class="config-description">@configDto.Configuration.Description</p>
-                                            <ul class="config-components list-unstyled">
-                                                <li><strong>Компоненты:</strong></li>
-                                                @if (configDto.Components.Any())
-                                                {
-                                                    @foreach (var comp in configDto.Components.Take(3))
-                                                    {
-                                                        <li><i class="fas fa-chevron-right me-1"></i> @comp.Name (@comp.Type)</li>
-                                                    }
-                                                    @if (configDto.Components.Count > 3)
-                                                    {
-                                                        <li><i class="fas fa-ellipsis-h me-1"></i> и ещё @(configDto.Components.Count - 3)</li>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <li><i class="fas fa-times me-1"></i> Нет компонентов</li>
-                                                }
-                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Модальное окно для каждой конфигурации -->
+                                    <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content border-0 shadow">
+                                                <div class="modal-header bg-light">
+                                                    <h5 class="modal-title" id="configModalLabel-@configDto.Configuration.ConfigId">
+                                                        <i class="fas fa-microchip text-primary me-2"></i>
+                                                        @configDto.Configuration.ConfigName
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <strong>Цель:</strong> @configDto.Configuration.TargetUse
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <strong>Статус:</strong>
+                                                            <span class="config-status-badge @statusClass">@statusText</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <strong>Дата создания:</strong> @configDto.Configuration.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <strong>Всего компонентов:</strong> @configDto.Components.Count
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Описание:</strong>
+                                                            <p class="text-muted mb-0">@configDto.Configuration.Description</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Дополнительные опции:</strong>
+                                                            <p class="text-muted mb-0">@configDto.Configuration.OtherOptions</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Список компонентов:</strong>
+                                                            <ul class="list-group">
+                                                                @if (configDto.Components.Any())
+                                                                {
+                                                                    @foreach (var comp in configDto.Components)
+                                                                    {
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                                            <div class="ms-2 me-auto">
+                                                                                <div class="fw-bold">@comp.Name</div>
+                                                                                <small class="text-muted">Тип: @comp.Type | Бренд: @comp.Brand | Цена: @comp.Price ₽</small>
+                                                                            </div>
+                                                                            <span class="badge bg-secondary">@comp.Model</span>
+                                                                        </li>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li class="list-group-item text-center text-muted">Компоненты отсутствуют</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 }
