@@ -86,6 +86,7 @@
             this.txtInn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtInn.Location = new System.Drawing.Point(86, 13);
             this.txtInn.Name = "txtInn";
+            this.txtInn.ReadOnly = true;
             this.txtInn.Size = new System.Drawing.Size(174, 22);
             this.txtInn.TabIndex = 19;
             // 
