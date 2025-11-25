@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DDMLib.Component; 
 
 namespace DDMLib.Configuration
 {
@@ -16,7 +17,8 @@ namespace DDMLib.Configuration
                 throw new ArgumentException("User email cannot be null or empty.", nameof(userEmail));
             }
 
-            List<ConfigurationDto> result = new List<ConfigurationDto>();
+            List<Configuration> configurations = new List<Configuration>();
+            List<int> configIds = new List<int>();
 
             using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
             {
@@ -24,7 +26,6 @@ namespace DDMLib.Configuration
                 {
                     connection.Open();
 
-                    // Запрос для получения основных данных конфигураций
                     string configurationQuery = @"
                         SELECT configId, configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions
                         FROM configurations
@@ -37,18 +38,9 @@ namespace DDMLib.Configuration
                     {
                         while (reader.Read())
                         {
-                            Configuration configuration = MapConfigurationFromReader(reader);
-
-                            // Получаем список компонентов для текущей конфигурации
-                            List<DDMLib.Component.Component> components = GetComponentsForConfiguration(connection, configuration.ConfigId);
-
-                            ConfigurationDto dto = new ConfigurationDto
-                            {
-                                Configuration = configuration,
-                                Components = components
-                            };
-
-                            result.Add(dto);
+                            Configuration config = MapConfigurationFromReader(reader);
+                            configurations.Add(config);
+                            configIds.Add(config.ConfigId);
                         }
                     }
                 }
@@ -57,6 +49,54 @@ namespace DDMLib.Configuration
                     ErrorLogger.LogError("GetUserConfigurations", ex.Message);
                     throw; // Пробрасываем исключение выше
                 }
+            }
+
+            // 2. Получаем компоненты для всех конфигураций
+            // Создаём словарь: ConfigId -> List<Component>
+            Dictionary<int, List<DDMLib.Component.Component>> componentsMap = new Dictionary<int, List<DDMLib.Component.Component>>();
+
+            if (configIds.Any())
+            {
+                using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                {
+                    connection.Open();
+
+                    // Запрос для получения компонентов, связанных с конфигурациями пользователя
+                    // Исправлено: c.supplierId -> c.supplierInn
+                    string componentQuery = @"
+                        SELECT cc.configId, c.componentId, c.name, c.brand, c.model, c.componentType, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierInn
+                        FROM config_components cc
+                        JOIN components c ON cc.componentId = c.componentId
+                        WHERE cc.configId IN (" + string.Join(",", configIds) + ")";
+
+                    MySqlCommand command = new MySqlCommand(componentQuery, connection);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int configId = reader.GetInt32("configId");
+                            DDMLib.Component.Component component = MapComponentFromReader(reader);
+
+                            if (!componentsMap.ContainsKey(configId))
+                            {
+                                componentsMap[configId] = new List<DDMLib.Component.Component>();
+                            }
+                            componentsMap[configId].Add(component);
+                        }
+                    }
+                }
+            }
+
+            // 3. Объединяем конфигурации с их компонентами
+            List<ConfigurationDto> result = new List<ConfigurationDto>();
+            foreach (var config in configurations)
+            {
+                List<DDMLib.Component.Component> components = componentsMap.ContainsKey(config.ConfigId) ? componentsMap[config.ConfigId] : new List<DDMLib.Component.Component>();
+                result.Add(new ConfigurationDto
+                {
+                    Configuration = config,
+                    Components = components
+                });
             }
 
             return result;
@@ -99,32 +139,6 @@ namespace DDMLib.Configuration
             };
         }
 
-        private List<DDMLib.Component.Component> GetComponentsForConfiguration(MySqlConnection connection, int configId)
-        {
-            List<DDMLib.Component.Component> components = new List<DDMLib.Component.Component>();
-
-            // Подзапрос для получения компонентов конкретной конфигурации
-            string componentQuery = @"
-                SELECT c.componentId, c.name, c.brand, c.model, c.type, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierId
-                FROM config_components cc
-                JOIN components c ON cc.componentId = c.componentId
-                WHERE cc.configId = @configId";
-
-            MySqlCommand command = new MySqlCommand(componentQuery, connection);
-            command.Parameters.AddWithValue("@configId", configId);
-
-            using (MySqlDataReader reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    DDMLib.Component.Component component = MapComponentFromReader(reader);
-                    components.Add(component);
-                }
-            }
-
-            return components;
-        }
-
         private DDMLib.Component.Component MapComponentFromReader(MySqlDataReader reader)
         {
             // Получаем индексы колонок
@@ -132,13 +146,13 @@ namespace DDMLib.Configuration
             int iName = reader.GetOrdinal("name");
             int iBrand = reader.GetOrdinal("brand");
             int iModel = reader.GetOrdinal("model");
-            int iType = reader.GetOrdinal("type");
+            int iType = reader.GetOrdinal("componentType");
             int iPrice = reader.GetOrdinal("price");
             int iStock = reader.GetOrdinal("stockQuantity");
             int iDesc = reader.GetOrdinal("description");
             int iAvailable = reader.GetOrdinal("isAvailable");
             int iPhoto = reader.GetOrdinal("photoUrl");
-            int iSupplier = reader.GetOrdinal("supplierId");
+            int iSupplier = reader.GetOrdinal("supplierInn");
 
             // Функции для безопасного получения значений
             Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
+using DDMLib.Configuration; 
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Pages
@@ -9,16 +10,19 @@ namespace WebApplication1.Pages
     {
         private readonly SessionManager sessionManager_;
         private readonly AccountService accountService_;
+        private readonly ConfigurationService configurationService_;
 
-        public UserProfileModel(SessionManager sessionManager, AccountService accountService)
+        public UserProfileModel(SessionManager sessionManager, AccountService accountService, ConfigurationService configurationService)
         {
             sessionManager_ = sessionManager;
             accountService_ = accountService;
+            configurationService_ = configurationService;
         }
 
         public User UserProfile { get; set; }
         public string Message { get; set; }
         public string PasswordMessage { get; set; }
+        public List<ConfigurationDto> UserConfigurations { get; set; } = new List<ConfigurationDto>();
 
         [BindProperty]
         [Required(ErrorMessage = "ФИО обязательно", AllowEmptyStrings = false)]
@@ -69,7 +73,8 @@ namespace WebApplication1.Pages
             }
 
             LoadUserProfile(userEmail);
-            ErrorLogger.LogError("UserProfileModel OnGet", "Profile loaded successfully.");
+            LoadUserConfigurations(userEmail); 
+            ErrorLogger.LogError("UserProfileModel OnGet", "Profile and configurations loaded successfully.");
             return Page();
         }
 
@@ -107,6 +112,7 @@ namespace WebApplication1.Pages
             {
                 ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "ModelState is invalid.");
                 LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
@@ -124,6 +130,7 @@ namespace WebApplication1.Pages
                 ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", $"Profile update failed: {result}");
                 ModelState.AddModelError(string.Empty, result);
                 LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
@@ -169,6 +176,7 @@ namespace WebApplication1.Pages
                     }
                 }
                 LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
                 return Page();
             }
 
@@ -192,6 +200,7 @@ namespace WebApplication1.Pages
             }
 
             LoadUserProfile(userEmail);
+            LoadUserConfigurations(userEmail);
             return Page();
         }
 
@@ -219,6 +228,19 @@ namespace WebApplication1.Pages
                 FullName = UserProfile.FullName;
                 Phone = UserProfile.Phone;
                 Address = UserProfile.Address;
+            }
+        }
+
+        private void LoadUserConfigurations(string email)
+        {
+            try
+            {
+                UserConfigurations = configurationService_.GetUserConfigurations(email);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("UserProfileModel LoadUserConfigurations", ex.Message);
+                UserConfigurations = new List<ConfigurationDto>(); // В случае ошибки возвращаем пустой список
             }
         }
     }
