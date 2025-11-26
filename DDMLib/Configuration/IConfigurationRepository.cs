@@ -9,5 +9,6 @@ namespace DDMLib.Configuration
     public interface IConfigurationRepository
     {
         List<ConfigurationDto> GetUserConfigurations(string userEmail);
+        bool DeleteConfigurationByIdAndUser(string userEmail, int configId);
     }
 }
