@@ -175,5 +175,66 @@ namespace DDMLib.Configuration
                 SupplierId = GetInt32OrZero(iSupplier)
             };
         }
+
+        public bool DeleteConfigurationByIdAndUser(string userEmail, int configId)
+        {
+            if (string.IsNullOrWhiteSpace(userEmail))
+            {
+                throw new ArgumentException("User email cannot be null or empty.", nameof(userEmail));
+            }
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Удаляем сначала связанные компоненты из config_components
+                            string deleteComponentsQuery = "DELETE FROM config_components WHERE configId = @configId;";
+                            using (MySqlCommand cmdComponents = new MySqlCommand(deleteComponentsQuery, connection, transaction))
+                            {
+                                cmdComponents.Parameters.AddWithValue("@configId", configId);
+                                cmdComponents.ExecuteNonQuery(); // Результат не важен, если строка не найдена - это нормально
+                            }
+
+                            // Затем удаляем саму конфигурацию из configurations
+                            string deleteConfigQuery = "DELETE FROM configurations WHERE configId = @configId AND userEmail = @userEmail;";
+                            using (MySqlCommand cmdConfig = new MySqlCommand(deleteConfigQuery, connection, transaction))
+                            {
+                                cmdConfig.Parameters.AddWithValue("@configId", configId);
+                                cmdConfig.Parameters.AddWithValue("@userEmail", userEmail);
+
+                                int rowsAffected = cmdConfig.ExecuteNonQuery();
+
+                                if (rowsAffected == 1)
+                                {
+                                    transaction.Commit(); // Успешно удалили и компоненты, и конфигурацию
+                                    return true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                    return false;
+                                }
+                            }
+                        }
+                        catch (MySqlException ex)
+                        {
+                            transaction.Rollback(); // Откатываем транзакцию при любой ошибке
+                            throw; // Пробрасываем исключение выше
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    // Обработка ошибок подключения или других исключений на уровне соединения
+                    ErrorLogger.LogError("DeleteConfigurationByIdAndUser", ex.Message);
+                    throw; // Пробрасываем исключение выше для обработки в сервисе
+                }
+            }
+        }
     }
 }
