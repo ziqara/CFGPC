@@ -36,9 +36,11 @@ namespace WindowsFormsApp1
         {
             try
             {
+                // грузим всех из сервиса
                 List<Supplier> suppliers = service_.GetAllSuppliers();
+                allSuppliers_ = suppliers ?? new List<Supplier>();
 
-                if (suppliers == null || suppliers.Count == 0)
+                if (allSuppliers_.Count == 0)
                 {
                     supplierDataTable.Visible = false;
                     MessageBox.Show("Поставщиков пока нет", "Информация",
@@ -46,8 +48,8 @@ namespace WindowsFormsApp1
                     return;
                 }
 
-                supplierDataTable.DataSource = suppliers;
                 supplierDataTable.Visible = true;
+                ShowSuppliers(allSuppliers_);
             }
             catch (Exception ex)
             {
@@ -258,68 +260,62 @@ namespace WindowsFormsApp1
 
         private void txtSearchName_TextChanged(object sender, EventArgs e)
         {
-
+            FilterAndSearchSuppliers();
         }
 
         private void cbxPhone_CheckedChanged(object sender, EventArgs e)
         {
-
+            FilterAndSearchSuppliers();
         }
 
         private void cbxAddres_CheckedChanged(object sender, EventArgs e)
         {
-
+            FilterAndSearchSuppliers();
         }
 
         private void FilterAndSearchSuppliers()
         {
-            if (allSuppliers_ == null || allSuppliers_.Count == 0)
-            {
-                supplierDataTable.DataSource = null;
+            if (allSuppliers_ == null)
                 return;
-            }
-
-            // если ни поиска, ни фильтров — показываем всех
-            if (IsNoFilterAndSearch())
-            {
-                ShowSuppliers(allSuppliers_);
-                return;
-            }
 
             string searchText = txtSearchName.Text?.Trim() ?? string.Empty;
             bool requirePhone = cbxPhone.Checked;
             bool requireAddress = cbxAddres.Checked;
 
-            List<Supplier> result = new List<Supplier>();
+            // начинаем всегда со всего списка
+            IEnumerable<Supplier> query = allSuppliers_;
 
-            foreach (Supplier s in allSuppliers_)
+            // поиск по названию
+            if (!string.IsNullOrEmpty(searchText))
             {
-                // поиск по названию (без учёта регистра)
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    if (string.IsNullOrEmpty(s.Name) ||
-                        s.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) < 0)
-                    {
-                        continue;
-                    }
-                }
-
-                // фильтр по наличию телефона
-                if (requirePhone && string.IsNullOrWhiteSpace(s.Phone))
-                {
-                    continue;
-                }
-
-                // фильтр по наличию адреса
-                if (requireAddress && string.IsNullOrWhiteSpace(s.Address))
-                {
-                    continue;
-                }
-
-                result.Add(s);
+                query = query.Where(s =>
+                    !string.IsNullOrEmpty(s.Name) &&
+                    s.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0);
             }
 
+            // только с телефоном
+            if (requirePhone)
+            {
+                query = query.Where(s => !string.IsNullOrWhiteSpace(s.Phone));
+            }
+
+            // только с адресом
+            if (requireAddress)
+            {
+                query = query.Where(s => !string.IsNullOrWhiteSpace(s.Address));
+            }
+
+            // финальный список
+            List<Supplier> result = query.ToList();
             ShowSuppliers(result);
+        }
+
+        private void ShowSuppliers(List<Supplier> suppliers)
+        {
+
+            supplierDataTable.DataSource = null;
+            supplierDataTable.AutoGenerateColumns = true;
+            supplierDataTable.DataSource = suppliers;
         }
     }
 }
