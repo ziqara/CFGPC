@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Ноя 15 2025 г., 06:32
+-- Время создания: Ноя 27 2025 г., 07:59
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.1.26
 
@@ -95,6 +95,15 @@ CREATE TABLE `configurations` (
   `otherOptions` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Дамп данных таблицы `configurations`
+--
+
+INSERT INTO `configurations` (`configId`, `configName`, `description`, `totalPrice`, `targetUse`, `status`, `isPreset`, `createdDate`, `userEmail`, `rgb`, `otherOptions`) VALUES
+(1, 'Моя первая сборка', 'Тестовая конфигурация с полным набором компонентов', '86000.00', 'gaming', 'validated', 0, '2025-11-27 10:40:14', 'test@gmail.com', 1, 'Тестовая конфигурация'),
+(2, 'Офисный вариант', 'Конфигурация для повседневной работы и просмотра фильмов', '86000.00', 'office', 'draft', 0, '2025-11-27 10:42:23', 'test@gmail.com', 0, 'Без подсветки'),
+(7, 'Профессиональная рабочая станция', 'Мощная система для рендеринга и сложных вычислений', '86000.00', 'professional', 'ordered', 0, '2025-11-27 10:58:08', 'test@gmail.com', 1, 'Максимальная производительность, RGB подсветка');
+
 -- --------------------------------------------------------
 
 --
@@ -107,6 +116,36 @@ CREATE TABLE `config_components` (
   `componentId` int(11) NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Дамп данных таблицы `config_components`
+--
+
+INSERT INTO `config_components` (`configComponentId`, `configId`, `componentId`, `quantity`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 1),
+(3, 1, 3, 1),
+(4, 1, 4, 1),
+(5, 1, 5, 1),
+(6, 1, 6, 1),
+(7, 1, 7, 1),
+(8, 1, 8, 1),
+(9, 2, 1, 1),
+(10, 2, 2, 1),
+(11, 2, 3, 1),
+(12, 2, 4, 1),
+(13, 2, 5, 1),
+(14, 2, 6, 1),
+(15, 2, 7, 1),
+(16, 2, 8, 1),
+(49, 7, 1, 1),
+(50, 7, 2, 1),
+(51, 7, 3, 1),
+(52, 7, 4, 1),
+(53, 7, 5, 1),
+(54, 7, 6, 1),
+(55, 7, 7, 1),
+(56, 7, 8, 1);
 
 -- --------------------------------------------------------
 
@@ -321,6 +360,13 @@ CREATE TABLE `users` (
   `registrationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`email`, `passwordHash`, `fullName`, `phone`, `address`, `registrationDate`) VALUES
+('test@gmail.com', '$2a$11$TBQxlQQDxDmRRWXduKGoTuc3eGluU0zuX5jKisVIu4a0EHXaWN94C', 'test', NULL, NULL, '2025-11-27 10:37:29');
+
 -- --------------------------------------------------------
 
 --
@@ -460,13 +506,13 @@ ALTER TABLE `components`
 -- AUTO_INCREMENT для таблицы `configurations`
 --
 ALTER TABLE `configurations`
-  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT для таблицы `config_components`
 --
 ALTER TABLE `config_components`
-  MODIFY `configComponentId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `configComponentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT для таблицы `orders`

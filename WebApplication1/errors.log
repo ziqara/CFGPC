@@ -277,3 +277,7 @@
 2025-11-27 10:53:38 | UserProfileModel OnGet | Profile and configurations loaded successfully.
 2025-11-27 10:54:49 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 3
 2025-11-27 10:54:49 | UserProfileModel OnPostDeleteConfiguration | Configuration 3 deleted successfully.
+2025-11-27 11:00:44 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 4
+2025-11-27 11:00:44 | UserProfileModel OnPostDeleteConfiguration | User not authenticated, redirecting.
+2025-11-27 11:00:54 | UserProfileModel OnGet | Started
+2025-11-27 11:00:54 | UserProfileModel OnGet | Profile and configurations loaded successfully.
