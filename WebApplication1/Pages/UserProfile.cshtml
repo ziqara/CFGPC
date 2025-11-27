@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Профиль пользователя";
 }
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,33 +14,106 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f7fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding-top: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
         }
 
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
             margin-bottom: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .page-title {
             font-size: 2.5rem;
             font-weight: 300;
+            color: white;
             margin-bottom: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .profile-card {
-            background: white;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-placeholder {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 5px solid #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Стили для кнопки загрузки аватара */
+        .avatar-upload-wrapper {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .avatar-file-input {
+            position: absolute;
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .avatar-upload-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             border: none;
         }
+
+            .avatar-upload-label:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
 
         .form-control-plaintext {
             font-size: 1.1rem;
@@ -107,19 +181,19 @@
         }
 
         .modal-content {
-            border-radius: 12px;
+            border-radius: 15px;
             border: none;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
         }
 
         .modal-header {
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .modal-footer {
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
         }
 
         .form-label {
@@ -139,6 +213,7 @@
                 box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
                 outline: none;
             }
+
         /* Стили для карточек конфигураций */
         .config-card {
             background: white;
@@ -150,7 +225,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            cursor: pointer; /* Добавлен курсор */
+            cursor: pointer;
         }
 
             .config-card:hover {
@@ -191,6 +266,7 @@
             line-height: 1.5;
             margin-bottom: 0;
         }
+
         /* Единый стиль для статуса */
         .config-status-badge {
             padding: 0.25rem 0.5rem;
@@ -202,24 +278,48 @@
         }
 
             .config-status-badge.draft {
-                background-color: #f39c12; /* Жёлтый */
+                background-color: #f39c12;
                 color: white;
             }
 
             .config-status-badge.validated {
-                background-color: #27ae60; /* Зелёный */
+                background-color: #27ae60;
                 color: white;
             }
 
             .config-status-badge.in_cart {
-                background-color: #3498db; /* Синий */
+                background-color: #3498db;
                 color: white;
             }
 
             .config-status-badge.ordered {
-                background-color: #9b59b6; /* Фиолетовый */
+                background-color: #9b59b6;
                 color: white;
             }
+
+        /* Стили для кнопки удаления */
+        .delete-config-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .config-card:hover .delete-config-btn {
+            opacity: 1;
+        }
+
+        /* Стиль для имени файла */
+        .file-name {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            text-align: center;
+            max-width: 200px;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
@@ -232,6 +332,7 @@
                 </h1>
             </div>
         </div>
+
         <div class="row justify-content-center">
             <div class="col-lg-10 col-xl-8">
                 <div class="profile-card">
@@ -264,6 +365,7 @@
                             </div>
                         }
                     </div>
+
                     @if (Model.UserProfile == null)
                     {
                         <div class="alert alert-warning text-center">
@@ -275,6 +377,27 @@
                     }
                     else
                     {
+                        <div class="avatar-container">
+                            @if (!string.IsNullOrEmpty(Model.AvatarBase64))
+                            {
+                                <img src="data:@Model.AvatarMimeType;base64,@Model.AvatarBase64" alt="Аватар" class="avatar-img" />
+                            }
+                            else
+                            {
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            }
+
+                            <form method="post" enctype="multipart/form-data" asp-page-handler="UploadAvatar" class="avatar-upload-wrapper">
+                                <input type="file" class="avatar-file-input" id="avatarFile" name="AvatarFile" accept="image/*" />
+                                <label for="avatarFile" class="avatar-upload-label">
+                                    <i class="fas fa-camera me-2"></i>Сменить аватар
+                                </label>
+                                <div class="file-name" id="fileName"></div>
+                            </form>
+                        </div>
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -289,6 +412,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -321,6 +445,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -338,7 +463,9 @@
                                 </div>
                             </div>
                         </div>
+
                         <hr class="my-4" />
+
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
                             <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-4">
                                 <i class="fas fa-home me-2"></i>На главную
@@ -359,6 +486,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Новый раздел: Конфигурации пользователя -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10 col-xl-8">
@@ -375,8 +503,15 @@
                                 @foreach (var configDto in Model.UserConfigurations)
                                 {
                                     <div class="col-md-6 mb-4">
-                                        <!-- Добавлен data-bs-toggle и data-bs-target -->
-                                        <div class="config-card h-100" data-bs-toggle="modal" data-bs-target="#configModal-@configDto.Configuration.ConfigId">
+                                        <div class="config-card h-100">
+                                            <!-- Кнопка удаления -->
+                                            <form method="post" class="d-inline" asp-page-handler="DeleteConfiguration" onsubmit="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
+                                                <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger delete-config-btn" title="Удалить">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+
                                             <h5 class="config-name">@configDto.Configuration.ConfigName</h5>
                                             <div class="config-meta">
                                                 <span><i class="fas fa-ruble-sign me-1"></i><strong>Цена:</strong> @configDto.Configuration.TotalPrice.ToString("F2") ₽</span>
@@ -393,7 +528,7 @@
                                                             "validated" => "validated",
                                                             "in_cart" => "in_cart",
                                                             "ordered" => "ordered",
-                                                            _ => "draft" // Значение по умолчанию
+                                                            _ => "draft"
                                                         };
                                                         string statusText = configDto.Configuration.Status switch
                                                         {
@@ -401,92 +536,13 @@
                                                             "validated" => "Проверена",
                                                             "in_cart" => "В корзине",
                                                             "ordered" => "Заказана",
-                                                            _ => "Неизвестный статус" // Текст по умолчанию
+                                                            _ => "Неизвестный статус"
                                                         };
                                                     }
                                                     <span class="config-status-badge @statusClass">@statusText</span>
                                                 </span>
                                             </div>
                                             <p class="config-description">@configDto.Configuration.Description</p>
-                                        </div>
-                                    </div>
-                                    <!-- Модальное окно для каждой конфигурации -->
-                                    <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                            <div class="modal-content border-0 shadow">
-                                                <div class="modal-header bg-light">
-                                                    <h5 class="modal-title" id="configModalLabel-@configDto.Configuration.ConfigId">
-                                                        <i class="fas fa-microchip text-primary me-2"></i>
-                                                        @configDto.Configuration.ConfigName
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <strong>Цель:</strong> @configDto.Configuration.TargetUse
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <strong>Статус:</strong>
-                                                            <span class="config-status-badge @statusClass">@statusText</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <strong>Дата создания:</strong> @configDto.Configuration.CreatedDate.ToString("dd.MM.yyyy HH:mm")
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <strong>Всего компонентов:</strong> @configDto.Components.Count
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-12">
-                                                            <strong>Описание:</strong>
-                                                            <p class="text-muted mb-0">@configDto.Configuration.Description</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-12">
-                                                            <strong>Дополнительные опции:</strong>
-                                                            <p class="text-muted mb-0">@configDto.Configuration.OtherOptions</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-12">
-                                                            <strong>Список компонентов:</strong>
-                                                            <ul class="list-group">
-                                                                @if (configDto.Components.Any())
-                                                                {
-                                                                    @foreach (var comp in configDto.Components)
-                                                                    {
-                                                                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                                                                            <div class="ms-2 me-auto">
-                                                                                <div class="fw-bold">@comp.Name</div>
-                                                                                <small class="text-muted">Тип: @comp.Type | Бренд: @comp.Brand | Цена: @comp.Price ₽</small>
-                                                                            </div>
-                                                                            <span class="badge bg-secondary">@comp.Model</span>
-                                                                        </li>
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    <li class="list-group-item text-center text-muted">Компоненты отсутствуют</li>
-                                                                }
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer bg-light">
-                                                    <!-- Форма для удаления -->
-                                                    <form method="post" class="d-inline">
-                                                        <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
-                                                        <button type="submit" class="btn btn-outline-danger" asp-page-handler="DeleteConfiguration" onclick="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
-                                                            <i class="fas fa-trash me-2"></i>Удалить
-                                                        </button>
-                                                    </form>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -505,16 +561,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно редактирования профиля -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light">
                     <h5 class="modal-title" id="editProfileModalLabel"><i class="fas fa-user-edit me-2 text-primary"></i>Редактирование профиля</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
-                <form method="post" id="editProfileForm">
+                <form method="post" id="editProfileForm" asp-page-handler="UpdateProfile">
                     <div class="modal-body">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -524,6 +583,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -543,7 +603,7 @@
                     </div>
                     <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <button type="submit" class="btn btn-primary px-4" asp-page-handler="UpdateProfile">
+                        <button type="submit" class="btn btn-primary px-4">
                             <i class="fas fa-save me-2"></i>Сохранить
                         </button>
                     </div>
@@ -551,26 +611,31 @@
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно смены пароля -->
     <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light">
                     <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key me-2 text-success"></i>Смена пароля</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
-                <form method="post" id="changePasswordForm">
+                <form method="post" id="changePasswordForm" asp-page-handler="ChangePassword">
                     <div class="modal-body">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
                         <div class="mb-3">
                             <label asp-for="CurrentPassword" class="form-label fw-bold">Текущий пароль</label>
                             <input asp-for="CurrentPassword" type="password" class="form-control" />
                             <span asp-validation-for="CurrentPassword" class="text-danger"></span>
                         </div>
+
                         <div class="mb-3">
                             <label asp-for="NewPassword" class="form-label fw-bold">Новый пароль</label>
                             <input asp-for="NewPassword" type="password" class="form-control" />
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
                         </div>
+
                         <div class="mb-3">
                             <label asp-for="ConfirmPassword" class="form-label fw-bold">Повторите новый пароль</label>
                             <input asp-for="ConfirmPassword" type="password" class="form-control" />
@@ -579,7 +644,7 @@
                     </div>
                     <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <button type="submit" class="btn btn-success px-4" asp-page-handler="ChangePassword">
+                        <button type="submit" class="btn btn-success px-4">
                             <i class="fas fa-key me-2"></i>Сменить пароль
                         </button>
                     </div>
@@ -587,19 +652,36 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Показ модального окна при ошибках
             @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
             {
-                    <text>
-                                var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                                modal.show();
-                    </text>
+                <text>
+                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                        modal.show();
+                </text>
             }
-                        });
+
+                // Обработка выбора файла для аватара
+                const avatarFileInput = document.getElementById('avatarFile');
+                const fileNameDisplay = document.getElementById('fileName');
+
+                if (avatarFileInput) {
+                    avatarFileInput.addEventListener('change', function(e) {
+                        if (this.files && this.files[0]) {
+                            fileNameDisplay.textContent = this.files[0].name;
+
+                            // Автоматическая отправка формы при выборе файла
+                            this.form.submit();
+                        }
+                    });
+                }
+            });
         </script>
     }
 </body>

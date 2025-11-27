@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
                 connection.Open();
 
                 MySqlCommand command = new MySqlCommand(@"
-                    SELECT email, passwordHash, fullName, phone, address, registrationDate
+                    SELECT email, passwordHash, fullName, phone, address, registrationDate, avatar
                     FROM users
                     WHERE email = @email
                     LIMIT 1;", connection);
@@ -39,10 +39,12 @@ public class UserRepository : IUserRepository
                     int iPhone = reader.GetOrdinal("phone");
                     int iAddr = reader.GetOrdinal("address");
                     int iRegDate = reader.GetOrdinal("registrationDate");
+                    int iAvatar = reader.GetOrdinal("avatar");
 
                     Func<int, string> GetStringOrEmpty = i => reader.IsDBNull(i) ? string.Empty : reader.GetString(i);
                     Func<int, string> GetStringOrNull = i => reader.IsDBNull(i) ? null : reader.GetString(i);
                     Func<int, DateTime> GetDateTimeOrMin = i => reader.IsDBNull(i) ? DateTime.MinValue : reader.GetDateTime(i);
+                    Func<int, byte[]> GetBlobOrNull = i => reader.IsDBNull(i) ? null : (byte[])reader.GetValue(i);
 
                     return new User
                     {
@@ -51,7 +53,8 @@ public class UserRepository : IUserRepository
                         FullName = GetStringOrEmpty(iFull),
                         Phone = GetStringOrNull(iPhone),
                         Address = GetStringOrNull(iAddr),
-                        RegistrationDate = GetDateTimeOrMin(iRegDate)
+                        RegistrationDate = GetDateTimeOrMin(iRegDate),
+                        Avatar = GetBlobOrNull(iAvatar)
                     };
                 }
             }
@@ -183,6 +186,39 @@ public class UserRepository : IUserRepository
         {
             ErrorLogger.LogError("VerifyPassword", ex.Message);
             return false;
+        }
+    }
+
+    public bool UpdateAvatar(string email, byte[] avatarData)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentException("Email не может быть пустым.", nameof(email));
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+        {
+            try
+            {
+                connection.Open();
+
+                string query = @"
+                    UPDATE users
+                    SET avatar = @avatar
+                    WHERE email = @email";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@avatar", (object)avatarData ?? DBNull.Value);
+                command.Parameters.AddWithValue("@email", email);
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("UserRepository UpdateAvatar", ex.Message);
+                throw;
+            }
         }
     }
 }

@@ -123,5 +123,24 @@ namespace DDMLib
                 ErrorLogger.LogError("Logout", ex.Message);
             }
         }
+
+        public string UpdateUserAvatar(string userEmail, byte[] avatarData)
+        {
+            if (string.IsNullOrWhiteSpace(userEmail))
+            {
+                return "Email пользователя не указан.";
+            }
+
+            try
+            {
+                bool success = userRepository_.UpdateAvatar(userEmail, avatarData);
+                return success ? "Аватар обновлён" : "Не удалось обновить аватар.";
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("AccountService UpdateUserAvatar", ex.Message);
+                return "Ошибка при обновлении аватара: " + ex.Message;
+            }
+        }
     }
 }

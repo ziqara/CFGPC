@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
 using DDMLib.Configuration;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WebApplication1.Pages
 {
@@ -23,6 +26,14 @@ namespace WebApplication1.Pages
         public string Message { get; set; }
         public string PasswordMessage { get; set; }
         public List<ConfigurationDto> UserConfigurations { get; set; } = new List<ConfigurationDto>();
+
+        // --- Новые свойства для аватара ---
+        [BindProperty]
+        public IFormFile? AvatarFile { get; set; }
+
+        public string? AvatarBase64 { get; set; }
+        public string? AvatarMimeType { get; set; } // Добавлено для определения MIME типа
+        // -------------------------------------
 
         [BindProperty]
         [Required(ErrorMessage = "ФИО обязательно", AllowEmptyStrings = false)]
@@ -55,76 +66,33 @@ namespace WebApplication1.Pages
         [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
             ErrorLogger.LogError("UserProfileModel OnGet", "Started");
             if (!sessionManager_.IsUserAuthenticated())
             {
                 ErrorLogger.LogError("UserProfileModel OnGet", "User not authenticated, redirecting.");
-                return RedirectToPage("/Login");
+                RedirectToPage("/Login");
             }
 
             string userEmail = sessionManager_.GetUserEmailFromSession();
             if (string.IsNullOrEmpty(userEmail))
             {
                 ErrorLogger.LogError("UserProfileModel OnGet", "User email not found in session, redirecting.");
-                return RedirectToPage("/Login");
+                RedirectToPage("/Login");
             }
 
             LoadUserProfile(userEmail);
             LoadUserConfigurations(userEmail);
+
+            if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+            {
+                AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+            }
+
             ErrorLogger.LogError("UserProfileModel OnGet", "Profile and configurations loaded successfully.");
-            return Page();
         }
-
-        // Новый обработчик для удаления конфигурации
-        public IActionResult OnPostDeleteConfiguration(int configId)
-        {
-            ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Started for configId: {configId}");
-
-            if (!sessionManager_.IsUserAuthenticated())
-            {
-                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User not authenticated, redirecting.");
-                return RedirectToPage("/Login");
-            }
-
-            string userEmail = sessionManager_.GetUserEmailFromSession();
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User email not found in session, redirecting.");
-                return RedirectToPage("/Login");
-            }
-
-            if (configId <= 0)
-            {
-                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "Invalid configId provided.");
-                Message = "Неверный идентификатор конфигурации.";
-                LoadUserProfile(userEmail);
-                LoadUserConfigurations(userEmail);
-                return Page();
-            }
-
-            string result = configurationService_.DeleteUserConfiguration(userEmail, configId);
-
-            if (string.IsNullOrEmpty(result))
-            {
-                Message = "Конфигурация удалена.";
-                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Configuration {configId} deleted successfully.");
-            }
-            else
-            {
-                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Failed to delete configuration {configId}: {result}");
-                Message = result; // Отображаем сообщение об ошибке от сервиса
-            }
-
-            // Перезагружаем данные после удаления
-            LoadUserProfile(userEmail);
-            LoadUserConfigurations(userEmail);
-
-            // Возвращаемся на ту же страницу, чтобы увидеть обновлённый список и сообщение
-            return Page();
-        }
-
 
         public IActionResult OnPostUpdateProfile()
         {
@@ -142,15 +110,16 @@ namespace WebApplication1.Pages
                 return RedirectToPage("/Login");
             }
 
+            // Удаляем проверки пароля из модели состояния при обновлении профиля
             ModelState.Remove(nameof(CurrentPassword));
             ModelState.Remove(nameof(NewPassword));
             ModelState.Remove(nameof(ConfirmPassword));
 
+            // Удаляем проверки телефон/адрес, если они пустые
             if (string.IsNullOrEmpty(Phone))
             {
                 ModelState.Remove("Phone");
             }
-
             if (string.IsNullOrEmpty(Address))
             {
                 ModelState.Remove("Address");
@@ -161,6 +130,13 @@ namespace WebApplication1.Pages
                 ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "ModelState is invalid.");
                 LoadUserProfile(userEmail);
                 LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
@@ -171,7 +147,17 @@ namespace WebApplication1.Pages
             {
                 Message = result;
                 ErrorLogger.LogError("UserProfileModel OnPostUpdateProfile", "Profile updated successfully.");
-                return RedirectToPage();
+                // Перезагружаем данные после обновления
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
+                return Page(); // Остаемся на странице, чтобы увидеть сообщение
             }
             else
             {
@@ -179,15 +165,118 @@ namespace WebApplication1.Pages
                 ModelState.AddModelError(string.Empty, result);
                 LoadUserProfile(userEmail);
                 LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
                 ViewData["ShowModal"] = "true";
                 return Page();
             }
         }
 
+        // --- Новый обработчик для загрузки аватара ---
+        public async Task<IActionResult> OnPostUploadAvatarAsync()
+        {
+            ErrorLogger.LogError("UserProfileModel OnPostUploadAvatarAsync", "Started");
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostUploadAvatarAsync", "User not authenticated, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            string userEmail = sessionManager_.GetUserEmailFromSession();
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostUploadAvatarAsync", "User email not found in session, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            if (AvatarFile == null || AvatarFile.Length == 0)
+            {
+                Message = "Файл аватара не выбран.";
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
+                return Page();
+            }
+
+            // Проверка типа файла (опционально, но рекомендуется)
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var fileExtension = Path.GetExtension(AvatarFile.FileName).ToLowerInvariant();
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                Message = "Недопустимый формат файла. Разрешены: JPG, JPEG, PNG, GIF.";
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
+                return Page();
+            }
+
+            // Проверка размера файла (например, не более 5 МБ)
+            if (AvatarFile.Length > 5 * 1024 * 1024)
+            {
+                Message = "Файл слишком большой. Максимальный размер 5 МБ.";
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
+                return Page();
+            }
+
+            byte[] avatarBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                await AvatarFile.CopyToAsync(memoryStream);
+                avatarBytes = memoryStream.ToArray();
+            }
+
+            // Вызов сервиса для обновления аватара
+            string result = accountService_.UpdateUserAvatar(userEmail, avatarBytes);
+
+            if (result == "Аватар обновлён")
+            {
+                Message = result;
+                ErrorLogger.LogError("UserProfileModel OnPostUploadAvatarAsync", "Avatar updated successfully.");
+            }
+            else
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostUploadAvatarAsync", $"Avatar update failed: {result}");
+                Message = result; // Отображаем сообщение об ошибке от сервиса
+            }
+
+            // Перезагружаем данные после обновления аватара
+            LoadUserProfile(userEmail);
+            LoadUserConfigurations(userEmail);
+            // --- Установка Base64 для аватара ---
+            if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+            {
+                AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+            }
+            // -------------------------------------
+            return Page();
+        }
+    // -------------------------------------------
+
         public IActionResult OnPostChangePassword()
         {
             ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "Started");
-
             if (!sessionManager_.IsUserAuthenticated())
             {
                 ErrorLogger.LogError("UserProfileModel OnPostChangePassword", "User not authenticated, redirecting.");
@@ -206,6 +295,7 @@ namespace WebApplication1.Pages
             PasswordMessage = string.Empty;
             Message = string.Empty;
 
+            // Удаляем поля профиля из ModelState при смене пароля
             ModelState.Remove(nameof(FullName));
             ModelState.Remove(nameof(Phone));
             ModelState.Remove(nameof(Address));
@@ -225,6 +315,13 @@ namespace WebApplication1.Pages
                 }
                 LoadUserProfile(userEmail);
                 LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
                 return Page();
             }
 
@@ -249,8 +346,75 @@ namespace WebApplication1.Pages
 
             LoadUserProfile(userEmail);
             LoadUserConfigurations(userEmail);
+            // --- Установка Base64 для аватара ---
+            if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+            {
+                AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+            }
+            // -------------------------------------
             return Page();
         }
+
+        // --- Новый обработчик для удаления конфигурации ---
+        public IActionResult OnPostDeleteConfiguration(int configId)
+        {
+            ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Started for configId: {configId}");
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User not authenticated, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            string userEmail = sessionManager_.GetUserEmailFromSession();
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User email not found in session, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            if (configId <= 0)
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "Invalid configId provided.");
+                Message = "Неверный идентификатор конфигурации.";
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                // --- Установка Base64 для аватара ---
+                if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+                {
+                    AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                    AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+                }
+                // -------------------------------------
+                return Page();
+            }
+
+            string result = configurationService_.DeleteUserConfiguration(userEmail, configId);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                Message = "Конфигурация удалена.";
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Configuration {configId} deleted successfully.");
+            }
+            else
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Failed to delete configuration {configId}: {result}");
+                Message = result; // Отображаем сообщение об ошибке от сервиса
+            }
+
+            // Перезагружаем данные после удаления
+            LoadUserProfile(userEmail);
+            LoadUserConfigurations(userEmail);
+            // --- Установка Base64 для аватара ---
+            if (UserProfile?.Avatar != null && UserProfile.Avatar.Length > 0)
+            {
+                AvatarMimeType = GetMimeType(UserProfile.Avatar);
+                AvatarBase64 = Convert.ToBase64String(UserProfile.Avatar);
+            }
+            // -------------------------------------
+            return Page(); // Возвращаемся на ту же страницу, чтобы увидеть обновлённый список и сообщение
+        }
+        // -------------------------------------------
 
         public IActionResult OnPostLogout()
         {
@@ -288,10 +452,20 @@ namespace WebApplication1.Pages
             catch (Exception ex)
             {
                 ErrorLogger.LogError("UserProfileModel LoadUserConfigurations", ex.Message);
-                // Можно добавить сообщение об ошибке в ModelState или в переменную для отображения
-                // ModelState.AddModelError(string.Empty, "Не удалось загрузить конфигурации: " + ex.Message);
                 UserConfigurations = new List<ConfigurationDto>(); // В случае ошибки возвращаем пустой список
             }
+        }
+
+        // Метод для определения MIME типа по байтам изображения
+        private string GetMimeType(byte[] imageBytes)
+        {
+            if (imageBytes.Length < 4) return "image/png"; // По умолчанию
+
+            if (imageBytes[0] == 0xFF && imageBytes[1] == 0xD8) return "image/jpeg";
+            if (imageBytes[0] == 0x89 && imageBytes[1] == 0x50 && imageBytes[2] == 0x4E && imageBytes[3] == 0x47) return "image/png";
+            if (imageBytes[0] == 0x47 && imageBytes[1] == 0x49 && imageBytes[2] == 0x46) return "image/gif";
+
+            return "image/png"; // По умолчанию
         }
     }
 }

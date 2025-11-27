@@ -283,3 +283,183 @@
 2025-11-27 11:00:54 | UserProfileModel OnGet | Profile and configurations loaded successfully.
 2025-11-27 19:46:07 | UserProfileModel OnGet | Started
 2025-11-27 19:46:07 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 19:49:12 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-27 19:49:12 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-27 19:50:43 | UserProfileModel OnGet | Started
+2025-11-27 19:50:43 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 19:50:47 | UserProfileModel OnGet | Started
+2025-11-27 19:50:47 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 19:50:49 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-27 19:50:49 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-27 19:50:56 | UserProfileModel OnGet | Started
+2025-11-27 19:50:56 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:18:09 | UserProfileModel OnGet | Started
+2025-11-27 20:18:09 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:18:11 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-27 20:18:11 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-27 20:18:18 | UserProfileModel OnGet | Started
+2025-11-27 20:18:18 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 20:18:18 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 20:18:18 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 20:18:18 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:19:28 | UserProfileModel OnGet | Started
+2025-11-27 20:19:28 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:19:43 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:19:43 | UserRepository UpdateAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:19:43 | AccountService UpdateUserAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:19:43 | UserProfileModel OnPostUploadAvatarAsync | Avatar update failed: Ошибка при обновлении аватара: Data too long for column 'avatar' at row 1
+2025-11-27 20:19:49 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:19:54 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:19:54 | UserRepository UpdateAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:19:54 | AccountService UpdateUserAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:19:54 | UserProfileModel OnPostUploadAvatarAsync | Avatar update failed: Ошибка при обновлении аватара: Data too long for column 'avatar' at row 1
+2025-11-27 20:20:01 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:20:01 | UserRepository UpdateAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:20:01 | AccountService UpdateUserAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:20:01 | UserProfileModel OnPostUploadAvatarAsync | Avatar update failed: Ошибка при обновлении аватара: Data too long for column 'avatar' at row 1
+2025-11-27 20:20:07 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:20:07 | UserRepository UpdateAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:20:07 | AccountService UpdateUserAvatar | Data too long for column 'avatar' at row 1
+2025-11-27 20:20:07 | UserProfileModel OnPostUploadAvatarAsync | Avatar update failed: Ошибка при обновлении аватара: Data too long for column 'avatar' at row 1
+2025-11-27 20:21:29 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:21:29 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:21:41 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:21:42 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:22:02 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:22:02 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:26:10 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:26:10 | UserProfileModel OnPostUploadAvatarAsync | User not authenticated, redirecting.
+2025-11-27 20:26:19 | UserProfileModel OnGet | Started
+2025-11-27 20:26:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:27:03 | UserProfileModel OnGet | Started
+2025-11-27 20:27:03 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 20:27:03 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 20:27:03 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 20:27:03 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:27:11 | UserProfileModel OnGet | Started
+2025-11-27 20:27:11 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:33:48 | UserProfileModel OnGet | Started
+2025-11-27 20:33:48 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 20:33:48 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 20:33:48 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 20:33:48 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:33:57 | UserProfileModel OnGet | Started
+2025-11-27 20:33:57 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:34:07 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:34:07 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:34:11 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:34:11 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:55:09 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:55:09 | UserProfileModel OnPostUploadAvatarAsync | User not authenticated, redirecting.
+2025-11-27 20:55:29 | UserProfileModel OnGet | Started
+2025-11-27 20:55:29 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:55:40 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:55:40 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:56:42 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 20:56:42 | UserProfileModel OnPostUpdateProfile | ModelState is invalid.
+2025-11-27 20:56:45 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 20:56:45 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 20:56:51 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 20:56:51 | UserProfileModel OnPostUpdateProfile | ModelState is invalid.
+2025-11-27 20:57:47 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 20:57:47 | UserProfileModel OnPostUpdateProfile | User not authenticated, redirecting.
+2025-11-27 20:57:52 | UserProfileModel OnGet | Started
+2025-11-27 20:57:52 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:57:57 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:57:57 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:58:13 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:58:13 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:58:17 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:58:17 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:58:54 | UserProfileModel OnGet | Started
+2025-11-27 20:58:54 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 20:58:55 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:58:59 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:58:59 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 20:58:59 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:59:10 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 20:59:10 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:00:29 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:00:29 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:02:12 | UserProfileModel OnGet | Started
+2025-11-27 21:02:12 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:02:16 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:02:16 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:02:22 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:02:22 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:17:10 | UserProfileModel OnGet | Started
+2025-11-27 21:17:10 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:17:17 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:17:17 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:19:52 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:19:52 | UserProfileModel OnPostUploadAvatarAsync | User not authenticated, redirecting.
+2025-11-27 21:19:58 | UserProfileModel OnGet | Started
+2025-11-27 21:19:58 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:22:35 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 21:22:35 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 21:23:12 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 21:23:12 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 21:23:23 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 21:23:23 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 21:33:53 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 21:33:53 | UserProfileModel OnPostUpdateProfile | User not authenticated, redirecting.
+2025-11-27 21:34:00 | UserProfileModel OnGet | Started
+2025-11-27 21:34:00 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:47:15 | UserProfileModel OnGet | Started
+2025-11-27 21:47:15 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:47:21 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:47:21 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:52:08 | UserProfileModel OnGet | Started
+2025-11-27 21:52:08 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:52:20 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:52:20 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:54:25 | UserProfileModel OnGet | Started
+2025-11-27 21:54:25 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:54:59 | UserProfileModel OnGet | Started
+2025-11-27 21:54:59 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:56:30 | UserProfileModel OnGet | Started
+2025-11-27 21:56:30 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 21:56:30 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 21:56:30 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 21:56:30 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:56:40 | UserProfileModel OnGet | Started
+2025-11-27 21:56:40 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:56:41 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:56:45 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 21:56:45 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 21:56:49 | UserProfileModel OnGet | Started
+2025-11-27 21:56:49 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 21:56:51 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-27 21:56:51 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-27 22:03:42 | UserProfileModel OnGet | Started
+2025-11-27 22:03:42 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:03:45 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:03:45 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:03:52 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 22:03:52 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 22:03:56 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:03:56 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:01 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:01 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:09 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:09 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:11 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:11 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:14 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:14 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:18 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:18 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:04:20 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:04:20 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:05:15 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:05:15 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:05:18 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:05:18 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:05:21 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:05:21 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:05:23 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:05:23 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:06:57 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:06:57 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:07:03 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:07:03 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.

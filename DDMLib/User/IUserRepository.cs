@@ -7,5 +7,6 @@
         string UpdateProfile(User user);
         bool UpdatePasswordHash(string email, string newPassword);
         bool VerifyPassword(User user, string password);
+        bool UpdateAvatar(string email, byte[] avatarData);
     }
 }
