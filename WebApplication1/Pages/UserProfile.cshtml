@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Профиль пользователя";
 }
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -140,7 +139,6 @@
                 box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
                 outline: none;
             }
-
         /* Стили для карточек конфигураций */
         .config-card {
             background: white;
@@ -193,7 +191,6 @@
             line-height: 1.5;
             margin-bottom: 0;
         }
-
         /* Единый стиль для статуса */
         .config-status-badge {
             padding: 0.25rem 0.5rem;
@@ -235,7 +232,6 @@
                 </h1>
             </div>
         </div>
-
         <div class="row justify-content-center">
             <div class="col-lg-10 col-xl-8">
                 <div class="profile-card">
@@ -247,7 +243,6 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
                             </div>
                         }
-
                         @if (!string.IsNullOrEmpty(Model.PasswordMessage))
                         {
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -255,7 +250,6 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
                             </div>
                         }
-
                         @if (!ViewContext.ModelState.IsValid && ViewContext.ModelState[string.Empty] != null && ViewContext.ModelState[string.Empty].Errors.Count > 0)
                         {
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -270,7 +264,6 @@
                             </div>
                         }
                     </div>
-
                     @if (Model.UserProfile == null)
                     {
                         <div class="alert alert-warning text-center">
@@ -296,7 +289,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -329,7 +321,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -347,9 +338,7 @@
                                 </div>
                             </div>
                         </div>
-
                         <hr class="my-4" />
-
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
                             <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-4">
                                 <i class="fas fa-home me-2"></i>На главную
@@ -370,7 +359,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Новый раздел: Конфигурации пользователя -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10 col-xl-8">
@@ -422,7 +410,6 @@
                                             <p class="config-description">@configDto.Configuration.Description</p>
                                         </div>
                                     </div>
-
                                     <!-- Модальное окно для каждой конфигурации -->
                                     <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -490,6 +477,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer bg-light">
+                                                    <!-- Форма для удаления -->
+                                                    <form method="post" class="d-inline">
+                                                        <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
+                                                        <button type="submit" class="btn btn-outline-danger" asp-page-handler="DeleteConfiguration" onclick="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
+                                                            <i class="fas fa-trash me-2"></i>Удалить
+                                                        </button>
+                                                    </form>
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                                 </div>
                                             </div>
@@ -511,7 +505,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
@@ -522,7 +515,6 @@
                 <form method="post" id="editProfileForm">
                     <div class="modal-body">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -532,7 +524,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -560,7 +551,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -571,19 +561,16 @@
                 <form method="post" id="changePasswordForm">
                     <div class="modal-body">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
                         <div class="mb-3">
                             <label asp-for="CurrentPassword" class="form-label fw-bold">Текущий пароль</label>
                             <input asp-for="CurrentPassword" type="password" class="form-control" />
                             <span asp-validation-for="CurrentPassword" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="NewPassword" class="form-label fw-bold">Новый пароль</label>
                             <input asp-for="NewPassword" type="password" class="form-control" />
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="ConfirmPassword" class="form-label fw-bold">Повторите новый пароль</label>
                             <input asp-for="ConfirmPassword" type="password" class="form-control" />
@@ -600,7 +587,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
@@ -608,10 +594,10 @@
             document.addEventListener('DOMContentLoaded', function () {
             @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
             {
-                <text>
-                            var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                            modal.show();
-                </text>
+                    <text>
+                                var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                                modal.show();
+                    </text>
             }
                         });
         </script>
