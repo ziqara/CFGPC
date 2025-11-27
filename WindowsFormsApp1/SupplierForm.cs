@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
     public partial class SupplierForm : Form
     {
         private readonly SupplierService service_;
+        private List<Supplier> allSuppliers_ = new List<Supplier>();
 
         public SupplierForm()
         {
@@ -253,6 +254,72 @@ namespace WindowsFormsApp1
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        private void txtSearchName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbxPhone_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbxAddres_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FilterAndSearchSuppliers()
+        {
+            if (allSuppliers_ == null || allSuppliers_.Count == 0)
+            {
+                supplierDataTable.DataSource = null;
+                return;
+            }
+
+            // если ни поиска, ни фильтров — показываем всех
+            if (IsNoFilterAndSearch())
+            {
+                ShowSuppliers(allSuppliers_);
+                return;
+            }
+
+            string searchText = txtSearchName.Text?.Trim() ?? string.Empty;
+            bool requirePhone = cbxPhone.Checked;
+            bool requireAddress = cbxAddres.Checked;
+
+            List<Supplier> result = new List<Supplier>();
+
+            foreach (Supplier s in allSuppliers_)
+            {
+                // поиск по названию (без учёта регистра)
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    if (string.IsNullOrEmpty(s.Name) ||
+                        s.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        continue;
+                    }
+                }
+
+                // фильтр по наличию телефона
+                if (requirePhone && string.IsNullOrWhiteSpace(s.Phone))
+                {
+                    continue;
+                }
+
+                // фильтр по наличию адреса
+                if (requireAddress && string.IsNullOrWhiteSpace(s.Address))
+                {
+                    continue;
+                }
+
+                result.Add(s);
+            }
+
+            ShowSuppliers(result);
         }
     }
 }

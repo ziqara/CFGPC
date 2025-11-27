@@ -68,6 +68,7 @@
             this.txtSearchName.Name = "txtSearchName";
             this.txtSearchName.Size = new System.Drawing.Size(186, 22);
             this.txtSearchName.TabIndex = 2;
+            this.txtSearchName.TextChanged += new System.EventHandler(this.txtSearchName_TextChanged);
             // 
             // label1
             // 
@@ -113,6 +114,7 @@
             this.cbxAddres.TabIndex = 6;
             this.cbxAddres.Text = "Адрес";
             this.cbxAddres.UseVisualStyleBackColor = true;
+            this.cbxAddres.CheckedChanged += new System.EventHandler(this.cbxAddres_CheckedChanged);
             // 
             // cbxPhone
             // 
@@ -124,6 +126,7 @@
             this.cbxPhone.TabIndex = 7;
             this.cbxPhone.Text = "Телефон";
             this.cbxPhone.UseVisualStyleBackColor = true;
+            this.cbxPhone.CheckedChanged += new System.EventHandler(this.cbxPhone_CheckedChanged);
             // 
             // SupplierForm
             // 
