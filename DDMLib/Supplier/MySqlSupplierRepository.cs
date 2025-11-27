@@ -37,7 +37,27 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool DeleteByInn(int inn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = "DELETE FROM suppliers WHERE inn = @inn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    int affected = cmd.ExecuteNonQuery();
+                    return affected > 0;   // true — хотя бы одна строка удалена
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool existsByEmail(string email)
