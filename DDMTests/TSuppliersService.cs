@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DDMLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -497,5 +494,99 @@ namespace DDMTests
 
             repo.Verify(r => r.UpdateSupplier(supplier), Times.Once);
         }
+
+        [TestMethod]
+        public void DeleteSupplier_Success_ReturnsEmptyString()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(123456789)
+            {
+                Name = "ООО Альфа",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            // Нет активных заказов = можно удалять
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(false);
+
+            // Удаление прошло успешно
+            repo.Setup(r => r.DeleteByInn(supplier.Inn)).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual(string.Empty, result);
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
+            repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
+        }
+
+        [TestMethod]
+        public void DeleteSupplier_HasRelatedRecords_ReturnsErrorMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(987654321)
+            {
+                Name = "ООО Связанный",
+                ContactEmail = "alpha@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Примерная, д. 1"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            // Есть незавершённые заказы = удалить нельзя
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(true);
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual("Невозможно удалить: есть связанные незавершённые заказы", result);
+
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
+            repo.Verify(r => r.DeleteByInn(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void DeleteSupplier_DatabaseError_ReturnsConnectionMessage()
+        {
+            // Arrange
+            Supplier supplier = new Supplier(444444444)
+            {
+                Name = "ООО ОшибкаБД",
+                ContactEmail = "err@example.com",
+                Phone = "79991234567",
+                Address = "г. Москва, ул. Ошибочная, д. 10"
+            };
+
+            Mock<ISupplierRepository> repo = new Mock<ISupplierRepository>();
+
+            repo.Setup(r => r.HasActiveOrders(supplier.Inn)).Returns(false);
+
+            // Симулируем любую SQL/connection ошибку
+            repo.Setup(r => r.DeleteByInn(supplier.Inn))
+                .Throws(new Exception("Timeout expired"));
+
+            SupplierService service = new SupplierService(repo.Object);
+
+            // Act
+            string result = service.DeleteSupplier(supplier.Inn);
+
+            // Assert
+            Assert.AreEqual("Вероятно, проблемы в соединении с БД: Timeout expired", result);
+
+            repo.Verify(r => r.HasActiveOrders(supplier.Inn), Times.Once);
+            repo.Verify(r => r.DeleteByInn(supplier.Inn), Times.Once);
+        }
+
+
     }
 }

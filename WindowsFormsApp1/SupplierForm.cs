@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
     public partial class SupplierForm : Form
     {
         private readonly SupplierService service_;
+        private List<Supplier> allSuppliers_ = new List<Supplier>();
 
         public SupplierForm()
         {
@@ -35,9 +36,11 @@ namespace WindowsFormsApp1
         {
             try
             {
+                // грузим всех из сервиса
                 List<Supplier> suppliers = service_.GetAllSuppliers();
+                allSuppliers_ = suppliers ?? new List<Supplier>();
 
-                if (suppliers == null || suppliers.Count == 0)
+                if (allSuppliers_.Count == 0)
                 {
                     supplierDataTable.Visible = false;
                     MessageBox.Show("Поставщиков пока нет", "Информация",
@@ -45,8 +48,8 @@ namespace WindowsFormsApp1
                     return;
                 }
 
-                supplierDataTable.DataSource = suppliers;
                 supplierDataTable.Visible = true;
+                ShowSuppliers(allSuppliers_);
             }
             catch (Exception ex)
             {
@@ -179,6 +182,140 @@ namespace WindowsFormsApp1
                     LoadSuppliers();
                 }
             }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // Проверяем, что есть выбранная строка
+            if (supplierDataTable.CurrentRow == null || supplierDataTable.CurrentRow.DataBoundItem == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите поставщика в списке.",
+                    "Удаление поставщика",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            // Берём объект Supplier из выбранной строки
+            Supplier supplier = supplierDataTable.CurrentRow.DataBoundItem as Supplier;
+            if (supplier == null)
+            {
+                MessageBox.Show(
+                    "Не удалось получить данные поставщика из таблицы.",
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            int inn = supplier.Inn;
+            string name = supplier.Name;
+
+            // Диалог подтверждения
+            DialogResult confirm = MessageBox.Show(
+                $"Удалить поставщика \"{name}\"?\nДействие нельзя отменить.",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string result = service_.DeleteSupplier(inn);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    // Успех
+                    MessageBox.Show(
+                        "Поставщик удалён.",
+                        "Успех",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    LoadSuppliers();
+                }
+                else
+                {
+                    // Бизнес-ошибка (есть связанные записи, запись не найдена, проблемы с БД и т.п.)
+                    MessageBox.Show(
+                        result,
+                        "Ошибка удаления",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                // На всякий случай, если что-то упало вне логики DeleteSupplier
+                MessageBox.Show(
+                    "Не удалось выполнить удаление. Вероятно, проблемы в соединении с БД: " + ex.Message,
+                    "Критическая ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtSearchName_TextChanged(object sender, EventArgs e)
+        {
+            FilterAndSearchSuppliers();
+        }
+
+        private void cbxPhone_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterAndSearchSuppliers();
+        }
+
+        private void cbxAddres_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterAndSearchSuppliers();
+        }
+
+        private void FilterAndSearchSuppliers()
+        {
+            if (allSuppliers_ == null)
+                return;
+
+            string searchText = txtSearchName.Text?.Trim() ?? string.Empty;
+            bool requirePhone = cbxPhone.Checked;
+            bool requireAddress = cbxAddres.Checked;
+
+            // начинаем всегда со всего списка
+            IEnumerable<Supplier> query = allSuppliers_;
+
+            // поиск по названию
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(s =>
+                    !string.IsNullOrEmpty(s.Name) &&
+                    s.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+
+            // только с телефоном
+            if (requirePhone)
+            {
+                query = query.Where(s => !string.IsNullOrWhiteSpace(s.Phone));
+            }
+
+            // только с адресом
+            if (requireAddress)
+            {
+                query = query.Where(s => !string.IsNullOrWhiteSpace(s.Address));
+            }
+
+            // финальный список
+            List<Supplier> result = query.ToList();
+            ShowSuppliers(result);
+        }
+
+        private void ShowSuppliers(List<Supplier> suppliers)
+        {
+
+            supplierDataTable.DataSource = null;
+            supplierDataTable.AutoGenerateColumns = true;
+            supplierDataTable.DataSource = suppliers;
         }
     }
 }

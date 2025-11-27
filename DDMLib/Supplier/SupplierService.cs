@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace DDMLib
 {
@@ -77,6 +78,42 @@ namespace DDMLib
             }
 
             return string.Empty;
+        }
+
+        public string DeleteSupplier(int inn)
+        {
+            try
+            {
+                if (repo_.HasActiveOrders(inn))
+                {
+                    return "Невозможно удалить: есть связанные незавершённые заказы";
+                }
+
+                bool ok = repo_.DeleteByInn(inn);
+
+                if (ok)
+                {
+                    return string.Empty;
+                }
+
+                return "Запись не найдена";
+            }
+            catch (MySqlException ex)
+            {
+                string msg = ex.Message ?? string.Empty;
+
+                if (msg.IndexOf("foreign key", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    msg.IndexOf("constraint fails", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return "Невозможно удалить: есть связанные записи";
+                }
+
+                return "Вероятно, проблемы в соединении с БД: " + msg;
+            }
+            catch (Exception ex)
+            {
+                return "Вероятно, проблемы в соединении с БД: " + ex.Message;
+            }
         }
     }
 }

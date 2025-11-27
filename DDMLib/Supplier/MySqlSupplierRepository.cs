@@ -35,6 +35,31 @@ public class MySqlSupplierRepository : ISupplierRepository
         }
     }
 
+    public bool DeleteByInn(int inn)
+    {
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = "DELETE FROM suppliers WHERE inn = @inn;";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    int affected = cmd.ExecuteNonQuery();
+                    return affected > 0;   // true — хотя бы одна строка удалена
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
     public bool existsByEmail(string email)
     {
         try
@@ -163,6 +188,38 @@ public class MySqlSupplierRepository : ISupplierRepository
                     object scalar = cmd.ExecuteScalar();
                     long count = Convert.ToInt64(scalar);
                     return count > 0;
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public bool HasActiveOrders(int inn)
+    {
+        try
+        {
+            using (var conn = new MySqlConnection(Config.ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+                    SELECT COUNT(*)
+                    FROM orders o
+                    JOIN configurations cfg   ON o.configId = cfg.configId
+                    JOIN config_components cc ON cfg.configId = cc.configId
+                    JOIN components c         ON cc.componentId = c.componentId
+                    WHERE c.supplierInn = @inn
+                      AND o.status NOT IN ('delivered', 'cancelled');";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0; // true = есть активные заказы → удалять НЕЛЬЗЯ
                 }
             }
         }
