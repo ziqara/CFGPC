@@ -199,7 +199,35 @@ public class MySqlSupplierRepository : ISupplierRepository
 
     public bool HasActiveOrders(int inn)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                const string sql = @"SELECT COUNT(*)
+                                    FROM orders o
+                                    JOIN configurations    cfg ON o.config_id  = cfg.config_id
+                                    JOIN config_components cc  ON cfg.config_id = cc.config_id
+                                    JOIN components        c   ON cc.component_id = c.component_id
+                                    WHERE c.supplier_id = @inn
+                                    AND o.status IN ('pending', 'processing', 'assembled', 'shipped');";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@inn", inn);
+
+                    object scalar = cmd.ExecuteScalar();
+                    long count = Convert.ToInt64(scalar);
+
+                    return count > 0; // true — есть активные заказы, нельзя удалять
+                }
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public List<Supplier> ReadAllSuppliers()
