@@ -107,32 +107,32 @@ namespace WindowsFormsApp1
 
         private void btnOrders_Click_2(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnConfig_Click_1(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnComponent_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnClients_Click_1(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnWarrious_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnReviews_Click_1(object sender, EventArgs e)
         {
-            ActivateButton(sender);
+            OpenChildForm(new MainForm(), sender);
         }
 
         private void btnCloseChildForm_Click(object sender, EventArgs e)
