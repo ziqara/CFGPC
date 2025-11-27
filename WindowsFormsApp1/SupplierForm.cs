@@ -180,5 +180,79 @@ namespace WindowsFormsApp1
                 }
             }
         }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // Проверяем, что есть выбранная строка
+            if (supplierDataTable.CurrentRow == null || supplierDataTable.CurrentRow.DataBoundItem == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите поставщика в списке.",
+                    "Удаление поставщика",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            // Берём объект Supplier из выбранной строки
+            Supplier supplier = supplierDataTable.CurrentRow.DataBoundItem as Supplier;
+            if (supplier == null)
+            {
+                MessageBox.Show(
+                    "Не удалось получить данные поставщика из таблицы.",
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            int inn = supplier.Inn;
+            string name = supplier.Name;
+
+            // Диалог подтверждения
+            DialogResult confirm = MessageBox.Show(
+                $"Удалить поставщика \"{name}\"?\nДействие нельзя отменить.",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string result = service_.DeleteSupplier(inn);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    // Успех
+                    MessageBox.Show(
+                        "Поставщик удалён.",
+                        "Успех",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    LoadSuppliers();
+                }
+                else
+                {
+                    // Бизнес-ошибка (есть связанные записи, запись не найдена, проблемы с БД и т.п.)
+                    MessageBox.Show(
+                        result,
+                        "Ошибка удаления",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                // На всякий случай, если что-то упало вне логики DeleteSupplier
+                MessageBox.Show(
+                    "Не удалось выполнить удаление. Вероятно, проблемы в соединении с БД: " + ex.Message,
+                    "Критическая ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
     }
 }

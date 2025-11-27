@@ -201,26 +201,25 @@ public class MySqlSupplierRepository : ISupplierRepository
     {
         try
         {
-            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            using (var conn = new MySqlConnection(Config.ConnectionString))
             {
-                connection.Open();
+                conn.Open();
 
-                const string sql = @"SELECT COUNT(*)
-                                    FROM orders o
-                                    JOIN configurations    cfg ON o.config_id  = cfg.config_id
-                                    JOIN config_components cc  ON cfg.config_id = cc.config_id
-                                    JOIN components        c   ON cc.component_id = c.component_id
-                                    WHERE c.supplier_id = @inn
-                                    AND o.status IN ('pending', 'processing', 'assembled', 'shipped');";
+                string sql = @"
+                    SELECT COUNT(*)
+                    FROM orders o
+                    JOIN configurations cfg   ON o.configId = cfg.configId
+                    JOIN config_components cc ON cfg.configId = cc.configId
+                    JOIN components c         ON cc.componentId = c.componentId
+                    WHERE c.supplierInn = @inn
+                      AND o.status NOT IN ('delivered', 'cancelled');";
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                using (var cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@inn", inn);
 
-                    object scalar = cmd.ExecuteScalar();
-                    long count = Convert.ToInt64(scalar);
-
-                    return count > 0; // true — есть активные заказы, нельзя удалять
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0; // true = есть активные заказы → удалять НЕЛЬЗЯ
                 }
             }
         }
