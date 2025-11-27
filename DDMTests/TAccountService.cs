@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DDMLib;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -17,50 +19,84 @@ namespace DDMTests
         public void TestGetUserProfile_WithValidEmail_ReturnsUserProfile()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
-            Mock<UserService> userServiceMock = new Mock<UserService>();
 
-            AccountService accountService = new AccountService(
-                userRepoMock.Object,
-                sessionManagerMock.Object,
-                userServiceMock.Object);
+            // Создаем SessionManager с настроенной авторизацией
+            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var httpContext = new DefaultHttpContext();
+
+            // Настраиваем куки для сессии
+            string sessionId = "test-session-id";
+            httpContext.Request.Cookies = new RequestCookieCollection(new Dictionary<string, string>
+    {
+        { "SessionId", sessionId }
+    });
+
+            httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
+
+            var sessionManager = new SessionManager(httpContextAccessorMock.Object);
+
+            // Добавляем тестовую сессию через reflection
+            var sessionsField = typeof(SessionManager).GetField("sessions_",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+
+            var sessions = sessionsField.GetValue(null) as ConcurrentDictionary<string, SessionData>;
+            if (sessions == null)
+            {
+                sessions = new ConcurrentDictionary<string, SessionData>();
+                sessionsField.SetValue(null, sessions);
+            }
 
             var testUsers = new[]
             {
-                new User
-                {
-                    Email = "user1@example.com",
-                    FullName = "Иван Петров",
-                    Phone = "+79991234567",
-                    Address = "г. Москва, ул. Арбат, 1"
-                },
-                new User
-                {
-                    Email = "user2@example.com",
-                    FullName = "Петр Сидоров",
-                    Phone = "+79997654321",
-                    Address = "г. Санкт-Петербург, Невский пр., 10"
-                },
-                new User
-                {
-                    Email = "user3@example.com",
-                    FullName = "Мария Иванова",
-                    Phone = "+79995554433",
-                    Address = "г. Казань, ул. Баумана, 5"
-                }
-            };
+        new User
+        {
+            Email = "user1@example.com",
+            FullName = "Иван Петров",
+            Phone = "+79991234567",
+            Address = "г. Москва, ул. Арбат, 1"
+        },
+        new User
+        {
+            Email = "user2@example.com",
+            FullName = "Петр Сидоров",
+            Phone = "+79997654321",
+            Address = "г. Санкт-Петербург, Невский пр., 10"
+        },
+        new User
+        {
+            Email = "user3@example.com",
+            FullName = "Мария Иванова",
+            Phone = "+79995554433",
+            Address = "г. Казань, ул. Баумана, 5"
+        }
+    };
 
+            // Настраиваем репозиторий
             foreach (var user in testUsers)
             {
                 userRepoMock.Setup(repo => repo.FindByEmail(user.Email)).Returns(user);
             }
 
-            userRepoMock.Setup(repo => repo.FindByEmail(It.Is<string>(e =>
-                !testUsers.Any(u => u.Email == e))))
-                        .Returns((User)null);
+            // Создаем реальный UserService
+            var userService = new UserService(userRepoMock.Object, sessionManager);
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManager,
+                userService);
 
             foreach (var expectedUser in testUsers)
             {
+                // Устанавливаем правильную сессию для текущего пользователя
+                sessions[sessionId] = new SessionData
+                {
+                    SessionId = sessionId,
+                    Email = expectedUser.Email,
+                    UserName = expectedUser.FullName,
+                    CreatedAt = DateTime.Now,
+                    ExpiresAt = DateTime.Now.AddHours(12)
+                };
+
                 User result = accountService.GetUserProfile(expectedUser.Email);
 
                 Assert.IsNotNull(result, $"Пользователь {expectedUser.Email} не должен быть null");
@@ -72,10 +108,64 @@ namespace DDMTests
                 userRepoMock.Verify(repo => repo.FindByEmail(expectedUser.Email), Times.Once,
                     $"Метод FindByEmail должен быть вызван один раз для {expectedUser.Email}");
             }
+        }
+
+        [TestMethod]
+        public void TestGetUserProfile_WithNonExistentEmail_ReturnsNull()
+        {
+            Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
+
+            // Создаем SessionManager с настроенной авторизацией
+            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var httpContext = new DefaultHttpContext();
+
+            string sessionId = "test-session-id";
+            httpContext.Request.Cookies = new RequestCookieCollection(new Dictionary<string, string>
+    {
+        { "SessionId", sessionId }
+    });
+
+            httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
+
+            var sessionManager = new SessionManager(httpContextAccessorMock.Object);
+
+            // Добавляем тестовую сессию через reflection
+            var sessionsField = typeof(SessionManager).GetField("sessions_",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+
+            var sessions = sessionsField.GetValue(null) as ConcurrentDictionary<string, SessionData>;
+            if (sessions == null)
+            {
+                sessions = new ConcurrentDictionary<string, SessionData>();
+                sessionsField.SetValue(null, sessions);
+            }
 
             string nonExistentEmail = "nonexistent@example.com";
-            User nonExistentResult = accountService.GetUserProfile(nonExistentEmail);
-            Assert.IsNull(nonExistentResult, "Для несуществующего email должен возвращаться null");
+
+            // Настраиваем сессию для несуществующего пользователя
+            sessions[sessionId] = new SessionData
+            {
+                SessionId = sessionId,
+                Email = nonExistentEmail, // email несуществующего пользователя
+                UserName = "Test User",
+                CreatedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddHours(12)
+            };
+
+            // Настраиваем репозиторий возвращать null для несуществующего email
+            userRepoMock.Setup(repo => repo.FindByEmail(nonExistentEmail)).Returns((User)null);
+
+            // Создаем реальный UserService
+            var userService = new UserService(userRepoMock.Object, sessionManager);
+
+            AccountService accountService = new AccountService(
+                userRepoMock.Object,
+                sessionManager,
+                userService);
+
+            User result = accountService.GetUserProfile(nonExistentEmail);
+
+            Assert.IsNull(result, "Для несуществующего email должен возвращаться null");
             userRepoMock.Verify(repo => repo.FindByEmail(nonExistentEmail), Times.Once);
         }
 
@@ -83,14 +173,53 @@ namespace DDMTests
         public void TestUpdateProfile_WithValidData_UpdatesProfileSuccessfully()
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
-            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            // Создаем реальные экземпляры SessionManager и UserService
+            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var httpContext = new DefaultHttpContext();
+
+            // Настраиваем сессию для авторизации
+            string sessionId = "test-session-id";
+            httpContext.Request.Cookies = new RequestCookieCollection(new Dictionary<string, string>
+    {
+        { "SessionId", sessionId }
+    });
+
+            httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
+
+            var sessionManager = new SessionManager(httpContextAccessorMock.Object);
+
+            // Добавляем тестовую сессию через reflection
+            var sessionsField = typeof(SessionManager).GetField("sessions_",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+
+            var sessions = sessionsField.GetValue(null) as ConcurrentDictionary<string, SessionData>;
+            if (sessions == null)
+            {
+                sessions = new ConcurrentDictionary<string, SessionData>();
+                sessionsField.SetValue(null, sessions);
+            }
+
+            string email = "user1@example.com";
+
+            // Создаем сессию для тестового пользователя
+            sessions[sessionId] = new SessionData
+            {
+                SessionId = sessionId,
+                Email = email,
+                UserName = "Иван Петров",
+                CreatedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddHours(12)
+            };
+
+            // Создаем реальный UserService
+            var userService = new UserService(userRepoMock.Object, sessionManager);
 
             AccountService accountService = new AccountService(
                 userRepoMock.Object,
-                sessionManagerMock.Object,
-                userServiceMock.Object);
-            string email = "user1@example.com";
+                sessionManager,
+                userService);
+
             string fullName = "Иван Петрович";
             string phone = "+79990000000";
             string address = "г. Санкт-Петербург, Невский пр., 10";
@@ -98,16 +227,19 @@ namespace DDMTests
             User existingUser = new User
             {
                 Email = email,
-                FullName = "Иван Петров", 
-                Phone = "+79991234567",   
-                Address = "г. Москва, ул. Арбат, 1" 
+                FullName = "Иван Петров",
+                Phone = "+79991234567",
+                Address = "г. Москва, ул. Арбат, 1"
             };
 
             userRepoMock.Setup(repo => repo.FindByEmail(email)).Returns(existingUser);
 
             User updatedUser = null;
+
+            // Изменяем возвращаемое значение на пустую строку или "Профиль обновлён"
             userRepoMock.Setup(repo => repo.UpdateProfile(It.IsAny<User>()))
-                        .Callback<User>(user => updatedUser = user);
+                        .Callback<User>(user => updatedUser = user)
+                        .Returns(string.Empty); // Пустая строка означает успех
 
             string result = accountService.UpdateProfile(email, fullName, phone, address);
 
@@ -186,20 +318,47 @@ namespace DDMTests
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
 
-            // Создаем мок SessionManager и настраиваем его
-            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>(Mock.Of<IHttpContextAccessor>());
-            sessionManagerMock.Setup(s => s.IsUserAuthenticated()).Returns(true);
-            sessionManagerMock.Setup(s => s.GetUserEmailFromSession()).Returns("user1@example.com");
+            // Создаем реальный SessionManager с настроенной сессией
+            var httpContext = new DefaultHttpContext();
 
-            // Создаем реальный UserService с моком SessionManager
-            var userService = new UserService(userRepoMock.Object, sessionManagerMock.Object);
+            // Создаем тестовую сессию
+            string sessionId = "test-session-id";
+            httpContext.Request.Cookies = new RequestCookieCollection(new Dictionary<string, string>
+            {
+                { "SessionId", sessionId }
+            });
+
+            var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+            var sessionManager = new SessionManager(httpContextAccessor);
+
+            // Добавляем тестовую сессию в статический словарь через reflection
+            var sessionsField = typeof(SessionManager).GetField("sessions_",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+
+            var sessions = sessionsField.GetValue(null) as ConcurrentDictionary<string, SessionData>;
+            if (sessions == null)
+            {
+                sessions = new ConcurrentDictionary<string, SessionData>();
+                sessionsField.SetValue(null, sessions);
+            }
+
+            string email = "user1@example.com";
+            sessions[sessionId] = new SessionData
+            {
+                SessionId = sessionId,
+                Email = email,
+                UserName = "Test User",
+                CreatedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddHours(12)
+            };
+
+            // Создаем реальный UserService
+            var userService = new UserService(userRepoMock.Object, sessionManager);
 
             AccountService accountService = new AccountService(
                 userRepoMock.Object,
-                sessionManagerMock.Object,
+                sessionManager,
                 userService);
-
-            string email = "user1@example.com";
 
             User existingUser = new User
             {
