@@ -14,7 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             padding-top: 20px;
             min-height: 100vh;
         }
@@ -24,8 +24,7 @@
         }
 
         .page-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
@@ -42,11 +41,11 @@
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             border-radius: 15px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid #e9ecef;
         }
 
         .avatar-container {
@@ -297,20 +296,6 @@
                 color: white;
             }
 
-        /* Стили для кнопки удаления */
-        .delete-config-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-
-        .config-card:hover .delete-config-btn {
-            opacity: 1;
-        }
-
         /* Стиль для имени файла */
         .file-name {
             font-size: 0.8rem;
@@ -487,7 +472,7 @@
             </div>
         </div>
 
-        <!-- Новый раздел: Конфигурации пользователя -->
+        <!-- Раздел: Конфигурации пользователя (как в первом файле) -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10 col-xl-8">
                 <div class="card shadow-lg border-0">
@@ -503,15 +488,8 @@
                                 @foreach (var configDto in Model.UserConfigurations)
                                 {
                                     <div class="col-md-6 mb-4">
-                                        <div class="config-card h-100">
-                                            <!-- Кнопка удаления -->
-                                            <form method="post" class="d-inline" asp-page-handler="DeleteConfiguration" onsubmit="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
-                                                <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
-                                                <button type="submit" class="btn btn-sm btn-outline-danger delete-config-btn" title="Удалить">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-
+                                        <!-- Добавлен data-bs-toggle и data-bs-target для открытия модального окна -->
+                                        <div class="config-card h-100" data-bs-toggle="modal" data-bs-target="#configModal-@configDto.Configuration.ConfigId">
                                             <h5 class="config-name">@configDto.Configuration.ConfigName</h5>
                                             <div class="config-meta">
                                                 <span><i class="fas fa-ruble-sign me-1"></i><strong>Цена:</strong> @configDto.Configuration.TotalPrice.ToString("F2") ₽</span>
@@ -528,7 +506,7 @@
                                                             "validated" => "validated",
                                                             "in_cart" => "in_cart",
                                                             "ordered" => "ordered",
-                                                            _ => "draft"
+                                                            _ => "draft" // Значение по умолчанию
                                                         };
                                                         string statusText = configDto.Configuration.Status switch
                                                         {
@@ -536,13 +514,92 @@
                                                             "validated" => "Проверена",
                                                             "in_cart" => "В корзине",
                                                             "ordered" => "Заказана",
-                                                            _ => "Неизвестный статус"
+                                                            _ => "Неизвестный статус" // Текст по умолчанию
                                                         };
                                                     }
                                                     <span class="config-status-badge @statusClass">@statusText</span>
                                                 </span>
                                             </div>
                                             <p class="config-description">@configDto.Configuration.Description</p>
+                                        </div>
+                                    </div>
+                                    <!-- Модальное окно для каждой конфигурации (как в первом файле) -->
+                                    <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content border-0 shadow">
+                                                <div class="modal-header bg-light">
+                                                    <h5 class="modal-title" id="configModalLabel-@configDto.Configuration.ConfigId">
+                                                        <i class="fas fa-microchip text-primary me-2"></i>
+                                                        @configDto.Configuration.ConfigName
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <strong>Цель:</strong> @configDto.Configuration.TargetUse
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <strong>Статус:</strong>
+                                                            <span class="config-status-badge @statusClass">@statusText</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <strong>Дата создания:</strong> @configDto.Configuration.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <strong>Всего компонентов:</strong> @configDto.Components.Count
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Описание:</strong>
+                                                            <p class="text-muted mb-0">@configDto.Configuration.Description</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Дополнительные опции:</strong>
+                                                            <p class="text-muted mb-0">@configDto.Configuration.OtherOptions</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <strong>Список компонентов:</strong>
+                                                            <ul class="list-group">
+                                                                @if (configDto.Components.Any())
+                                                                {
+                                                                    @foreach (var comp in configDto.Components)
+                                                                    {
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                                            <div class="ms-2 me-auto">
+                                                                                <div class="fw-bold">@comp.Name</div>
+                                                                                <small class="text-muted">Тип: @comp.Type | Бренд: @comp.Brand | Цена: @comp.Price ₽</small>
+                                                                            </div>
+                                                                            <span class="badge bg-secondary">@comp.Model</span>
+                                                                        </li>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li class="list-group-item text-center text-muted">Компоненты отсутствуют</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer bg-light">
+                                                    <!-- Форма для удаления -->
+                                                    <form method="post" class="d-inline">
+                                                        <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
+                                                        <button type="submit" class="btn btn-outline-danger" asp-page-handler="DeleteConfiguration" onclick="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
+                                                            <i class="fas fa-trash me-2"></i>Удалить
+                                                        </button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -662,8 +719,8 @@
             @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
             {
                 <text>
-                        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-                        modal.show();
+                            var modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                            modal.show();
                 </text>
             }
 

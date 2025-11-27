@@ -1,20 +1,144 @@
 ﻿@using DDMLib
 @inject SessionManager SessionManager
+@inject AccountService AccountService
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication1</title>
+    <title>@ViewData["Title"] - DDM</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApplication1.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e9ecef !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #495057 !important;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            margin: 0 2px;
+            padding: 0.5rem 1rem !important;
+        }
+
+            .nav-link:hover {
+                background: #f8f9fa;
+                color: var(--primary-color) !important;
+            }
+
+            .nav-link.active {
+                background: var(--primary-color);
+                color: white !important;
+            }
+
+        .user-name {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+            margin-right: 0.5rem;
+        }
+
+        .avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            margin-right: 0.5rem;
+            color: #6c757d;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background: var(--secondary-color);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 6px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--primary-color);
+                border-color: var(--primary-color);
+                color: white;
+                transform: translateY(-1px);
+            }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">WebApplication1</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <img src="~/resources/blacklogo.png" alt="DDM Logo" class="logo" />
+                    DDM
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,28 +146,44 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Index" ? "active" : "")" asp-area="" asp-page="/Index">
+                                <i class="fas fa-home me-1"></i>Главная
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
                         @if (SessionManager.IsUserAuthenticated())
                         {
+                            var userEmail = SessionManager.GetUserEmailFromSession();
+                            var userProfile = AccountService.GetUserProfile(userEmail);
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/UserProfile" title="Перейти в профиль">
-                                    <strong>@SessionManager.GetUserNameFromSession()</strong>
+                                    @if (userProfile?.Avatar != null && userProfile.Avatar.Length > 0)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(userProfile.Avatar)" alt="Аватар" class="user-avatar" />
+                                    }
+                                    else
+                                    {
+                                        <div class="avatar-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    }
+                                    <span class="user-name">@SessionManager.GetUserNameFromSession()</span>
                                 </a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Register">Регистрация</a>
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Register" ? "active" : "")" asp-area="" asp-page="/Register">
+                                    <i class="fas fa-user-plus me-1"></i>Регистрация
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Войти</a>
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Login" ? "active" : "")" asp-area="" asp-page="/Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Войти
+                                </a>
                             </li>
                         }
                     </ul>
@@ -51,17 +191,12 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - WebApplication1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

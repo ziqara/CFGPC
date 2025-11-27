@@ -463,3 +463,88 @@
 2025-11-27 22:06:57 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
 2025-11-27 22:07:03 | UserProfileModel OnPostUploadAvatarAsync | Started
 2025-11-27 22:07:03 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:26:37 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:40 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:41 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:42 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:43 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:43 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:45 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:46 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:50 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:51 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:51 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:26:56 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:32:59 | UserProfileModel OnGet | Started
+2025-11-27 22:32:59 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:38:33 | UserProfileModel OnGet | Started
+2025-11-27 22:38:33 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 22:38:33 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 22:38:33 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 22:38:33 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:38:44 | UserProfileModel OnGet | Started
+2025-11-27 22:38:44 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:38:51 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 7
+2025-11-27 22:38:51 | UserProfileModel OnPostDeleteConfiguration | Configuration 7 deleted successfully.
+2025-11-27 22:39:01 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:01 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:04 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:04 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:07 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:07 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:13 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:13 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:18 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:18 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:22 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:22 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:25 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:25 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:39:26 | UserProfileModel OnGet | Started
+2025-11-27 22:39:26 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:39:33 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:39:33 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:45:52 | UserProfileModel OnGet | Started
+2025-11-27 22:45:52 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:46:00 | UserProfileModel OnGet | Started
+2025-11-27 22:46:00 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:46:06 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:46:09 | UserProfileModel OnGet | Started
+2025-11-27 22:46:09 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:47:34 | UserProfileModel OnGet | Started
+2025-11-27 22:47:34 | UserProfileModel OnGet | User not authenticated, redirecting.
+2025-11-27 22:47:34 | UserProfileModel OnGet | User email not found in session, redirecting.
+2025-11-27 22:47:34 | UserProfileModel LoadUserConfigurations | User email cannot be null or empty. (Parameter 'userEmail')
+2025-11-27 22:47:34 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:47:43 | UserProfileModel OnGet | Started
+2025-11-27 22:47:43 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:47:54 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 22:47:54 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 22:48:03 | UserProfileModel OnPostUpdateProfile | Started
+2025-11-27 22:48:03 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2025-11-27 22:48:07 | UserProfileModel OnPostLogout | Logout initiated.
+2025-11-27 22:48:07 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2025-11-27 22:49:25 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:27 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:28 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:29 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:29 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:29 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:31 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:32 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:33 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:34 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:35 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:35 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:36 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:37 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2025-11-27 22:49:39 | UserProfileModel OnGet | Started
+2025-11-27 22:49:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2025-11-27 22:49:52 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:49:52 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:49:55 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:49:55 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 22:51:31 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 22:51:31 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2025-11-27 23:00:28 | UserProfileModel OnPostUploadAvatarAsync | Started
+2025-11-27 23:00:28 | UserProfileModel OnPostUploadAvatarAsync | User not authenticated, redirecting.

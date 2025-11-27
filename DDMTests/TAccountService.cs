@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DDMLib;
+using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -177,20 +178,26 @@ namespace DDMTests
         [DataRow("", "+79991234567", "г. Москва", "ФИО не может быть пустым")]
         [DataRow("   ", "+79991234567", "г. Москва", "ФИО не может быть пустым")]
         [DataRow("Очень длинное имя которое превышает допустимую длину в двести пятьдесят пять символов и должно вызвать ошибку валидации потому что " +
-            "это слишком длинная строка для поля ФИО в нашей системе и мы должны ограничивать его размер для корректной работы базы данных и " +
-            "пользовательского интерфейса", "+79991234567", "г. Москва", "Превышена допустимая длина ФИО (≤ 255)")]
+"это слишком длинная строка для поля ФИО в нашей системе и мы должны ограничивать его размер для корректной работы базы данных и " +
+"пользовательского интерфейса", "+79991234567", "г. Москва", "Превышена допустимая длина ФИО (≤ 255)")]
         [DataRow("Иван Петров", "invalid_phone", "г. Москва", "Неверный формат телефона. Пример: +7 (999) 123-45-67")]
         [DataRow("Иван Петров", "123", "г. Москва", "Неверный формат телефона. Пример: +7 (999) 123-45-67")]
         public void TestUpdateProfile_WithInvalidData_ReturnsValidationErrors(string fullName, string phone, string address, string expectedError)
         {
             Mock<IUserRepository> userRepoMock = new Mock<IUserRepository>();
-            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>();
-            Mock<UserService> userServiceMock = new Mock<UserService>();
+
+            // Создаем мок SessionManager и настраиваем его
+            Mock<SessionManager> sessionManagerMock = new Mock<SessionManager>(Mock.Of<IHttpContextAccessor>());
+            sessionManagerMock.Setup(s => s.IsUserAuthenticated()).Returns(true);
+            sessionManagerMock.Setup(s => s.GetUserEmailFromSession()).Returns("user1@example.com");
+
+            // Создаем реальный UserService с моком SessionManager
+            var userService = new UserService(userRepoMock.Object, sessionManagerMock.Object);
 
             AccountService accountService = new AccountService(
                 userRepoMock.Object,
                 sessionManagerMock.Object,
-                userServiceMock.Object);
+                userService);
 
             string email = "user1@example.com";
 
