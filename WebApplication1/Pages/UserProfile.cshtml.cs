@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
-using DDMLib.Configuration; 
+using DDMLib.Configuration;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Pages
@@ -55,7 +55,6 @@ namespace WebApplication1.Pages
         [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
-
         public IActionResult OnGet()
         {
             ErrorLogger.LogError("UserProfileModel OnGet", "Started");
@@ -73,10 +72,59 @@ namespace WebApplication1.Pages
             }
 
             LoadUserProfile(userEmail);
-            LoadUserConfigurations(userEmail); 
+            LoadUserConfigurations(userEmail);
             ErrorLogger.LogError("UserProfileModel OnGet", "Profile and configurations loaded successfully.");
             return Page();
         }
+
+        // Новый обработчик для удаления конфигурации
+        public IActionResult OnPostDeleteConfiguration(int configId)
+        {
+            ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Started for configId: {configId}");
+
+            if (!sessionManager_.IsUserAuthenticated())
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User not authenticated, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            string userEmail = sessionManager_.GetUserEmailFromSession();
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "User email not found in session, redirecting.");
+                return RedirectToPage("/Login");
+            }
+
+            if (configId <= 0)
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", "Invalid configId provided.");
+                Message = "Неверный идентификатор конфигурации.";
+                LoadUserProfile(userEmail);
+                LoadUserConfigurations(userEmail);
+                return Page();
+            }
+
+            string result = configurationService_.DeleteUserConfiguration(userEmail, configId);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                Message = "Конфигурация удалена.";
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Configuration {configId} deleted successfully.");
+            }
+            else
+            {
+                ErrorLogger.LogError("UserProfileModel OnPostDeleteConfiguration", $"Failed to delete configuration {configId}: {result}");
+                Message = result; // Отображаем сообщение об ошибке от сервиса
+            }
+
+            // Перезагружаем данные после удаления
+            LoadUserProfile(userEmail);
+            LoadUserConfigurations(userEmail);
+
+            // Возвращаемся на ту же страницу, чтобы увидеть обновлённый список и сообщение
+            return Page();
+        }
+
 
         public IActionResult OnPostUpdateProfile()
         {
@@ -240,6 +288,8 @@ namespace WebApplication1.Pages
             catch (Exception ex)
             {
                 ErrorLogger.LogError("UserProfileModel LoadUserConfigurations", ex.Message);
+                // Можно добавить сообщение об ошибке в ModelState или в переменную для отображения
+                // ModelState.AddModelError(string.Empty, "Не удалось загрузить конфигурации: " + ex.Message);
                 UserConfigurations = new List<ConfigurationDto>(); // В случае ошибки возвращаем пустой список
             }
         }
