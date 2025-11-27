@@ -86,7 +86,7 @@ namespace DDMLib
             {
                 if (repo_.HasActiveOrders(inn))
                 {
-                    return "Невозможно удалить: есть связанные записи";
+                    return "Невозможно удалить: есть связанные незавершённые заказы";
                 }
 
                 bool ok = repo_.DeleteByInn(inn);
