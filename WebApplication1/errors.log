@@ -548,3 +548,43 @@
 2025-11-27 22:51:31 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
 2025-11-27 23:00:28 | UserProfileModel OnPostUploadAvatarAsync | Started
 2025-11-27 23:00:28 | UserProfileModel OnPostUploadAvatarAsync | User not authenticated, redirecting.
+2026-02-05 17:32:40 | UserProfileModel OnGet | Started
+2026-02-05 17:32:40 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:33:00 | UserProfileModel OnGet | Started
+2026-02-05 17:33:00 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:33:01 | UserProfileModel OnGet | Started
+2026-02-05 17:33:01 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:35:05 | UserProfileModel OnGet | Started
+2026-02-05 17:35:05 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:35:19 | UserProfileModel OnGet | Started
+2026-02-05 17:35:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:35:54 | UserProfileModel OnGet | Started
+2026-02-05 17:35:54 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:36:25 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:28 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:29 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:30 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:30 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:35 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:38 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:39 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:40 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:42 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:43 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:44 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:45 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:45 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:47 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:48 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:49 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:52 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:53 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:53 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:59 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:36:59 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:37:04 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:37:05 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-05 17:37:37 | UserProfileModel OnGet | Started
+2026-02-05 17:37:37 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-05 17:37:45 | UserProfileModel OnGet | Started
+2026-02-05 17:37:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
