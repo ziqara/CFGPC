@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication1.Pages
+namespace ClientWebApp.Pages
 {
     public class LoginModel : PageModel
     {

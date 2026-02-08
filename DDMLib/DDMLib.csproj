@@ -170,6 +170,13 @@
     <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Configuration\IConfigurationRepository.cs" />
     <Compile Include="ErrorLogger.cs" />
+    <Compile Include="Order\DeliveryMethod.cs" />
+    <Compile Include="Order\IOrderRepository.cs" />
+    <Compile Include="Order\Order.cs" />
+    <Compile Include="Order\OrderRepository.cs" />
+    <Compile Include="Order\OrderService.cs" />
+    <Compile Include="Order\OrderStatus.cs" />
+    <Compile Include="Order\PaymentMethod.cs" />
     <Compile Include="Session\SessionData.cs" />
     <Compile Include="Session\SessionManager.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />

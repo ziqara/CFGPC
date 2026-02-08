@@ -1,6 +1,7 @@
 using DDMLib;
 using DDMLib.Component;
 using DDMLib.Configuration;
+using DDMLib.Order;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +25,9 @@ builder.Services.AddScoped<ComponentService>();
 
 builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 builder.Services.AddScoped<ConfigurationService>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<OrderService>();
 
 var app = builder.Build();
 

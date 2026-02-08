@@ -1,0 +1,110 @@
+﻿@page
+@using DDMLib.Order
+@model ClientWebApp.Pages.OrdersModel
+@{
+    ViewData["Title"] = "Мои заказы";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Мои заказы</h1>
+
+    @if (Model.UserOrders == null || !Model.UserOrders.Any())
+    {
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Заказы не найдены</h4>
+            <p>У вас пока нет оформленных заказов.</p>
+            <hr>
+            <p class="mb-0">Вы можете создать свою первую конфигурацию ПК и оформить заказ.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID заказа</th>
+                        <th>Дата заказа</th>
+                        <th>Статус</th>
+                        <th>Сумма</th>
+                        <th>Способ доставки</th>
+                        <th>Способ оплаты</th>
+                        <th>Статус оплаты</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.UserOrders)
+                    {
+                        <tr>
+                            <td>@order.OrderId</td>
+                            <td>@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                <span class="badge
+                                    @(order.Status == OrderStatus.Delivered ? "bg-success" :
+                                      order.Status == OrderStatus.Cancelled ? "bg-danger" :
+                                      order.Status == OrderStatus.Processing || order.Status == OrderStatus.Assembled || order.Status == OrderStatus.Shipped ? "bg-warning" : "bg-secondary")">
+                                    @GetStatusText(order.Status)
+                                </span>
+                            </td>
+                            <td>@order.TotalPrice.ToString("N2") ₽</td>
+                            <td>@GetDeliveryMethodText(order.DeliveryMethod)</td>
+                            <td>@GetPaymentMethodText(order.PaymentMethod)</td>
+                            <td>
+                                @if (order.IsPaid)
+                                {
+                                    <span class="badge bg-success">Оплачен</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Не оплачен</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-outline-primary">Детали</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@functions {
+    private string GetStatusText(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Pending => "Ожидает обработки",
+            OrderStatus.Processing => "В обработке",
+            OrderStatus.Assembled => "Собран",
+            OrderStatus.Shipped => "Отправлен",
+            OrderStatus.Delivered => "Доставлен",
+            OrderStatus.Cancelled => "Отменен",
+            _ => status.ToString()
+        };
+    }
+
+    private string GetDeliveryMethodText(DeliveryMethod method)
+    {
+        return method switch
+        {
+            DeliveryMethod.Courier => "Курьер",
+            DeliveryMethod.Pickup => "Самовывоз",
+            DeliveryMethod.Self => "Со склада",
+            _ => method.ToString()
+        };
+    }
+
+    private string GetPaymentMethodText(PaymentMethod method)
+    {
+        return method switch
+        {
+            PaymentMethod.Card => "Карта",
+            PaymentMethod.CashOnDelivery => "Наложенный платеж",
+            PaymentMethod.BankTransfer => "Банковский перевод",
+            _ => method.ToString()
+        };
+    }
+}
