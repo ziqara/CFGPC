@@ -608,3 +608,90 @@
 2026-02-08 16:58:03 | UserProfileModel OnGet | Profile and configurations loaded successfully.
 2026-02-08 16:58:07 | UserProfileModel OnGet | Started
 2026-02-08 16:58:07 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 17:26:35 | FindByEmail | Не удалось подключиться к базе данных.
+2026-02-10 17:26:37 | FindByEmail | Unable to connect to any of the specified MySQL hosts
+2026-02-10 17:28:22 | UserProfileModel OnGet | Started
+2026-02-10 17:28:22 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:01:19 | UserProfileModel OnGet | Started
+2026-02-10 18:01:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:02:10 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:16 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:18 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:25 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:26 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:41 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:42 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:42 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:45 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:46 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:47 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:02:48 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:11 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:29 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:30 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:31 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:32 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:34 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:35 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:36 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:37 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:39 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:03:54 | UserProfileModel OnGet | Started
+2026-02-10 18:03:54 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:19:53 | UserProfileModel OnGet | Started
+2026-02-10 18:19:53 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:20:15 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-10 18:20:15 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-10 18:20:18 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-10 18:20:18 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-10 18:20:29 | UserProfileModel OnPostChangePassword | Started
+2026-02-10 18:20:29 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2026-02-10 18:20:29 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-10 18:20:29 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-10 18:20:29 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-10 18:20:30 | UserProfileModel OnGet | Started
+2026-02-10 18:20:30 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:20:31 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-10 18:20:31 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-10 18:20:36 | UserProfileModel OnGet | Started
+2026-02-10 18:20:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:20:44 | UserProfileModel OnPostChangePassword | Started
+2026-02-10 18:20:44 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2026-02-10 18:20:44 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-10 18:20:45 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-10 18:20:45 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-10 18:20:51 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-10 18:20:51 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-10 18:20:54 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-10 18:20:54 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-10 18:26:51 | UserProfileModel OnGet | Started
+2026-02-10 18:26:51 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:26:58 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-10 18:26:58 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-10 18:27:02 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-10 18:27:02 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-10 18:27:15 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-10 18:27:15 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-10 18:27:19 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-10 18:27:19 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-10 18:27:56 | UserProfileModel OnGet | Started
+2026-02-10 18:27:56 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:28:26 | UserProfileModel OnGet | Started
+2026-02-10 18:28:26 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:28:35 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:28:38 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:28:38 | OnGet ComponentsPageModel | Загружено компонентов: 1
+2026-02-10 18:28:40 | UserProfileModel OnGet | Started
+2026-02-10 18:28:41 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:30:28 | UserProfileModel OnGet | Started
+2026-02-10 18:30:28 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-10 18:31:14 | UserProfileModel OnPostChangePassword | Started
+2026-02-10 18:31:14 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2026-02-10 18:31:14 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-10 18:31:14 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-10 18:31:14 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | Started
+2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | Session email retrieved: 'test@gmail.com'
+2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | Password changed successfully.
