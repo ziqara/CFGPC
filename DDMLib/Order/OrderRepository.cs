@@ -62,5 +62,45 @@ namespace DDMLib.Order
                 throw; // ошибка пробрасывается в ui
             }
         }
+
+        public void AddOrder(Order order)
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                {
+                    connection.Open();
+
+                    string sql = @"
+                INSERT INTO orders 
+                    (configId, userEmail, orderDate, status, totalPrice, 
+                     deliveryAddress, deliveryMethod, paymentMethod, isPaid)
+                VALUES 
+                    (@ConfigId, @UserEmail, @OrderDate, @Status, @TotalPrice, 
+                     @DeliveryAddress, @DeliveryMethod, @PaymentMethod, @IsPaid);
+                SELECT LAST_INSERT_ID();";
+
+                    using (MySqlCommand command = new MySqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@ConfigId", order.ConfigId);
+                        command.Parameters.AddWithValue("@UserEmail", order.UserEmail);
+                        command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                        command.Parameters.AddWithValue("@Status", order.Status.ToString());
+                        command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
+                        command.Parameters.AddWithValue("@DeliveryAddress", order.DeliveryAddress ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@DeliveryMethod", order.DeliveryMethod.ToString());
+                        command.Parameters.AddWithValue("@PaymentMethod", order.PaymentMethod.ToString());
+                        command.Parameters.AddWithValue("@IsPaid", order.IsPaid);
+
+                        order.OrderId = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("OrderRepository.AddOrder", ex.Message);
+                throw;
+            }
+        }
     }
 }

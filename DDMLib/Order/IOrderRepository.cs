@@ -9,5 +9,6 @@ namespace DDMLib.Order
     public interface IOrderRepository
     {
         List<Order> GetOrdersByUserEmail(string userEmail);
+        void AddOrder(Order order);
     }
 }

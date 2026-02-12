@@ -28,5 +28,40 @@ namespace DDMLib.Order
                 throw; // ошибка пробрасывается в ui
             }
         }
+
+        public void CreateOrder(Order order)
+        {
+            try
+            {
+                // Валидация обязательных полей
+                if (order == null)
+                    throw new ArgumentNullException(nameof(order), "Заказ не может быть пустым");
+
+                if (order.ConfigId <= 0)
+                    throw new ArgumentException("ID конфигурации должен быть указан", nameof(order.ConfigId));
+
+                if (string.IsNullOrWhiteSpace(order.UserEmail))
+                    throw new ArgumentException("Email пользователя не может быть пустым", nameof(order.UserEmail));
+
+                if (order.TotalPrice <= 0)
+                    throw new ArgumentException("Сумма заказа должна быть больше 0", nameof(order.TotalPrice));
+
+                if (string.IsNullOrWhiteSpace(order.DeliveryAddress))
+                    throw new ArgumentException("Адрес доставки не может быть пустым", nameof(order.DeliveryAddress));
+
+                // Устанавливаем значения по умолчанию
+                order.OrderDate = DateTime.Now;
+                order.IsPaid = false;
+                order.Status = OrderStatus.Pending;
+
+                // Вызываем синхронный метод
+                _orderRepository.AddOrder(order);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("OrderService.CreateOrder", ex.Message);
+                throw;
+            }
+        }
     }
 }

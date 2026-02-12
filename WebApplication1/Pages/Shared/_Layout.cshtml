@@ -133,27 +133,6 @@
                 color: white;
                 transform: translateY(-1px);
             }
-
-        /* Стили для иконки корзины */
-        .cart-link {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem !important;
-            height: 100%;
-        }
-
-        .cart-icon {
-            font-size: 1.2rem;
-            color: #495057;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cart-link:hover .cart-icon {
-            color: var(--primary-color);
-        }
     </style>
 </head>
 <body>
@@ -179,10 +158,10 @@
                     <ul class="navbar-nav align-items-center">
                         @if (SessionManager.IsUserAuthenticated())
                         {
-                            <!-- Иконка корзины для покупок - только для авторизованных -->
+                            <!-- Кнопка "Мои заказы" для авторизованных пользователей -->
                             <li class="nav-item">
-                                <a class="nav-link cart-link" href="#" title="Корзина покупок">
-                                    <i class="fas fa-shopping-cart cart-icon"></i>
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Orders" ? "active" : "")" asp-area="" asp-page="/Orders">
+                                    <i class="fas fa-shopping-bag me-1"></i>Мои заказы
                                 </a>
                             </li>
 

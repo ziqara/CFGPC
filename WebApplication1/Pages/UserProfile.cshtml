@@ -524,6 +524,7 @@
                                         </div>
                                     </div>
                                     <!-- Модальное окно для каждой конфигурации (как в первом файле) -->
+                                    <!-- Модальное окно для каждой конфигурации (как в первом файле) -->
                                     <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content border-0 shadow">
@@ -590,14 +591,24 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer bg-light">
-                                                    <!-- Форма для удаления -->
-                                                    <form method="post" class="d-inline">
-                                                        <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
-                                                        <button type="submit" class="btn btn-outline-danger" asp-page-handler="DeleteConfiguration" onclick="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
-                                                            <i class="fas fa-trash me-2"></i>Удалить
-                                                        </button>
-                                                    </form>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                    <div class="d-flex justify-content-between w-100">
+                                                        <div>
+                                                            <!-- Форма для удаления -->
+                                                            <form method="post" class="d-inline">
+                                                                <input type="hidden" name="configId" value="@configDto.Configuration.ConfigId" />
+                                                                <button type="submit" class="btn btn-outline-danger" asp-page-handler="DeleteConfiguration" onclick="return confirm('Удалить конфигурацию &quot;@Html.Raw(configDto.Configuration.ConfigName)&quot;?\nДействие нельзя отменить.');">
+                                                                    <i class="fas fa-trash me-2"></i>Удалить
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                        <div>
+                                                            <a asp-page="/CreateOrder" asp-route-configId="@configDto.Configuration.ConfigId"
+                                                               class="btn btn-primary me-2">
+                                                                <i class="fas fa-shopping-cart me-2"></i>Заказать
+                                                            </a>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

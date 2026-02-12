@@ -695,3 +695,34 @@
 2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
 2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
 2026-02-10 18:31:24 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-10 18:32:05 | UserProfileModel OnGet | Started
+2026-02-10 18:32:05 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:34:02 | UserProfileModel OnGet | Started
+2026-02-12 17:34:02 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:36:56 | UserProfileModel OnGet | Started
+2026-02-12 17:36:56 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:45:31 | UserProfileModel OnGet | Started
+2026-02-12 17:45:31 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:45:47 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:45:55 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:45:59 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:46:16 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:46:19 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:46:36 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:46:50 | UserProfileModel OnGet | Started
+2026-02-12 17:46:50 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:47:18 | CreateOrder OnPost | Сумма заказа должна быть больше 0 (Parameter 'TotalPrice')
+2026-02-12 17:55:06 | UserProfileModel OnGet | Started
+2026-02-12 17:55:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 17:55:20 | CreateOrder OnPost | Data truncated for column 'paymentMethod' at row 1
+2026-02-12 17:55:36 | CreateOrder OnPost | Data truncated for column 'paymentMethod' at row 1
+2026-02-12 17:57:21 | UserProfileModel OnGet | Started
+2026-02-12 17:57:21 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 18:04:09 | UserProfileModel OnGet | Started
+2026-02-12 18:04:09 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 18:04:14 | UserProfileModel OnGet | Started
+2026-02-12 18:04:14 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 18:10:11 | UserProfileModel OnGet | Started
+2026-02-12 18:10:11 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-12 18:10:13 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-12 18:10:13 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
