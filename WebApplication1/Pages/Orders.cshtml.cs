@@ -47,15 +47,15 @@ namespace ClientWebApp.Pages
             // Создаем словарь для быстрого поиска конфигурации по ID
             var configDict = configurations.ToDictionary(
                 c => c.Configuration.ConfigId,
-                c => c.Configuration.ConfigName);
+                c => c);
 
-            // Формируем ViewModel с названиями конфигураций
+            // Формируем ViewModel с названиями и деталями конфигураций
             UserOrders = orders.Select(order => new OrderViewModel
             {
                 Order = order,
-                ConfigName = configDict.ContainsKey(order.ConfigId)
+                Configuration = configDict.ContainsKey(order.ConfigId)
                     ? configDict[order.ConfigId]
-                    : $"Конфигурация #{order.ConfigId}"
+                    : null
             }).ToList();
 
             return Page();
@@ -65,6 +65,9 @@ namespace ClientWebApp.Pages
     public class OrderViewModel
     {
         public Order Order { get; set; }
-        public string ConfigName { get; set; }
+        public ConfigurationDto Configuration { get; set; }
+
+        public string ConfigName => Configuration?.Configuration?.ConfigName ?? $"Конфигурация #{Order.ConfigId}";
+        public bool HasConfiguration => Configuration != null;
     }
 }

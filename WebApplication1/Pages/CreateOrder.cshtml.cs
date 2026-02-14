@@ -29,6 +29,9 @@ namespace ClientWebApp.Pages
         public ConfigurationDto? SelectedConfiguration { get; set; }
         public string? ErrorMessage { get; set; }
 
+        // Свойство для расчета итоговой суммы с доставкой
+        public decimal TotalWithDelivery => OrderInput.TotalPrice + (OrderInput.DeliveryMethod == DeliveryMethod.Courier ? 500 : 0);
+
         public IActionResult OnGet(int configId)
         {
             if (!_sessionManager.IsUserAuthenticated())
@@ -59,6 +62,7 @@ namespace ClientWebApp.Pages
             // Заполняем данные заказа
             OrderInput.ConfigId = SelectedConfiguration.Configuration.ConfigId;
             OrderInput.TotalPrice = SelectedConfiguration.Configuration.TotalPrice;
+            OrderInput.DeliveryMethod = DeliveryMethod.Courier; // По умолчанию выбираем курьерскую доставку
 
             return Page();
         }
@@ -86,7 +90,7 @@ namespace ClientWebApp.Pages
                     UserEmail = userEmail,
                     OrderDate = DateTime.Now,
                     Status = OrderStatus.Pending,
-                    TotalPrice = OrderInput.TotalPrice,
+                    TotalPrice = TotalWithDelivery, // Используем сумму с доставкой
                     DeliveryAddress = OrderInput.DeliveryAddress,
                     DeliveryMethod = OrderInput.DeliveryMethod,
                     PaymentMethod = OrderInput.PaymentMethod,

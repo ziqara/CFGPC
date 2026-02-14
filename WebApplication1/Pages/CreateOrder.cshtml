@@ -40,9 +40,9 @@
                     </div>
 
                     <div class="card-body p-4">
-                        <form method="post">
+                        <form method="post" id="orderForm">
                             <input type="hidden" asp-for="OrderInput.ConfigId" />
-                            <input type="hidden" asp-for="OrderInput.TotalPrice" />
+                            <input type="hidden" asp-for="OrderInput.TotalPrice" id="basePrice" />
 
                             <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
 
@@ -56,8 +56,8 @@
                                         </span>
                                     </div>
                                     <div class="text-end">
-                                        <small class="text-muted d-block">Итого:</small>
-                                        <strong style="color: #764ba2; font-size: 1.5rem;">
+                                        <small class="text-muted d-block">Стоимость сборки:</small>
+                                        <strong style="color: #764ba2; font-size: 1.3rem;" id="configPrice">
                                             @Model.SelectedConfiguration.Configuration.TotalPrice.ToString("N0") ₽
                                         </strong>
                                     </div>
@@ -117,24 +117,36 @@
                                     </label>
                                     <div class="delivery-options">
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.DeliveryMethod" value="@DeliveryMethod.Courier" id="deliveryCourier">
+                                            <input class="form-check-input delivery-radio" type="radio"
+                                                   asp-for="OrderInput.DeliveryMethod"
+                                                   value="@DeliveryMethod.Courier"
+                                                   id="deliveryCourier"
+                                                   data-delivery-cost="500">
                                             <label class="form-check-label" for="deliveryCourier">
                                                 <i class="fas fa-truck text-primary me-1"></i> Курьер
-                                                <small class="d-block text-muted">Доставка курьером до двери</small>
+                                                <small class="d-block text-muted">Доставка курьером до двери (+500 ₽)</small>
                                             </label>
                                         </div>
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.DeliveryMethod" value="@DeliveryMethod.Pickup" id="deliveryPickup">
+                                            <input class="form-check-input delivery-radio" type="radio"
+                                                   asp-for="OrderInput.DeliveryMethod"
+                                                   value="@DeliveryMethod.Pickup"
+                                                   id="deliveryPickup"
+                                                   data-delivery-cost="0">
                                             <label class="form-check-label" for="deliveryPickup">
                                                 <i class="fas fa-store text-primary me-1"></i> Самовывоз
-                                                <small class="d-block text-muted">Забрать из пункта выдачи</small>
+                                                <small class="d-block text-muted">Забрать из пункта выдачи (бесплатно)</small>
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.DeliveryMethod" value="@DeliveryMethod.Self" id="deliverySelf">
+                                            <input class="form-check-input delivery-radio" type="radio"
+                                                   asp-for="OrderInput.DeliveryMethod"
+                                                   value="@DeliveryMethod.Self"
+                                                   id="deliverySelf"
+                                                   data-delivery-cost="0">
                                             <label class="form-check-label" for="deliverySelf">
                                                 <i class="fas fa-warehouse text-primary me-1"></i> Со склада
-                                                <small class="d-block text-muted">Самовывоз со склада компании</small>
+                                                <small class="d-block text-muted">Самовывоз со склада компании (бесплатно)</small>
                                             </label>
                                         </div>
                                     </div>
@@ -148,21 +160,30 @@
                                     </label>
                                     <div class="payment-options">
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.PaymentMethod" value="@PaymentMethod.Card" id="paymentCard">
+                                            <input class="form-check-input" type="radio"
+                                                   asp-for="OrderInput.PaymentMethod"
+                                                   value="@PaymentMethod.Card"
+                                                   id="paymentCard">
                                             <label class="form-check-label" for="paymentCard">
                                                 <i class="fas fa-credit-card text-success me-1"></i> Банковская карта
                                                 <small class="d-block text-muted">Visa, Mastercard, МИР</small>
                                             </label>
                                         </div>
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.PaymentMethod" value="@PaymentMethod.CashOnDelivery" id="paymentCash">
+                                            <input class="form-check-input" type="radio"
+                                                   asp-for="OrderInput.PaymentMethod"
+                                                   value="@PaymentMethod.CashOnDelivery"
+                                                   id="paymentCash">
                                             <label class="form-check-label" for="paymentCash">
                                                 <i class="fas fa-money-bill-wave text-success me-1"></i> Наложенный платеж
                                                 <small class="d-block text-muted">Оплата при получении</small>
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" asp-for="OrderInput.PaymentMethod" value="@PaymentMethod.BankTransfer" id="paymentTransfer">
+                                            <input class="form-check-input" type="radio"
+                                                   asp-for="OrderInput.PaymentMethod"
+                                                   value="@PaymentMethod.BankTransfer"
+                                                   id="paymentTransfer">
                                             <label class="form-check-label" for="paymentTransfer">
                                                 <i class="fas fa-university text-success me-1"></i> Банковский перевод
                                                 <small class="d-block text-muted">Для юридических лиц</small>
@@ -174,6 +195,25 @@
                             </div>
 
                             <hr class="my-4">
+
+                            <!-- Детализация суммы -->
+                            <div class="mb-4">
+                                <h6 class="mb-3" style="color: #2d3748;">Детализация суммы:</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Стоимость сборки:</span>
+                                    <span class="fw-semibold" id="detailConfigPrice">@Model.SelectedConfiguration.Configuration.TotalPrice.ToString("N0") ₽</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 delivery-cost-row-hidden" id="deliveryCostRow">
+                                    <span class="text-muted">Доставка курьером:</span>
+                                    <span class="fw-semibold text-primary">+500 ₽</span>
+                                </div>
+                                <div class="d-flex justify-content-between pt-2 border-top">
+                                    <h5 class="mb-0" style="color: #2d3748;">Итого к оплате:</h5>
+                                    <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">
+                                        @Model.SelectedConfiguration.Configuration.TotalPrice.ToString("N0") ₽
+                                    </h3>
+                                </div>
+                            </div>
 
                             <!-- Кнопки -->
                             <div class="d-grid gap-3">
@@ -272,8 +312,50 @@
     .badge.bg-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     }
+
+    .border-top {
+        border-top: 2px solid #e9ecef !important;
+    }
+
+    .delivery-cost-row-hidden {
+        display: none !important;
+    }
 </style>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const courier = document.getElementById('deliveryCourier');
+        const pickup = document.getElementById('deliveryPickup');
+        const self = document.getElementById('deliverySelf');
+
+        const totalSpan = document.getElementById('totalPrice');
+        const detailConfigSpan = document.getElementById('detailConfigPrice');
+        const deliveryRow = document.getElementById('deliveryCostRow');
+
+        // Берём базовую цену из скрытого поля
+        const basePriceInput = document.getElementById('basePrice');
+        const basePrice = parseFloat(basePriceInput?.value || '0');
+
+        function recalc() {
+            let deliveryCost = 0;
+            if (courier.checked) {
+                deliveryCost = 500;
+                deliveryRow.classList.remove('delivery-cost-row-hidden'); // показываем строку
+            } else {
+                deliveryRow.classList.add('delivery-cost-row-hidden'); // скрываем строку
+            }
+
+            const total = basePrice + deliveryCost;
+            totalSpan.innerText = total.toLocaleString('ru-RU') + ' ₽';
+            detailConfigSpan.innerText = basePrice.toLocaleString('ru-RU') + ' ₽';
+        }
+
+        // Привязываем обработчики
+        courier.addEventListener('change', recalc);
+        pickup.addEventListener('change', recalc);
+        self.addEventListener('change', recalc);
+
+        // Инициализация: вызываем один раз после загрузки
+        recalc();
+    });
+</script>
