@@ -46,8 +46,9 @@ namespace DDMLib.Order
                 if (order.TotalPrice <= 0)
                     throw new ArgumentException("Сумма заказа должна быть больше 0", nameof(order.TotalPrice));
 
-                if (string.IsNullOrWhiteSpace(order.DeliveryAddress))
-                    throw new ArgumentException("Адрес доставки не может быть пустым", nameof(order.DeliveryAddress));
+                // Проверка адреса доставки: обязательна только при курьерской доставке
+                if (order.DeliveryMethod == DeliveryMethod.Courier && string.IsNullOrWhiteSpace(order.DeliveryAddress))
+                    throw new ArgumentException("Адрес доставки обязателен при курьерской доставке", nameof(order.DeliveryAddress));
 
                 // Устанавливаем значения по умолчанию
                 order.OrderDate = DateTime.Now;

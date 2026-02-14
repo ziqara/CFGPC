@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DDMLib.Component; 
+using DDMLib.Component;
 
 namespace DDMLib.Configuration
 {
@@ -63,6 +63,95 @@ namespace DDMLib.Configuration
 
                     // Запрос для получения компонентов, связанных с конфигурациями пользователя
                     // Исправлено: c.supplierId -> c.supplierInn
+                    string componentQuery = @"
+                        SELECT cc.configId, c.componentId, c.name, c.brand, c.model, c.componentType, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierInn
+                        FROM config_components cc
+                        JOIN components c ON cc.componentId = c.componentId
+                        WHERE cc.configId IN (" + string.Join(",", configIds) + ")";
+
+                    MySqlCommand command = new MySqlCommand(componentQuery, connection);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int configId = reader.GetInt32("configId");
+                            DDMLib.Component.Component component = MapComponentFromReader(reader);
+
+                            if (!componentsMap.ContainsKey(configId))
+                            {
+                                componentsMap[configId] = new List<DDMLib.Component.Component>();
+                            }
+                            componentsMap[configId].Add(component);
+                        }
+                    }
+                }
+            }
+
+            // 3. Объединяем конфигурации с их компонентами
+            List<ConfigurationDto> result = new List<ConfigurationDto>();
+            foreach (var config in configurations)
+            {
+                List<DDMLib.Component.Component> components = componentsMap.ContainsKey(config.ConfigId) ? componentsMap[config.ConfigId] : new List<DDMLib.Component.Component>();
+                result.Add(new ConfigurationDto
+                {
+                    Configuration = config,
+                    Components = components
+                });
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Возвращает все предустановленные конфигурации (у которых isPreset = 1)
+        /// </summary>
+        /// <returns>Список DTO предустановленных конфигураций</returns>
+        public List<ConfigurationDto> GetPresetConfigurations()
+        {
+            List<Configuration> configurations = new List<Configuration>();
+            List<int> configIds = new List<int>();
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string configurationQuery = @"
+                        SELECT configId, configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions
+                        FROM configurations
+                        WHERE isPreset = 1";
+
+                    MySqlCommand command = new MySqlCommand(configurationQuery, connection);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Configuration config = MapConfigurationFromReader(reader);
+                            configurations.Add(config);
+                            configIds.Add(config.ConfigId);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.LogError("GetPresetConfigurations", ex.Message);
+                    throw; // Пробрасываем исключение выше
+                }
+            }
+
+            // 2. Получаем компоненты для всех предустановленных конфигураций
+            // Создаём словарь: ConfigId -> List<Component>
+            Dictionary<int, List<DDMLib.Component.Component>> componentsMap = new Dictionary<int, List<DDMLib.Component.Component>>();
+
+            if (configIds.Any())
+            {
+                using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                {
+                    connection.Open();
+
+                    // Запрос для получения компонентов, связанных с предустановленными конфигурациями
                     string componentQuery = @"
                         SELECT cc.configId, c.componentId, c.name, c.brand, c.model, c.componentType, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierInn
                         FROM config_components cc

@@ -98,16 +98,20 @@
 
                             <!-- Адрес доставки -->
                             <div class="mb-4">
-                                <label asp-for="OrderInput.DeliveryAddress" class="form-label fw-semibold" style="color: #764ba2;">
-                                    <i class="fas fa-map-marker-alt me-2"></i>Адрес доставки
-                                </label>
-                                <textarea asp-for="OrderInput.DeliveryAddress"
-                                          class="form-control rounded-3"
-                                          rows="3"
-                                          placeholder="Город, улица, дом, квартира, подъезд, этаж"
-                                          style="border: 1px solid #d6bcfa; resize: vertical;"></textarea>
-                                <span asp-validation-for="OrderInput.DeliveryAddress" class="text-danger small"></span>
-                            </div>
+                                <div class="mb-4" id="deliveryAddressGroup">
+                                    <label asp-for="OrderInput.DeliveryAddress" class="form-label fw-semibold" style="color: #764ba2;">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Адрес доставки
+                                    </label>
+                                    <textarea asp-for="OrderInput.DeliveryAddress"
+                                              class="form-control rounded-3"
+                                              rows="3"
+                                              placeholder="Город, улица, дом, квартира, подъезд, этаж"
+                                              style="border: 1px solid #d6bcfa; resize: vertical;"
+                                              aria-describedby="deliveryAddressHelp"
+                                              id="deliveryAddressField"></textarea>
+                                    <small id="deliveryAddressHelp" class="form-text text-muted">Адрес обязателен только при курьерской доставке</small>
+                                    <span asp-validation-for="OrderInput.DeliveryAddress" class="text-danger small"></span>
+                                </div>
 
                             <div class="row mb-4">
                                 <!-- Способ доставки -->
@@ -320,6 +324,10 @@
     .delivery-cost-row-hidden {
         display: none !important;
     }
+
+    .delivery-address-hidden {
+        display: none !important;
+    }
 </style>
 
 <script>
@@ -357,5 +365,54 @@
 
         // Инициализация: вызываем один раз после загрузки
         recalc();
+    });
+
+             document.addEventListener('DOMContentLoaded', function () {
+        const courier = document.getElementById('deliveryCourier');
+        const pickup = document.getElementById('deliveryPickup');
+        const self = document.getElementById('deliverySelf');
+
+        const addressGroup = document.getElementById('deliveryAddressGroup');
+        const addressField = document.getElementById('deliveryAddressField');
+
+        // Получаем адрес из профиля, переданный с сервера
+        const userProfileAddress = '@Html.Raw(Model.UserProfileAddress ?? "")';
+
+        function updateAddressFieldState() {
+            if (courier.checked) {
+                addressGroup.classList.remove('delivery-address-hidden');
+                addressField.disabled = false;
+                addressField.required = true;
+
+                // Автоподстановка, только если поле пустое
+                if (!addressField.value.trim() && userProfileAddress) {
+                    addressField.value = userProfileAddress;
+                }
+
+                Обновляем подсказку
+                const help = document.getElementById('deliveryAddressHelp');
+                help.textContent = "Адрес обязателен при курьерской доставке";
+                help.classList.remove('text-muted');
+                help.classList.add('text-danger');
+            } else {
+                addressGroup.classList.add('delivery-address-hidden');
+                addressField.disabled = true;
+                addressField.required = false;
+
+                // Обновляем подсказку
+                const help = document.getElementById('deliveryAddressHelp');
+                help.textContent = "Адрес не требуется при самовывозе";
+                help.classList.remove('text-danger');
+                help.classList.add('text-muted');
+            }
+        }
+
+        // Инициализация состояния при загрузке
+        updateAddressFieldState();
+
+        // Обработчики на все способы доставки
+        courier.addEventListener('change', updateAddressFieldState);
+        pickup.addEventListener('change', updateAddressFieldState);
+        self.addEventListener('change', updateAddressFieldState);
     });
 </script>

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+п»їusing Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DDMLib;
 using DDMLib.Order;
@@ -12,15 +12,18 @@ namespace ClientWebApp.Pages
         private readonly SessionManager _sessionManager;
         private readonly ConfigurationService _configurationService;
         private readonly OrderService _orderService;
+        private readonly UserService _userService; // в†ђ Р”РѕР±Р°РІР»РµРЅРѕ
 
         public CreateOrderModel(
             SessionManager sessionManager,
             ConfigurationService configurationService,
-            OrderService orderService)
+            OrderService orderService,
+            UserService userService) // в†ђ Р”РѕР±Р°РІР»РµРЅ РїР°СЂР°РјРµС‚СЂ
         {
             _sessionManager = sessionManager;
             _configurationService = configurationService;
             _orderService = orderService;
+            _userService = userService;
         }
 
         [BindProperty]
@@ -29,8 +32,9 @@ namespace ClientWebApp.Pages
         public ConfigurationDto? SelectedConfiguration { get; set; }
         public string? ErrorMessage { get; set; }
 
-        // Свойство для расчета итоговой суммы с доставкой
+        // РЎРІРѕР№СЃС‚РІРѕ РґР»СЏ СЂР°СЃС‡РµС‚Р° РёС‚РѕРіРѕРІРѕР№ СЃСѓРјРјС‹ СЃ РґРѕСЃС‚Р°РІРєРѕР№
         public decimal TotalWithDelivery => OrderInput.TotalPrice + (OrderInput.DeliveryMethod == DeliveryMethod.Courier ? 500 : 0);
+        public string? UserProfileAddress { get; set; }
 
         public IActionResult OnGet(int configId)
         {
@@ -41,28 +45,48 @@ namespace ClientWebApp.Pages
 
             var userEmail = _sessionManager.GetUserEmailFromSession();
 
-            // Загружаем конкретную конфигурацию по ID
+            // Р—Р°РіСЂСѓР¶Р°РµРј РєРѕРЅРєСЂРµС‚РЅСѓСЋ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РїРѕ ID
             var configs = _configurationService.GetUserConfigurations(userEmail);
             SelectedConfiguration = configs.FirstOrDefault(c => c.Configuration.ConfigId == configId);
 
             if (SelectedConfiguration == null)
             {
-                ErrorMessage = "Конфигурация не найдена или недоступна для заказа.";
+                ErrorMessage = "РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РЅРµ РЅР°Р№РґРµРЅР° РёР»Рё РЅРµРґРѕСЃС‚СѓРїРЅР° РґР»СЏ Р·Р°РєР°Р·Р°.";
                 return Page();
             }
 
-            // Проверяем статус конфигурации
+            // РџСЂРѕРІРµСЂСЏРµРј СЃС‚Р°С‚СѓСЃ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
             if (SelectedConfiguration.Configuration.Status != "validated" &&
                 SelectedConfiguration.Configuration.Status != "in_cart")
             {
-                ErrorMessage = "Данная конфигурация недоступна для заказа.";
+                ErrorMessage = "Р”Р°РЅРЅР°СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ РЅРµРґРѕСЃС‚СѓРїРЅР° РґР»СЏ Р·Р°РєР°Р·Р°.";
                 return Page();
             }
 
-            // Заполняем данные заказа
+            // Р—Р°РїРѕР»РЅСЏРµРј РґР°РЅРЅС‹Рµ Р·Р°РєР°Р·Р°
+            var user = _userService.ValidateUserExists(userEmail);
+            if (user != null)
+            {
+                UserProfileAddress = user.Address;
+            }
+
+            if (SelectedConfiguration.Configuration.Status != "validated" &&
+                SelectedConfiguration.Configuration.Status != "in_cart")
+            {
+                ErrorMessage = "Р”Р°РЅРЅР°СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ РЅРµРґРѕСЃС‚СѓРїРЅР° РґР»СЏ Р·Р°РєР°Р·Р°.";
+                return Page();
+            }
+
+            // Р—Р°РїРѕР»РЅСЏРµРј РґР°РЅРЅС‹Рµ Р·Р°РєР°Р·Р°
             OrderInput.ConfigId = SelectedConfiguration.Configuration.ConfigId;
             OrderInput.TotalPrice = SelectedConfiguration.Configuration.TotalPrice;
-            OrderInput.DeliveryMethod = DeliveryMethod.Courier; // По умолчанию выбираем курьерскую доставку
+            OrderInput.DeliveryMethod = DeliveryMethod.Courier;
+
+            // РђРІС‚РѕРїРѕРґСЃС‚Р°РЅРѕРІРєР° С‚РѕР»СЊРєРѕ РµСЃР»Рё Р°РґСЂРµСЃ РїСѓСЃС‚РѕР№
+            if (string.IsNullOrWhiteSpace(OrderInput.DeliveryAddress) && !string.IsNullOrWhiteSpace(UserProfileAddress))
+            {
+                OrderInput.DeliveryAddress = UserProfileAddress;
+            }
 
             return Page();
         }
@@ -90,7 +114,7 @@ namespace ClientWebApp.Pages
                     UserEmail = userEmail,
                     OrderDate = DateTime.Now,
                     Status = OrderStatus.Pending,
-                    TotalPrice = TotalWithDelivery, // Используем сумму с доставкой
+                    TotalPrice = TotalWithDelivery, // РСЃРїРѕР»СЊР·СѓРµРј СЃСѓРјРјСѓ СЃ РґРѕСЃС‚Р°РІРєРѕР№
                     DeliveryAddress = OrderInput.DeliveryAddress,
                     DeliveryMethod = OrderInput.DeliveryMethod,
                     PaymentMethod = OrderInput.PaymentMethod,
@@ -99,13 +123,13 @@ namespace ClientWebApp.Pages
 
                 _orderService.CreateOrder(order);
 
-                TempData["SuccessMessage"] = "Заказ успешно оформлен!";
+                //TempData["SuccessMessage"] = "Р—Р°РєР°Р· СѓСЃРїРµС€РЅРѕ РѕС„РѕСЂРјР»РµРЅ!";
                 return RedirectToPage("/Orders");
             }
             catch (Exception ex)
             {
                 ErrorLogger.LogError("CreateOrder OnPost", ex.Message);
-                ModelState.AddModelError(string.Empty, "Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте снова.");
+                ModelState.AddModelError(string.Empty, "РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РїСЂРё РѕС„РѕСЂРјР»РµРЅРёРё Р·Р°РєР°Р·Р°. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
                 LoadSelectedConfiguration(userEmail, OrderInput.ConfigId);
                 return Page();
             }
@@ -122,22 +146,31 @@ namespace ClientWebApp.Pages
         }
     }
 
-    public class OrderInputModel
+    public class OrderInputModel : IValidatableObject
     {
         public int ConfigId { get; set; }
         public decimal TotalPrice { get; set; }
 
-        [Required(ErrorMessage = "Укажите адрес доставки")]
-        [StringLength(500, ErrorMessage = "Адрес не должен превышать 500 символов")]
-        [Display(Name = "Адрес доставки")]
-        public string DeliveryAddress { get; set; } = string.Empty;
+        [Display(Name = "РђРґСЂРµСЃ РґРѕСЃС‚Р°РІРєРё")]
+        public string? DeliveryAddress { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Выберите способ доставки")]
-        [Display(Name = "Способ доставки")]
+        [Required(ErrorMessage = "Р’С‹Р±РµСЂРёС‚Рµ СЃРїРѕСЃРѕР± РґРѕСЃС‚Р°РІРєРё")]
+        [Display(Name = "РЎРїРѕСЃРѕР± РґРѕСЃС‚Р°РІРєРё")]
         public DeliveryMethod DeliveryMethod { get; set; }
 
-        [Required(ErrorMessage = "Выберите способ оплаты")]
-        [Display(Name = "Способ оплаты")]
+        [Required(ErrorMessage = "Р’С‹Р±РµСЂРёС‚Рµ СЃРїРѕСЃРѕР± РѕРїР»Р°С‚С‹")]
+        [Display(Name = "РЎРїРѕСЃРѕР± РѕРїР»Р°С‚С‹")]
         public PaymentMethod PaymentMethod { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (DeliveryMethod == DeliveryMethod.Courier && string.IsNullOrWhiteSpace(DeliveryAddress))
+            {
+                yield return new ValidationResult(
+                    "РЈРєР°Р¶РёС‚Рµ Р°РґСЂРµСЃ РґРѕСЃС‚Р°РІРєРё",
+                    new[] { nameof(DeliveryAddress) }
+                );
+            }
+        }
     }
 }
