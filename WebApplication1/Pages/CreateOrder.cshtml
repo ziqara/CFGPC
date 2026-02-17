@@ -109,7 +109,7 @@
                                               style="border: 1px solid #d6bcfa; resize: vertical;"
                                               aria-describedby="deliveryAddressHelp"
                                               id="deliveryAddressField"></textarea>
-                                    <small id="deliveryAddressHelp" class="form-text text-muted">Адрес обязателен только при курьерской доставке</small>
+                                    <small id="deliveryAddressHelp" class="form-text text-muted"></small>
                                     <span asp-validation-for="OrderInput.DeliveryAddress" class="text-danger small"></span>
                                 </div>
 
@@ -391,7 +391,7 @@
 
                 //Обновляем подсказку
                 const help = document.getElementById('deliveryAddressHelp');
-                help.textContent = "Адрес обязателен при курьерской доставке";
+                help.textContent = "";
                 help.classList.remove('text-muted');
                 help.classList.add('text-danger');
             } else {

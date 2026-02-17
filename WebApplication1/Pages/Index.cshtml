@@ -1,11 +1,38 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Главная";
 }
 
 <div class="text-center">
     <img src="~/Resources/bigblacklogo.png" alt="Logo" class="main-logo" />
+</div>
+
+<div class="container mt-4">
+    <!-- Фильтр по типу использования -->
+    <div class="mb-4 text-center">
+        <label for="filterTargetUse" class="form-label fw-semibold">Тип использования:</label>
+        <select id="filterTargetUse" class="form-select d-inline-block w-auto mx-2" onchange="applyFilter()">
+            <option value="">Все типы</option>
+            @foreach (var targetUse in Model.AvailableTargetUses)
+            {
+                <option value="@targetUse" selected="@(Model.FilterTargetUse == targetUse)">@targetUse</option>
+            }
+        </select>
+    </div>
+
+    <!-- Карточки конфигураций -->
+    <div id="configCardsContainer">
+        @await Html.PartialAsync("_ConfigCards", Model.DisplayedConfigurations)
+    </div>
+
+    <!-- Кнопка "Показать ещё" -->
+    @if (Model.AllConfigurations.Count > Model.ShowCount)
+    {
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-outline-primary" onclick="loadMore()">Показать ещё</button>
+        </div>
+    }
 </div>
 
 <style>
@@ -22,4 +49,74 @@
         padding: 20px;
         background-color: #f8f9fa;
     }
+
+    .config-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+        .config-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+    .card-img-top {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .price-tag {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #28a745;
+    }
 </style>
+
+<script>
+    let currentShowCount = @Model.ShowCount;
+    let currentFilter = '@Model.FilterTargetUse';
+
+    function applyFilter() {
+        const select = document.getElementById('filterTargetUse');
+        currentFilter = select.value;
+        currentShowCount = 3;
+        loadConfigCards();
+    }
+
+    function loadMore() {
+        currentShowCount += 3;
+        loadConfigCards();
+    }
+
+    function loadConfigCards() {
+        fetch(`?handler=LoadMore&FilterTargetUse=${encodeURIComponent(currentFilter)}&ShowCount=${currentShowCount}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('configCardsContainer').innerHTML = html;
+            // Проверяем, нужно ли показывать кнопку "Показать ещё"
+            checkShowMoreButton();
+        });
+    }
+
+    function checkShowMoreButton() {
+        // Здесь можно реализовать логику, если нужно
+    }
+</script>

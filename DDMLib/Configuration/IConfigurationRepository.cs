@@ -10,5 +10,6 @@ namespace DDMLib.Configuration
     {
         List<ConfigurationDto> GetUserConfigurations(string userEmail);
         bool DeleteConfigurationByIdAndUser(string userEmail, int configId);
+        List<ConfigurationDto> GetPresetConfigurations();
     }
 }

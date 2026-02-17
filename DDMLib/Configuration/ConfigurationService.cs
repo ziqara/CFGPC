@@ -58,5 +58,10 @@ namespace DDMLib.Configuration
                 return $"Произошла ошибка при удалении: {ex.Message}";
             }
         }
+
+        public List<ConfigurationDto> GetPresetConfigurations()
+        {
+            return configurationRepository_.GetPresetConfigurations();
+        }
     }
 }
