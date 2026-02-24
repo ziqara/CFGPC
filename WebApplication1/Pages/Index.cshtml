@@ -5,20 +5,59 @@
 }
 
 <div class="text-center">
-    <img src="~/Resources/bigblacklogo.png" alt="Logo" class="main-logo" />
+    <img src="~/Resources/bigblacklogo.png" alt="DDMachines Logo" class="main-logo" />
 </div>
 
-<div class="container mt-4">
-    <!-- Фильтр по типу использования -->
-    <div class="mb-4 text-center">
-        <label for="filterTargetUse" class="form-label fw-semibold">Тип использования:</label>
-        <select id="filterTargetUse" class="form-select d-inline-block w-auto mx-2" onchange="applyFilter()">
-            <option value="">Все типы</option>
+<div class="container mt-5">
+    <!-- Красивая сортировка по типу использования -->
+    <div class="filter-section mb-5">
+        <h2 class="filter-title text-center mb-4">
+            <i class="fas fa-filter me-2" style="color: #764ba2;"></i>
+            Подберите компьютер под свои задачи
+        </h2>
+
+        <div class="filter-buttons">
+            <button type="button"
+                    class="filter-btn @(string.IsNullOrEmpty(Model.FilterTargetUse) ? "active" : "")"
+                    onclick="setFilter('')">
+                <i class="fas fa-star me-2"></i>
+                Все сборки
+            </button>
+
             @foreach (var targetUse in Model.AvailableTargetUses)
             {
-                <option value="@targetUse" selected="@(Model.FilterTargetUse == targetUse)">@targetUse</option>
+                <button type="button"
+                        class="filter-btn @(Model.FilterTargetUse == targetUse ? "active" : "")"
+                        onclick="setFilter('@targetUse')">
+                    @{
+                        string displayName = targetUse;
+                        string iconClass = "fa-tag";
+
+                        switch (targetUse.ToLower())
+                        {
+                            case "gaming":
+                                displayName = "Игровые";
+                                iconClass = "fa-gamepad";
+                                break;
+                            case "professional":
+                                displayName = "Профессиональные";
+                                iconClass = "fa-briefcase";
+                                break;
+                            case "office":
+                                displayName = "Офисные";
+                                iconClass = "fa-building";
+                                break;
+                            case "student":
+                                displayName = "Для студентов";
+                                iconClass = "fa-graduation-cap";
+                                break;
+                        }
+                    }
+                    <i class="fas @iconClass me-2"></i>
+                    @displayName
+                </button>
             }
-        </select>
+        </div>
     </div>
 
     <!-- Карточки конфигураций -->
@@ -26,97 +65,481 @@
         @await Html.PartialAsync("_ConfigCards", Model.DisplayedConfigurations)
     </div>
 
-    <!-- Кнопка "Показать ещё" -->
-    @if (Model.AllConfigurations.Count > Model.ShowCount)
-    {
-        <div class="text-center mt-4">
-            <button type="button" class="btn btn-outline-primary" onclick="loadMore()">Показать ещё</button>
-        </div>
-    }
+    <!-- Кнопка "Показать ещё / Скрыть" -->
+    <div class="text-center mt-4" id="showMoreButtonContainer">
+        <button type="button" class="btn-toggle" id="toggleButton" onclick="toggleShow()">
+            <i class="fas fa-chevron-down me-2"></i>Показать ещё
+        </button>
+    </div>
 </div>
 
 <style>
     .main-logo {
         max-width: 100%;
         height: auto;
-        max-height: 80vh;
+        max-height: 70vh;
         display: block;
         margin: 0 auto;
+        filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.15));
     }
 
     body {
         margin: 0;
         padding: 20px;
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #f5f7ff 0%, #f0f3ff 100%);
     }
 
-    .config-card {
-        border-radius: 12px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        border: 1px solid #e9ecef;
+    /* Стили для секции фильтрации */
+    .filter-section {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(102, 126, 234, 0.1);
     }
 
-        .config-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    .filter-title {
+        color: #2d3748;
+        font-size: 1.5rem;
+        font-weight: 500;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .filter-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
         }
 
-    .card-img-top {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .filter-btn {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 40px;
+        padding: 0.75rem 1.8rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+
+        .filter-btn i {
+            font-size: 1.1rem;
+            color: #764ba2;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-3px);
+            border-color: #764ba2;
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.15);
+            background: linear-gradient(135deg, #f9f5ff 0%, #f3f4ff 100%);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+            .filter-btn.active i {
+                color: white;
+            }
+
+    /* Индикатор активного фильтра */
+    .active-filter-indicator .badge {
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Стили для карточек */
+    .config-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        border: none;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        position: relative;
+        height: 100%;
+    }
+
+        .config-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .config-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+            .config-card:hover::before {
+                opacity: 1;
+            }
+
+    .card-body {
+        padding: 1.5rem;
     }
 
     .card-title {
-        font-size: 1.2rem;
-        font-weight: bold;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.75rem;
     }
 
     .card-text {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .target-use-badge {
+        display: inline-block;
+        padding: 0.25rem 1rem;
+        background: linear-gradient(135deg, #f3f4ff 0%, #f9f5ff 100%);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #764ba2;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(118, 75, 162, 0.2);
     }
 
     .price-tag {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #28a745;
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 1rem 0;
     }
+
+    .btn-details {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-radius: 30px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        color: #495057;
+        width: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-details:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+    /* Стили для кнопки переключения */
+    .btn-toggle {
+        background: white;
+        border: 2px solid #764ba2;
+        border-radius: 40px;
+        padding: 0.75rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #764ba2;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(118, 75, 162, 0.1);
+    }
+
+        .btn-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(118, 75, 162, 0.2);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-toggle:hover i {
+            transform: translateY(2px);
+        }
+
+    /* Спиннер загрузки */
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 2rem auto;
+        color: #764ba2;
+    }
+
+    /* Адаптивность */
+    @@media (max-width: 768px) {
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+        }
+
+        .price-tag {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Стили для модальных окон */
+    .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .component-item {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .component-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+    /* Убираем cursor: pointer с карточек, так как теперь кнопка для открытия */
+    .config-card {
+        cursor: default;
+    }
+
+        .config-card .btn-details {
+            cursor: pointer;
+        }
+
+    /* Стили для кнопки заказа */
+    .btn-order {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+        .btn-order:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-order i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-order:hover i {
+            transform: scale(1.1);
+        }
+
+    /* Обновляем стиль для кнопки подробнее */
+    .btn-details {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-radius: 30px;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        color: #495057;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-details:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+    /* Обновляем отступы в карточке */
+    .config-card .card-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .config-card .d-flex.gap-2 {
+        margin-top: auto;
+    }
+
+    /* Стили для модального окна */
+    .modal-footer .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+        .modal-footer .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+    .modal-footer .btn-secondary {
+        background: #e9ecef;
+        border: none;
+        color: #495057;
+        padding: 0.6rem 1.5rem;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+        .modal-footer .btn-secondary:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
 </style>
 
 <script>
     let currentShowCount = @Model.ShowCount;
     let currentFilter = '@Model.FilterTargetUse';
+    let isShowingAll = false;
+    const initialShowCount = 3;
 
-    function applyFilter() {
-        const select = document.getElementById('filterTargetUse');
-        currentFilter = select.value;
-        currentShowCount = 3;
+    function setFilter(filterValue) {
+        currentFilter = filterValue;
+        currentShowCount = initialShowCount;
+        isShowingAll = false;
+
+        // Обновляем активный класс на кнопках
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Находим нажатую кнопку и добавляем активный класс
+        event.currentTarget.classList.add('active');
+
         loadConfigCards();
+        updateButtonText();
     }
 
-    function loadMore() {
-        currentShowCount += 3;
+    function toggleShow() {
+        if (isShowingAll) {
+            currentShowCount = initialShowCount;
+            isShowingAll = false;
+        } else {
+            currentShowCount = 999;
+            isShowingAll = true;
+        }
         loadConfigCards();
+        updateButtonText();
     }
 
     function loadConfigCards() {
-        fetch(`?handler=LoadMore&FilterTargetUse=${encodeURIComponent(currentFilter)}&ShowCount=${currentShowCount}`, {
-            method: 'POST',
+        const container = document.getElementById('configCardsContainer');
+        container.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Загрузка...</span></div></div>';
+
+        // Важно: отправляем оригинальное значение (gaming, office и т.д.), не русское
+        fetch(`/Index?handler=LoadMore&filterTargetUse=${encodeURIComponent(currentFilter)}&showCount=${currentShowCount}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
         .then(html => {
-            document.getElementById('configCardsContainer').innerHTML = html;
-            // Проверяем, нужно ли показывать кнопку "Показать ещё"
-            checkShowMoreButton();
+            container.innerHTML = html;
+            updateButtonText();
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            container.innerHTML = '<div class="alert alert-danger text-center">Произошла ошибка при загрузке. Пожалуйста, попробуйте снова.</div>';
         });
     }
 
-    function checkShowMoreButton() {
-        // Здесь можно реализовать логику, если нужно
+    function updateButtonText() {
+        const button = document.getElementById('toggleButton');
+        if (button) {
+            if (isShowingAll) {
+                button.innerHTML = '<i class="fas fa-chevron-up me-2"></i>Скрыть';
+            } else {
+                button.innerHTML = '<i class="fas fa-chevron-down me-2"></i>Показать ещё';
+            }
+        }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const totalConfigs = @Model.AllConfigurations.Count;
+        const buttonContainer = document.getElementById('showMoreButtonContainer');
+
+        if (totalConfigs <= initialShowCount) {
+            if (buttonContainer) {
+                buttonContainer.style.display = 'none';
+            }
+        }
+    });
 </script>

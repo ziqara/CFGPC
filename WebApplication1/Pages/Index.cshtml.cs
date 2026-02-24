@@ -28,7 +28,22 @@ namespace WebApplication1.Pages
 
         public void OnGet()
         {
-            // Загружаем все предустановки
+            LoadConfigurations();
+        }
+
+        public IActionResult OnGetLoadMore(string filterTargetUse, int showCount)
+        {
+            FilterTargetUse = filterTargetUse ?? "";
+            ShowCount = showCount;
+
+            LoadConfigurations();
+
+            return Partial("_ConfigCards", DisplayedConfigurations);
+        }
+
+        private void LoadConfigurations()
+        {
+            // Загружаем все предустановки (isPreset = 1)
             AllConfigurations = _configurationService.GetPresetConfigurations();
 
             // Получаем уникальные значения targetUse
@@ -45,18 +60,11 @@ namespace WebApplication1.Pages
                 filtered = filtered.Where(c => c.Configuration.TargetUse == FilterTargetUse);
             }
 
-            // Сортируем по цене (опционально)
+            // Сортируем по цене
             filtered = filtered.OrderBy(c => c.Configuration.TotalPrice);
 
-            // Берем первые N
+            // Берем первые ShowCount (если ShowCount очень большой, берем все)
             DisplayedConfigurations = filtered.Take(ShowCount).ToList();
-        }
-
-        public IActionResult OnPostLoadMore()
-        {
-            OnGet(); // Загружаем всё снова
-            ShowCount += 3; // Увеличиваем количество
-            return Partial("_ConfigCards", DisplayedConfigurations);
         }
     }
 }

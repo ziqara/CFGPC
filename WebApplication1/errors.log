@@ -889,3 +889,59 @@
 2026-02-22 20:54:36 | OnGet ComponentsPageModel | Загружено компонентов: 5
 2026-02-22 20:54:37 | OnGet ComponentsPageModel | Загружено компонентов: 5
 2026-02-22 20:54:39 | OnGet ComponentsPageModel | Загружено компонентов: 3
+2026-02-24 18:50:41 | UserProfileModel OnGet | Started
+2026-02-24 18:50:41 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:06 | UserProfileModel OnGet | Started
+2026-02-24 18:51:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:11 | UserProfileModel OnGet | Started
+2026-02-24 18:51:11 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:13 | UserProfileModel OnGet | Started
+2026-02-24 18:51:13 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:15 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-24 18:51:15 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-24 18:51:53 | UserProfileModel OnGet | Started
+2026-02-24 18:51:53 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:55 | UserProfileModel OnGet | Started
+2026-02-24 18:51:55 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:57 | UserProfileModel OnGet | Started
+2026-02-24 18:51:57 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:51:57 | UserProfileModel OnGet | Started
+2026-02-24 18:51:57 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:52:06 | UserProfileModel OnGet | Started
+2026-02-24 18:52:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:52:17 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-24 18:52:17 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-24 18:52:19 | UserProfileModel OnGet | Started
+2026-02-24 18:52:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:52:22 | UserProfileModel OnGet | Started
+2026-02-24 18:52:22 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:58:53 | UserProfileModel OnGet | Started
+2026-02-24 18:58:53 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 18:59:06 | UserProfileModel OnGet | Started
+2026-02-24 18:59:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:11 | UserProfileModel OnGet | Started
+2026-02-24 19:08:11 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:13 | UserProfileModel OnGet | Started
+2026-02-24 19:08:13 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:14 | UserProfileModel OnGet | Started
+2026-02-24 19:08:14 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:15 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-24 19:08:15 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-24 19:08:23 | UserProfileModel OnGet | Started
+2026-02-24 19:08:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:32 | UserProfileModel OnGet | Started
+2026-02-24 19:08:32 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:08:33 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-24 19:08:33 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-24 19:34:44 | UserProfileModel OnGet | Started
+2026-02-24 19:34:44 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:35:37 | UserProfileModel OnGet | Started
+2026-02-24 19:35:37 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:39:25 | UserProfileModel OnGet | Started
+2026-02-24 19:39:25 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:39:39 | UserProfileModel OnGet | Started
+2026-02-24 19:39:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:44:08 | UserProfileModel OnGet | Started
+2026-02-24 19:44:08 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-24 19:44:15 | UserProfileModel OnGet | Started
+2026-02-24 19:44:15 | UserProfileModel OnGet | Profile and configurations loaded successfully.

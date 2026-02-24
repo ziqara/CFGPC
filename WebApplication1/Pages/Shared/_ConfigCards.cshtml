@@ -1,20 +1,162 @@
-﻿@model List<DDMLib.Configuration.ConfigurationDto>
+﻿@using DDMLib.Configuration
+@model List<ConfigurationDto>
 
-<div class="row g-4">
-    @foreach (var config in Model)
-    {
-        <div class="col-md-4">
-            <div class="card config-card h-100">
-                <img src="~/Resources/default-config-image.jpg" class="card-img-top" alt="@config.Configuration.ConfigName" />
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@config.Configuration.ConfigName</h5>
-                    <p class="card-text">@config.Configuration.Description</p>
-                    <div class="mt-auto">
-                        <p class="mb-1"><strong>Цель:</strong> @config.Configuration.TargetUse</p>
-                        <p class="price-tag">@config.Configuration.TotalPrice.ToString("N0") ₽</p>
+@if (Model != null && Model.Any())
+{
+    <div class="row g-4">
+        @foreach (var configDto in Model)
+        {
+            string displayTargetUse = configDto.Configuration.TargetUse switch
+            {
+                "gaming" => "Игровой",
+                "professional" => "Профессиональный",
+                "office" => "Офисный",
+                "student" => "Для студентов",
+                _ => configDto.Configuration.TargetUse
+            };
+
+            <div class="col-md-4">
+                <div class="config-card">
+                    <div class="card-body">
+                        <div class="target-use-badge">
+                            <i class="fas fa-tag me-1"></i> @displayTargetUse
+                        </div>
+
+                        <h5 class="card-title">@configDto.Configuration.ConfigName</h5>
+
+                        <p class="card-text">
+                            @if (!string.IsNullOrEmpty(configDto.Configuration.Description) && configDto.Configuration.Description.Length > 100)
+                            {
+                                @(configDto.Configuration.Description.Substring(0, 100) + "...")
+                            }
+                            else
+                            {
+                                @configDto.Configuration.Description
+                            }
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price-tag">
+                                @configDto.Configuration.TotalPrice.ToString("N0") ₽
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fas fa-microchip me-1"></i> @configDto.Components.Count комп.
+                            </span>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn-details flex-grow-1" data-bs-toggle="modal" data-bs-target="#configModal-@configDto.Configuration.ConfigId">
+                                <i class="fas fa-info-circle me-2"></i>Подробнее
+                            </button>
+
+                            <a asp-page="/CreateOrder" asp-route-configId="@configDto.Configuration.ConfigId"
+                               class="btn-order">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+
+            <!-- Модальное окно для конфигурации -->
+            <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h5 class="modal-title text-white" id="configModalLabel-@configDto.Configuration.ConfigId">
+                                <i class="fas fa-microchip me-2"></i>
+                                @configDto.Configuration.ConfigName
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Цель использования:</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="target-use-badge">@displayTargetUse</span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Стоимость:</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="price-tag" style="font-size: 1.2rem;">@configDto.Configuration.TotalPrice.ToString("N0") ₽</span>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(configDto.Configuration.Description))
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <strong>Описание:</strong>
+                                        <p class="text-muted mb-0 mt-1">@configDto.Configuration.Description</p>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(configDto.Configuration.OtherOptions))
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <strong>Дополнительные опции:</strong>
+                                        <p class="text-muted mb-0 mt-1">@configDto.Configuration.OtherOptions</p>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <strong>Компоненты (@configDto.Components.Count):</strong>
+                                    <div class="mt-2">
+                                        @foreach (var comp in configDto.Components)
+                                        {
+                                            <div class="component-item mb-2 p-2" style="background: #f8f9fa; border-radius: 8px; border-left: 4px solid #764ba2;">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <div class="fw-semibold">@comp.Name</div>
+                                                        <small class="text-muted">
+                                                            <span class="badge bg-light text-dark me-2">@comp.Brand</span>
+                                                            <span class="badge bg-light text-dark">@comp.Type</span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <div class="fw-bold" style="color: #764ba2;">@comp.Price.ToString("N0") ₽</div>
+                                                        <small class="text-muted">@comp.Model</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <div>
+                                <!-- Можно добавить дополнительные кнопки слева при необходимости -->
+                            </div>
+                            <div>
+                                <a asp-page="/CreateOrder" asp-route-configId="@configDto.Configuration.ConfigId"
+                                   class="btn btn-primary me-2">
+                                    <i class="fas fa-shopping-cart me-2"></i>Заказать
+                                </a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center py-5">
+        <i class="fas fa-box-open fa-3x mb-3" style="color: #764ba2;"></i>
+        <h4>Конфигурации не найдены</h4>
+        <p class="mb-0">Попробуйте выбрать другой тип использования</p>
+    </div>
+}
