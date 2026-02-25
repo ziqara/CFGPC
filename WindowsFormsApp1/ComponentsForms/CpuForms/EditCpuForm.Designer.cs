@@ -83,6 +83,11 @@
             // 
             this.nudTdp.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudTdp.Location = new System.Drawing.Point(364, 86);
+            this.nudTdp.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.nudTdp.Name = "nudTdp";
             this.nudTdp.Size = new System.Drawing.Size(100, 22);
             this.nudTdp.TabIndex = 73;
@@ -101,6 +106,11 @@
             // 
             this.nudCores.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudCores.Location = new System.Drawing.Point(364, 60);
+            this.nudCores.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.nudCores.Name = "nudCores";
             this.nudCores.Size = new System.Drawing.Size(100, 22);
             this.nudCores.TabIndex = 71;
@@ -137,11 +147,11 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(16, 194);
+            this.label7.Location = new System.Drawing.Point(46, 197);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 16);
+            this.label7.Size = new System.Drawing.Size(41, 16);
             this.label7.TabIndex = 67;
-            this.label7.Text = "Фото URL";
+            this.label7.Text = "Фото";
             // 
             // label6
             // 
@@ -171,7 +181,7 @@
             this.chkAvailable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkAvailable.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.chkAvailable.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chkAvailable.Location = new System.Drawing.Point(19, 219);
+            this.chkAvailable.Location = new System.Drawing.Point(13, 218);
             this.chkAvailable.Name = "chkAvailable";
             this.chkAvailable.Size = new System.Drawing.Size(93, 21);
             this.chkAvailable.TabIndex = 64;
@@ -193,6 +203,11 @@
             // 
             this.nudStock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudStock.Location = new System.Drawing.Point(93, 138);
+            this.nudStock.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.nudStock.Name = "nudStock";
             this.nudStock.Size = new System.Drawing.Size(100, 22);
             this.nudStock.TabIndex = 62;
@@ -212,6 +227,11 @@
             this.nudPrice.DecimalPlaces = 2;
             this.nudPrice.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudPrice.Location = new System.Drawing.Point(93, 112);
+            this.nudPrice.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.nudPrice.Name = "nudPrice";
             this.nudPrice.Size = new System.Drawing.Size(100, 22);
             this.nudPrice.TabIndex = 60;
@@ -257,7 +277,7 @@
             // txtPhoto
             // 
             this.txtPhoto.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtPhoto.Location = new System.Drawing.Point(93, 191);
+            this.txtPhoto.Location = new System.Drawing.Point(93, 194);
             this.txtPhoto.Name = "txtPhoto";
             this.txtPhoto.Size = new System.Drawing.Size(161, 22);
             this.txtPhoto.TabIndex = 55;

@@ -124,6 +124,11 @@
             // 
             this.nudSpeedMhz.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudSpeedMhz.Location = new System.Drawing.Point(419, 81);
+            this.nudSpeedMhz.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudSpeedMhz.Name = "nudSpeedMhz";
             this.nudSpeedMhz.Size = new System.Drawing.Size(100, 22);
             this.nudSpeedMhz.TabIndex = 100;
@@ -160,11 +165,11 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(38, 187);
+            this.label7.Location = new System.Drawing.Point(61, 187);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 16);
+            this.label7.Size = new System.Drawing.Size(45, 16);
             this.label7.TabIndex = 96;
-            this.label7.Text = "Фото URL";
+            this.label7.Text = "Фото ";
             // 
             // label6
             // 
@@ -216,6 +221,11 @@
             // 
             this.nudStock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudStock.Location = new System.Drawing.Point(115, 131);
+            this.nudStock.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudStock.Name = "nudStock";
             this.nudStock.Size = new System.Drawing.Size(100, 22);
             this.nudStock.TabIndex = 91;
@@ -235,6 +245,11 @@
             this.nudPrice.DecimalPlaces = 2;
             this.nudPrice.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudPrice.Location = new System.Drawing.Point(115, 105);
+            this.nudPrice.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudPrice.Name = "nudPrice";
             this.nudPrice.Size = new System.Drawing.Size(100, 22);
             this.nudPrice.TabIndex = 89;

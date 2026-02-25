@@ -33,7 +33,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.nudCapacityGb = new System.Windows.Forms.NumericUpDown();
             this.txtDesc = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cbxSupplier = new System.Windows.Forms.ComboBox();
             this.chkAvailable = new System.Windows.Forms.CheckBox();
@@ -45,12 +44,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtModel = new System.Windows.Forms.TextBox();
-            this.txtPhoto = new System.Windows.Forms.TextBox();
             this.txtBrand = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.cbxInterface = new System.Windows.Forms.ComboBox();
+            this.btnBrowsePhoto = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtPhoto = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudCapacityGb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
@@ -104,16 +105,6 @@
             this.txtDesc.Size = new System.Drawing.Size(204, 96);
             this.txtDesc.TabIndex = 68;
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(16, 194);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 16);
-            this.label7.TabIndex = 67;
-            this.label7.Text = "Фото URL";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -142,7 +133,7 @@
             this.chkAvailable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkAvailable.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.chkAvailable.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chkAvailable.Location = new System.Drawing.Point(19, 219);
+            this.chkAvailable.Location = new System.Drawing.Point(12, 219);
             this.chkAvailable.Name = "chkAvailable";
             this.chkAvailable.Size = new System.Drawing.Size(93, 21);
             this.chkAvailable.TabIndex = 64;
@@ -164,6 +155,11 @@
             // 
             this.nudStock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudStock.Location = new System.Drawing.Point(93, 138);
+            this.nudStock.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudStock.Name = "nudStock";
             this.nudStock.Size = new System.Drawing.Size(100, 22);
             this.nudStock.TabIndex = 62;
@@ -183,6 +179,11 @@
             this.nudPrice.DecimalPlaces = 2;
             this.nudPrice.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudPrice.Location = new System.Drawing.Point(93, 112);
+            this.nudPrice.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudPrice.Name = "nudPrice";
             this.nudPrice.Size = new System.Drawing.Size(100, 22);
             this.nudPrice.TabIndex = 60;
@@ -224,14 +225,6 @@
             this.txtModel.Name = "txtModel";
             this.txtModel.Size = new System.Drawing.Size(161, 22);
             this.txtModel.TabIndex = 56;
-            // 
-            // txtPhoto
-            // 
-            this.txtPhoto.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtPhoto.Location = new System.Drawing.Point(93, 191);
-            this.txtPhoto.Name = "txtPhoto";
-            this.txtPhoto.Size = new System.Drawing.Size(161, 22);
-            this.txtPhoto.TabIndex = 55;
             // 
             // txtBrand
             // 
@@ -279,18 +272,49 @@
             this.cbxInterface.Size = new System.Drawing.Size(125, 21);
             this.cbxInterface.TabIndex = 76;
             // 
+            // btnBrowsePhoto
+            // 
+            this.btnBrowsePhoto.Location = new System.Drawing.Point(179, 193);
+            this.btnBrowsePhoto.Name = "btnBrowsePhoto";
+            this.btnBrowsePhoto.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowsePhoto.TabIndex = 152;
+            this.btnBrowsePhoto.Text = "Выбрать";
+            this.btnBrowsePhoto.UseVisualStyleBackColor = true;
+            this.btnBrowsePhoto.Click += new System.EventHandler(this.btnBrowsePhoto_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(46, 196);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 16);
+            this.label7.TabIndex = 151;
+            this.label7.Text = "Фото";
+            // 
+            // txtPhoto
+            // 
+            this.txtPhoto.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtPhoto.Location = new System.Drawing.Point(93, 194);
+            this.txtPhoto.Name = "txtPhoto";
+            this.txtPhoto.ReadOnly = true;
+            this.txtPhoto.Size = new System.Drawing.Size(80, 20);
+            this.txtPhoto.TabIndex = 150;
+            // 
             // AddStorageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(551, 336);
+            this.Controls.Add(this.btnBrowsePhoto);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.txtPhoto);
             this.Controls.Add(this.cbxInterface);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.nudCapacityGb);
             this.Controls.Add(this.txtDesc);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.cbxSupplier);
             this.Controls.Add(this.chkAvailable);
@@ -302,7 +326,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtModel);
-            this.Controls.Add(this.txtPhoto);
             this.Controls.Add(this.txtBrand);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.btnCancel);
@@ -327,7 +350,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown nudCapacityGb;
         private System.Windows.Forms.TextBox txtDesc;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbxSupplier;
         private System.Windows.Forms.CheckBox chkAvailable;
@@ -339,11 +361,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtModel;
-        private System.Windows.Forms.TextBox txtPhoto;
         private System.Windows.Forms.TextBox txtBrand;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox cbxInterface;
+        private System.Windows.Forms.Button btnBrowsePhoto;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtPhoto;
     }
 }

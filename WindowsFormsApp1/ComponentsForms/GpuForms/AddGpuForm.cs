@@ -22,13 +22,40 @@ namespace WindowsFormsApp1.ComponentsForms.GpuForms
 
             gpuService_ = gpuService ?? throw new ArgumentNullException(nameof(gpuService));
             supplierService_ = new SupplierService(new MySqlSupplierRepository());
-
+            txtPhoto.ReadOnly = true;
             this.Shown += AddGpuForm_Shown;
+        }
+
+        private string GetSavedPhotoPathForDb()
+        {
+            if (string.IsNullOrWhiteSpace(txtPhoto.Text))
+                return null;
+
+            var t = txtPhoto.Text.Trim();
+
+            if (t.StartsWith("/Resources/", StringComparison.OrdinalIgnoreCase))
+                return t;
+
+            return PhotoStorage.SavePhotoToResources(t); // вернет /Resources/xxx.jpg и скопирует файл
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Gpu gpu = BuildFromControls();
+            string savedPhoto = null;
+
+            try
+            {
+                savedPhoto = GetSavedPhotoPathForDb();
+                txtPhoto.Text = savedPhoto ?? "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось сохранить изображение.\n\n" + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Gpu gpu = BuildFromControls(savedPhoto);
 
             string result = gpuService_.CreateGpu(gpu);
             if (!string.IsNullOrEmpty(result))
@@ -41,7 +68,7 @@ namespace WindowsFormsApp1.ComponentsForms.GpuForms
             Close();
         }
 
-        private Gpu BuildFromControls()
+        private Gpu BuildFromControls(string savedPhotoPath)
         {
             int selectedInn = (int)cbxSupplier.SelectedValue;
 
@@ -54,7 +81,8 @@ namespace WindowsFormsApp1.ComponentsForms.GpuForms
                 Brand = string.IsNullOrWhiteSpace(txtBrand.Text) ? null : txtBrand.Text.Trim(),
                 Model = string.IsNullOrWhiteSpace(txtModel.Text) ? null : txtModel.Text.Trim(),
                 Description = string.IsNullOrWhiteSpace(txtDesc.Text) ? null : txtDesc.Text.Trim(),
-                PhotoUrl = string.IsNullOrWhiteSpace(txtPhoto.Text) ? null : txtPhoto.Text.Trim(),
+
+                PhotoUrl = string.IsNullOrWhiteSpace(savedPhotoPath) ? null : savedPhotoPath,
 
                 Price = nudPrice.Value,
                 StockQuantity = (int)nudStock.Value,
@@ -118,6 +146,22 @@ namespace WindowsFormsApp1.ComponentsForms.GpuForms
             cbxSupplier.ValueMember = "Inn";
             cbxSupplier.SelectedIndex = 0;
             cbxSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        private void btnBrowsePhoto_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Выберите изображение";
+                ofd.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp";
+                ofd.Multiselect = false;
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    txtPhoto.Text = ofd.FileName; // временно абсолютный путь
+                }
+            }
         }
     }
 }

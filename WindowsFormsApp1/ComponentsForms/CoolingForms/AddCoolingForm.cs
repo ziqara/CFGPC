@@ -23,6 +23,8 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
             coolingService_ = coolingService ?? throw new ArgumentNullException(nameof(coolingService));
             supplierService_ = new SupplierService(new MySqlSupplierRepository());
 
+            txtPhoto.ReadOnly = true;
+
             this.Shown += AddCoolingForm_Shown;
         }
 
@@ -36,7 +38,22 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Cooling item = BuildFromControls();
+            string savedPhoto = null;
+
+            try
+            {
+                savedPhoto = GetSavedPhotoPathForDb();
+                // чтобы сразу было видно, что сохранится в БД
+                txtPhoto.Text = savedPhoto ?? "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось сохранить изображение.\n\n" + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Cooling item = BuildFromControls(savedPhoto);
 
             string result = coolingService_.CreateCooling(item);
             if (!string.IsNullOrEmpty(result))
@@ -97,7 +114,7 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
             cbxSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        private Cooling BuildFromControls()
+        private Cooling BuildFromControls(string savedPhotoPath)
         {
             int selectedInn = (int)cbxSupplier.SelectedValue;
 
@@ -110,7 +127,8 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
                 Brand = string.IsNullOrWhiteSpace(txtBrand.Text) ? null : txtBrand.Text.Trim(),
                 Model = string.IsNullOrWhiteSpace(txtModel.Text) ? null : txtModel.Text.Trim(),
                 Description = string.IsNullOrWhiteSpace(txtDesc.Text) ? null : txtDesc.Text.Trim(),
-                PhotoUrl = string.IsNullOrWhiteSpace(txtPhoto.Text) ? null : txtPhoto.Text.Trim(),
+
+                PhotoUrl = string.IsNullOrWhiteSpace(savedPhotoPath) ? null : savedPhotoPath,
 
                 Price = nudPrice.Value,
                 StockQuantity = (int)nudStock.Value,
@@ -130,6 +148,37 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void btnBrowsePhoto_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Выберите изображение";
+                ofd.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp";
+                ofd.Multiselect = false;
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    // временно кладём абсолютный путь выбранного файла
+                    txtPhoto.Text = ofd.FileName;
+                }
+            }
+        }
+        private string GetSavedPhotoPathForDb()
+        {
+            if (string.IsNullOrWhiteSpace(txtPhoto.Text))
+                return null;
+
+            var t = txtPhoto.Text.Trim();
+
+            // Если уже хранится как /Resources/...
+            if (t.StartsWith("/Resources/", StringComparison.OrdinalIgnoreCase))
+                return t;
+
+            // Иначе это C:\...\file.jpg -> копируем в Resources и получаем /Resources/xxx.jpg
+            return PhotoStorage.SavePhotoToResources(t);
         }
     }
 }

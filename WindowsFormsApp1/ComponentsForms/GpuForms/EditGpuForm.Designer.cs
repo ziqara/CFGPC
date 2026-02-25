@@ -92,6 +92,11 @@
             // 
             this.nudTdp.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudTdp.Location = new System.Drawing.Point(419, 24);
+            this.nudTdp.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
             this.nudTdp.Name = "nudTdp";
             this.nudTdp.Size = new System.Drawing.Size(100, 22);
             this.nudTdp.TabIndex = 128;
@@ -110,7 +115,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(298, 52);
+            this.label9.Location = new System.Drawing.Point(294, 53);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(122, 16);
             this.label9.TabIndex = 126;
@@ -120,6 +125,11 @@
             // 
             this.nudVramGb.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudVramGb.Location = new System.Drawing.Point(419, 50);
+            this.nudVramGb.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
             this.nudVramGb.Name = "nudVramGb";
             this.nudVramGb.Size = new System.Drawing.Size(100, 22);
             this.nudVramGb.TabIndex = 125;
@@ -138,11 +148,11 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(38, 183);
+            this.label7.Location = new System.Drawing.Point(65, 184);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 16);
+            this.label7.Size = new System.Drawing.Size(41, 16);
             this.label7.TabIndex = 123;
-            this.label7.Text = "Фото URL";
+            this.label7.Text = "Фото";
             // 
             // label6
             // 
@@ -194,6 +204,11 @@
             // 
             this.nudStock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudStock.Location = new System.Drawing.Point(115, 127);
+            this.nudStock.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
             this.nudStock.Name = "nudStock";
             this.nudStock.Size = new System.Drawing.Size(100, 22);
             this.nudStock.TabIndex = 118;
@@ -213,6 +228,11 @@
             this.nudPrice.DecimalPlaces = 2;
             this.nudPrice.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudPrice.Location = new System.Drawing.Point(115, 101);
+            this.nudPrice.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
             this.nudPrice.Name = "nudPrice";
             this.nudPrice.Size = new System.Drawing.Size(100, 22);
             this.nudPrice.TabIndex = 116;
@@ -258,7 +278,7 @@
             // txtPhoto
             // 
             this.txtPhoto.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtPhoto.Location = new System.Drawing.Point(115, 180);
+            this.txtPhoto.Location = new System.Drawing.Point(115, 182);
             this.txtPhoto.Name = "txtPhoto";
             this.txtPhoto.Size = new System.Drawing.Size(161, 22);
             this.txtPhoto.TabIndex = 111;

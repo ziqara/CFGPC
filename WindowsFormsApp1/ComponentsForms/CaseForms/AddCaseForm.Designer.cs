@@ -51,6 +51,8 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.txtFormFactor = new System.Windows.Forms.TextBox();
+            this.btnBrowsePhoto = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.nudStock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             this.SuspendLayout();
@@ -97,11 +99,11 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(40, 193);
+            this.label7.Location = new System.Drawing.Point(69, 195);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 16);
+            this.label7.Size = new System.Drawing.Size(41, 16);
             this.label7.TabIndex = 93;
-            this.label7.Text = "Фото URL";
+            this.label7.Text = "Фото";
             // 
             // label6
             // 
@@ -153,6 +155,11 @@
             // 
             this.nudStock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudStock.Location = new System.Drawing.Point(117, 137);
+            this.nudStock.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudStock.Name = "nudStock";
             this.nudStock.Size = new System.Drawing.Size(100, 22);
             this.nudStock.TabIndex = 88;
@@ -172,6 +179,11 @@
             this.nudPrice.DecimalPlaces = 2;
             this.nudPrice.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudPrice.Location = new System.Drawing.Point(117, 111);
+            this.nudPrice.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudPrice.Name = "nudPrice";
             this.nudPrice.Size = new System.Drawing.Size(100, 22);
             this.nudPrice.TabIndex = 86;
@@ -216,10 +228,11 @@
             // 
             // txtPhoto
             // 
-            this.txtPhoto.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtPhoto.Location = new System.Drawing.Point(117, 190);
+            this.txtPhoto.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtPhoto.Location = new System.Drawing.Point(117, 193);
             this.txtPhoto.Name = "txtPhoto";
-            this.txtPhoto.Size = new System.Drawing.Size(161, 22);
+            this.txtPhoto.ReadOnly = true;
+            this.txtPhoto.Size = new System.Drawing.Size(80, 20);
             this.txtPhoto.TabIndex = 81;
             // 
             // txtBrand
@@ -278,11 +291,26 @@
             this.txtFormFactor.Size = new System.Drawing.Size(125, 22);
             this.txtFormFactor.TabIndex = 102;
             // 
+            // btnBrowsePhoto
+            // 
+            this.btnBrowsePhoto.Location = new System.Drawing.Point(203, 193);
+            this.btnBrowsePhoto.Name = "btnBrowsePhoto";
+            this.btnBrowsePhoto.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowsePhoto.TabIndex = 103;
+            this.btnBrowsePhoto.Text = "Выбрать";
+            this.btnBrowsePhoto.UseVisualStyleBackColor = true;
+            this.btnBrowsePhoto.Click += new System.EventHandler(this.btnBrowsePhoto_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // AddCaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(551, 336);
+            this.Controls.Add(this.btnBrowsePhoto);
             this.Controls.Add(this.txtFormFactor);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.cbxSize);
@@ -343,5 +371,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtFormFactor;
+        private System.Windows.Forms.Button btnBrowsePhoto;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

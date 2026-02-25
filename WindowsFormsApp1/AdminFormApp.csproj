@@ -263,6 +263,18 @@
     <Compile Include="UserOrder\UsersCardsForm.Designer.cs">
       <DependentUpon>UsersCardsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ComponentsForms\CaseForms\AddCaseForm.resx">
+      <DependentUpon>AddCaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CaseForms\EditCaseForm.resx">
+      <DependentUpon>EditCaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CoolingForms\AddCoolingForm.resx">
+      <DependentUpon>AddCoolingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CoolingForms\EditCoolingForm.resx">
+      <DependentUpon>EditCoolingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\CpuForms\AddCpuForm.resx">
       <DependentUpon>AddCpuForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -271,6 +283,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\CpuForms\EditCpuForm.resx">
       <DependentUpon>EditCpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\GpuForms\AddGpuForm.resx">
+      <DependentUpon>AddGpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\GpuForms\EditGpuForm.resx">
+      <DependentUpon>EditGpuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\MainFormForComponents.resx">
       <DependentUpon>MainFormForComponents.cs</DependentUpon>
@@ -293,6 +311,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\PsuForms\EditPsuForm.resx">
       <DependentUpon>EditPsuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\RamForms\AddRamForm.resx">
+      <DependentUpon>AddRamForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\RamForms\EditRamForm.resx">
+      <DependentUpon>EditRamForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\StorageForms\AddStorageForm.resx">
+      <DependentUpon>AddStorageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\StorageForms\EditStorageForm.resx">
+      <DependentUpon>EditStorageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SupplierForms\EditSupplierForm.resx">
       <DependentUpon>EditSupplierForm.cs</DependentUpon>
