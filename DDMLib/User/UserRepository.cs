@@ -4,6 +4,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using BCrypt.Net;
 using DDMLib;
+using System.Collections.Generic;
 
 public class UserRepository : IUserRepository
 {
@@ -218,6 +219,105 @@ public class UserRepository : IUserRepository
             {
                 ErrorLogger.LogError("UserRepository UpdateAvatar", ex.Message);
                 throw;
+            }
+        }
+    }
+
+    public List<User> ReadAllUsers()
+    {
+        var users = new List<User>();
+
+        using (var connection = new MySqlConnection(Config.ConnectionString))
+        {
+            connection.Open();
+
+            const string sql = @"
+                SELECT email, passwordHash, fullName, phone, address, registrationDate, avatar
+                FROM users
+                ORDER BY registrationDate DESC;";
+
+            using (var command = new MySqlCommand(sql, connection))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    users.Add(new User
+                    {
+                        Email = reader.IsDBNull(0) ? "" : reader.GetString(0),
+                        Password = reader.IsDBNull(1) ? "" : reader.GetString(1), // passwordHash
+                        FullName = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                        Phone = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        Address = reader.IsDBNull(4) ? null : reader.GetString(4),
+                        RegistrationDate = reader.IsDBNull(5) ? DateTime.MinValue : reader.GetDateTime(5),
+                        Avatar = reader.IsDBNull(6) ? null : (byte[])reader["avatar"]
+                    });
+                }
+            }
+        }
+
+        return users;
+    }
+
+    public Dictionary<string, bool> ReadActiveOrdersFlags()
+    {
+        var map = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+
+        using (var connection = new MySqlConnection(Config.ConnectionString))
+        {
+            connection.Open();
+
+            // активные = НЕ delivered/cancelled
+            const string sql = @"
+                SELECT u.email,
+                       EXISTS(
+                           SELECT 1
+                           FROM orders o
+                           WHERE o.userEmail = u.email
+                             AND o.status NOT IN ('delivered','cancelled')
+                       ) AS hasActive
+                FROM users u;";
+
+            using (var cmd = new MySqlCommand(sql, connection))
+            using (var r = cmd.ExecuteReader())
+            {
+                while (r.Read())
+                {
+                    string email = r.IsDBNull(0) ? "" : r.GetString(0);
+                    bool hasActive = Convert.ToInt32(r.GetValue(1)) == 1;
+                    map[email] = hasActive;
+                }
+            }
+        }
+
+        return map;
+    }
+
+    public bool HasAnyOrders(string email)
+    {
+        using (var connection = new MySqlConnection(Config.ConnectionString))
+        {
+            connection.Open();
+
+            const string sql = "SELECT COUNT(*) FROM orders WHERE userEmail=@email;";
+            using (var cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@email", email);
+                return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+            }
+        }
+    }
+
+    public bool DeleteByEmail(string email)
+    {
+        using (var connection = new MySqlConnection(Config.ConnectionString))
+        {
+            connection.Open();
+
+            const string sql = "DELETE FROM users WHERE email=@email;";
+            using (var cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@email", email);
+                return cmd.ExecuteNonQuery() > 0;
             }
         }
     }

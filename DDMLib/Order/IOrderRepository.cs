@@ -10,5 +10,9 @@ namespace DDMLib.Order
     {
         List<Order> GetOrdersByUserEmail(string userEmail);
         void AddOrder(Order order);
+
+        // ADMIN
+        bool ExistsById(int orderId);
+        bool UpdateOrderStatusAndPaid(int orderId, OrderStatus status, bool isPaid);
     }
 }

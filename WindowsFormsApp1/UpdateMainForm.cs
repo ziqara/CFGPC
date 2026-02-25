@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApp1.UserOrder;
 
 namespace WindowsFormsApp1
 {
@@ -122,7 +123,7 @@ namespace WindowsFormsApp1
 
         private void btnClients_Click_1(object sender, EventArgs e)
         {
-            OpenChildForm(new MainForm(), sender);
+            OpenChildForm(new UsersCardsForm(), sender);
         }
 
         private void btnWarrious_Click(object sender, EventArgs e)

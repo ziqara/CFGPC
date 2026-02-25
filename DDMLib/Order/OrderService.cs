@@ -64,5 +64,14 @@ namespace DDMLib.Order
                 throw;
             }
         }
+
+        public string AdminUpdateOrderStatusAndPaid(int orderId, OrderStatus status, bool isPaid)
+        {
+            if (orderId <= 0) return "Некорректный ID заказа";
+            if (!_orderRepository.ExistsById(orderId)) return "Заказ не найден";
+
+            bool ok = _orderRepository.UpdateOrderStatusAndPaid(orderId, status, isPaid);
+            return ok ? string.Empty : "Не удалось обновить заказ (ошибка БД)";
+        }
     }
 }
