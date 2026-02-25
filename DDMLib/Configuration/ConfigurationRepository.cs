@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DDMLib.Component;
+using DDMLib.Configurations;
 
 namespace DDMLib.Configuration
 {
@@ -323,6 +324,87 @@ namespace DDMLib.Configuration
                     ErrorLogger.LogError("DeleteConfigurationByIdAndUser", ex.Message);
                     throw; // Пробрасываем исключение выше для обработки в сервисе
                 }
+            }
+        }
+
+        public ConfigurationDetails GetDetails(int configId)
+        {
+            var details = new ConfigurationDetails { ConfigId = configId };
+
+            using (var conn = new MySqlConnection(Config.ConnectionString))
+            {
+                conn.Open();
+
+                // 1) Название конфигурации
+                using (var cmd = new MySqlCommand(
+                    "SELECT configName FROM configurations WHERE configId=@id LIMIT 1;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", configId);
+                    var name = cmd.ExecuteScalar();
+                    details.ConfigName = name == null ? "" : Convert.ToString(name);
+                }
+
+                // 2) Состав конфигурации
+                // Ожидаем таблицы:
+                // config_components(configId, componentId, quantity)
+                // components(componentId, name, brand, model, componentType, price, supplierInn)
+                // suppliers(inn, name)
+                string sql = @"
+                    SELECT
+                        c.componentType,
+                        c.name,
+                        c.brand,
+                        c.model,
+                        cc.quantity,
+                        c.price,
+                        s.name AS supplierName
+                    FROM config_components cc
+                    JOIN components c ON cc.componentId = c.componentId
+                    LEFT JOIN suppliers s ON c.supplierInn = s.inn
+                    WHERE cc.configId = @id
+                    ORDER BY c.componentType, c.name;";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", configId);
+
+                    using (var r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            string typeRaw = r.IsDBNull(0) ? "" : r.GetString(0);
+
+                            details.Components.Add(new ConfigComponentInfo
+                            {
+                                ComponentType = ToRussianComponentType(typeRaw),
+                                ComponentName = r.IsDBNull(1) ? "" : r.GetString(1),
+                                Brand = r.IsDBNull(2) ? "—" : r.GetString(2),
+                                Model = r.IsDBNull(3) ? "—" : r.GetString(3),
+                                Quantity = r.IsDBNull(4) ? 1 : r.GetInt32(4),
+                                Price = r.IsDBNull(5) ? 0m : r.GetDecimal(5),
+                                SupplierName = r.IsDBNull(6) ? "—" : r.GetString(6)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return details;
+        }
+
+        private string ToRussianComponentType(string type)
+        {
+            switch ((type ?? "").Trim().ToLower())
+            {
+                case "cpu": return "Процессор";
+                case "gpu": return "Видеокарта";
+                case "ram": return "ОЗУ";
+                case "motherboard": return "Материнская плата";
+                case "storage": return "Накопитель";
+                case "psu": return "Блок питания";
+                case "case": return "Корпус";
+                case "cooling": return "Охлаждение";
+                default: return string.IsNullOrWhiteSpace(type) ? "—" : type;
             }
         }
     }

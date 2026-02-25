@@ -103,5 +103,10 @@ namespace WindowsFormsApp1
                 opcAddres.Visible = true;
             }
         }
+
+        private void AddSupplierForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

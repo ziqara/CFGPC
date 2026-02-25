@@ -17,6 +17,18 @@ namespace DDMLib
             return repo_.ReadAllUsers();
         }
 
+        public string UpdateAvatar(string email, byte[] avatarBytes)
+        {
+            try
+            {
+                bool ok = repo_.UpdateAvatar(email, avatarBytes);
+                return ok ? string.Empty : "Не удалось обновить аватар";
+            }
+            catch (Exception ex)
+            {
+                return "Ошибка при обновлении аватара: " + ex.Message;
+            }
+        }
         public Dictionary<string, bool> GetActiveOrdersFlags()
         {
             return repo_.ReadActiveOrdersFlags();

@@ -13,54 +13,56 @@ namespace DDMLib.Order
         {
             List<Order> orders = new List<Order>();
 
-            try
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
             {
-                using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+                connection.Open();
+
+                string sql = @"
+            SELECT 
+                o.orderId,
+                o.configId,
+                c.configName,
+                o.userEmail,
+                o.orderDate,
+                o.status,
+                o.totalPrice,
+                o.deliveryAddress,
+                o.deliveryMethod,
+                o.paymentMethod,
+                o.isPaid
+            FROM orders o
+            JOIN configurations c ON o.configId = c.configId
+            WHERE o.userEmail = @UserEmail
+            ORDER BY o.orderDate DESC;";
+
+                using (MySqlCommand command = new MySqlCommand(sql, connection))
                 {
-                    connection.Open();
+                    command.Parameters.AddWithValue("@UserEmail", userEmail);
 
-                    string sql = @"
-                SELECT 
-                    orderId, configId, userEmail, orderDate, status, 
-                    totalPrice, deliveryAddress, deliveryMethod, paymentMethod, isPaid 
-                FROM orders 
-                WHERE userEmail = @UserEmail 
-                ORDER BY orderDate DESC;";
-
-                    using (MySqlCommand command = new MySqlCommand(sql, connection))
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("@UserEmail", userEmail);
-
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            orders.Add(new Order
                             {
-                                Order order = new Order
-                                {
-                                    OrderId = reader.GetInt32(0),
-                                    ConfigId = reader.GetInt32(1),
-                                    UserEmail = reader.GetString(2),
-                                    OrderDate = reader.GetDateTime(3),
-                                    Status = (OrderStatus)Enum.Parse(typeof(OrderStatus), reader.GetString(4), ignoreCase: true),
-                                    TotalPrice = reader.GetDecimal(5),
-                                    DeliveryAddress = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                    DeliveryMethod = (DeliveryMethod)Enum.Parse(typeof(DeliveryMethod), reader.GetString(7), ignoreCase: true),
-                                    PaymentMethod = (PaymentMethod)Enum.Parse(typeof(PaymentMethod), reader.GetString(8), ignoreCase: true),
-                                    IsPaid = reader.GetBoolean(9)
-                                };
-
-                                orders.Add(order);
-                            }
+                                OrderId = reader.GetInt32(0),
+                                ConfigId = reader.GetInt32(1),
+                                ConfigName = reader.IsDBNull(2) ? "" : reader.GetString(2), // ← ВАЖНО
+                                UserEmail = reader.GetString(3),
+                                OrderDate = reader.GetDateTime(4),
+                                Status = (OrderStatus)Enum.Parse(typeof(OrderStatus), reader.GetString(5), true),
+                                TotalPrice = reader.GetDecimal(6),
+                                DeliveryAddress = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                DeliveryMethod = (DeliveryMethod)Enum.Parse(typeof(DeliveryMethod), reader.GetString(8), true),
+                                PaymentMethod = (PaymentMethod)Enum.Parse(typeof(PaymentMethod), reader.GetString(9), true),
+                                IsPaid = reader.GetBoolean(10)
+                            });
                         }
                     }
                 }
+            }
 
-                return orders;
-            }
-            catch
-            {
-                throw; // ошибка пробрасывается в ui
-            }
+            return orders;
         }
 
         public void AddOrder(Order order)

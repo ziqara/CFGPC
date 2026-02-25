@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,52 @@ namespace WindowsFormsApp1.UserOrder
             txtFullName.Text = user_.FullName ?? "";
             txtPhone.Text = user_.Phone ?? "";
             txtAddress.Text = user_.Address ?? "";
+
+            ShowAvatar(user_.Avatar);
+        }
+
+        private void ShowAvatar(byte[] avatarBytes)
+        {
+            // если PictureBox ещё не добавлен на форму — будет NullReference
+            if (pbAvatar == null) return;
+
+            // очищаем старое изображение чтобы не было утечек
+            if (pbAvatar.Image != null)
+            {
+                var old = pbAvatar.Image;
+                pbAvatar.Image = null;
+                old.Dispose();
+            }
+
+            pbAvatar.Image = BytesToImageOrDefault(avatarBytes);
+        }
+
+        private Image BytesToImageOrDefault(byte[] bytes)
+        {
+            try
+            {
+                if (bytes == null || bytes.Length == 0)
+                    return CreateDefaultAvatar();
+
+                using (var ms = new MemoryStream(bytes))
+                    return Image.FromStream(ms);
+            }
+            catch
+            {
+                return CreateDefaultAvatar();
+            }
+        }
+
+        private Image CreateDefaultAvatar()
+        {
+            Bitmap bmp = new Bitmap(120, 120);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+                using (var b = new SolidBrush(Color.FromArgb(220, 220, 220)))
+                    g.FillEllipse(b, 10, 10, 100, 100);
+            }
+            return bmp;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -63,6 +110,11 @@ namespace WindowsFormsApp1.UserOrder
 
         private void EditUserForm_Shown(object sender, EventArgs e)
         {
+            if (btnCancel != null && btnCancel.Visible)
+            {
+                btnCancel.Focus();
+            }
+
             ApplyTheme();
         }
 
@@ -78,9 +130,45 @@ namespace WindowsFormsApp1.UserOrder
                     btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
                 }
             }
+        }
 
-            if (labelTitle != null)
-                labelTitle.ForeColor = ThemeColor.PrimaryColor;
+        private void btnChangeAvatar_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1 == null)
+            {
+                MessageBox.Show("Добавь OpenFileDialog на форму (openFileDialog1).");
+                return;
+            }
+
+            openFileDialog1.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp;*.gif";
+            openFileDialog1.Title = "Выберите аватар";
+
+            if (openFileDialog1.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
+            {
+                byte[] bytes = File.ReadAllBytes(openFileDialog1.FileName);
+
+                // вызываем твой репозиторийный метод через IUserRepository напрямую
+                // В AdminUserService пока нет UpdateAvatar — добавим ниже
+                string res = service_.UpdateAvatar(user_.Email, bytes);
+
+                if (!string.IsNullOrEmpty(res))
+                {
+                    MessageBox.Show(res, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                user_.Avatar = bytes;
+                ShowAvatar(user_.Avatar);
+                MessageBox.Show("Аватар обновлён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось обновить аватар: " + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

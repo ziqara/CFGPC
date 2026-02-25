@@ -23,15 +23,60 @@ namespace WindowsFormsApp1.UserOrder
 
             userEmail_ = email;
             service_ = new OrderService(new OrderRepository());
-
+            ordersDataTable.CellFormatting += OrdersDataTable_CellFormatting;
             this.Shown += UserOrdersForm_Shown;
             ThemeColor.ThemeChanged += ApplyTableTheme;
+
+            ordersDataTable.CellFormatting += OrdersDataTable_CellFormatting;
+            ordersDataTable.CellMouseEnter += ordersDataTable_CellMouseEnter;
+            ordersDataTable.CellMouseLeave += ordersDataTable_CellMouseLeave;
+
+            ordersDataTable.CellToolTipTextNeeded += ordersDataTable_CellToolTipTextNeeded;
+        }
+
+        private void OrdersDataTable_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var columnName = ordersDataTable.Columns[e.ColumnIndex].DataPropertyName;
+
+            if (columnName == "Status" && e.Value is DDMLib.Order.OrderStatus status)
+            {
+                e.Value = status.ToRussian();
+                e.FormattingApplied = true;
+            }
+
+            if (columnName == "PaymentMethod" && e.Value is DDMLib.Order.PaymentMethod pay)
+            {
+                e.Value = pay.ToRussian();
+                e.FormattingApplied = true;
+            }
+
+            if (columnName == "DeliveryMethod" && e.Value is DDMLib.Order.DeliveryMethod del)
+            {
+                e.Value = del.ToRussian();
+                e.FormattingApplied = true;
+            }
+
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var col = ordersDataTable.Columns[e.ColumnIndex];
+
+            // "Конфигурация" как ссылка
+            if (col.DataPropertyName == "ConfigName")
+            {
+                ordersDataTable.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor = Color.Blue;
+                ordersDataTable.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.Font =
+                    new Font(ordersDataTable.Font, FontStyle.Underline);
+            }
         }
 
         private void UserOrdersForm_Load(object sender, EventArgs e)
         {
             labelTitle.Text = $"Заказы пользователя: {userEmail_}";
             LoadOrders();
+            if (ordersDataTable.Columns["ConfigId"] != null)
+                ordersDataTable.Columns["ConfigId"].Visible = false;
         }
 
         private void btnEditStatus_Click(object sender, EventArgs e)
@@ -141,6 +186,48 @@ namespace WindowsFormsApp1.UserOrder
             ordersDataTable.RowTemplate.Height = 25;
             foreach (DataGridViewRow row in ordersDataTable.Rows)
                 row.Height = ordersDataTable.RowTemplate.Height;
+        }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private void ordersDataTable_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var col = ordersDataTable.Columns[e.ColumnIndex];
+            if (col.DataPropertyName == "ConfigName")
+                ordersDataTable.Cursor = Cursors.Hand;
+        }
+
+        private void ordersDataTable_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            ordersDataTable.Cursor = Cursors.Default;
+        }
+
+        private void ordersDataTable_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var col = ordersDataTable.Columns[e.ColumnIndex];
+            if (col.DataPropertyName == "ConfigName")
+                e.ToolTipText = "Двойной клик — открыть состав ПК";
+        }
+
+        private void ordersDataTable_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var col = ordersDataTable.Columns[e.ColumnIndex];
+            if (col.DataPropertyName != "ConfigName") return;
+
+            var order = ordersDataTable.Rows[e.RowIndex].DataBoundItem as DDMLib.Order.Order;
+            if (order == null) return;
+
+            using (var f = new ConfigDetailsForm(order.ConfigId, order.ConfigName))
+                f.ShowDialog(this);
         }
     }
 }

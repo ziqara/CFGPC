@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SupplierForms\AddSupplierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ComponentsForms\CaseForms\AddCaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,12 +157,6 @@
     <Compile Include="ComponentsForms\StorageForms\StorageForm.Designer.cs">
       <DependentUpon>StorageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SupplierForms\AddSupplierForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SupplierForms\AddSupplierForm.Designer.cs">
-      <DependentUpon>AddSupplierForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ComponentsForms\CpuForms\AddCpuForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,6 +226,12 @@
     <Compile Include="UpdateMainForm.Designer.cs">
       <DependentUpon>UpdateMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserOrder\ConfigDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOrder\ConfigDetailsForm.Designer.cs">
+      <DependentUpon>ConfigDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserOrder\EditOrderStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,9 +263,6 @@
     <Compile Include="UserOrder\UsersCardsForm.Designer.cs">
       <DependentUpon>UsersCardsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddSupplierForm.resx">
-      <DependentUpon>AddSupplierForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\CpuForms\AddCpuForm.resx">
       <DependentUpon>AddCpuForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -284,6 +284,16 @@
     <EmbeddedResource Include="ComponentsForms\MotherboardForms\MotherboardForm.resx">
       <DependentUpon>MotherboardForm.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="SupplierForm.resx">
+      <SubType>Form</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </Compile>
+    <EmbeddedResource Include="ComponentsForms\PsuForms\AddPsuForm.resx">
+      <DependentUpon>AddPsuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\PsuForms\EditPsuForm.resx">
+      <DependentUpon>EditPsuForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SupplierForms\EditSupplierForm.resx">
       <DependentUpon>EditSupplierForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -304,6 +314,9 @@
     </Compile>
     <EmbeddedResource Include="UpdateMainForm.resx">
       <DependentUpon>UpdateMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserOrder\ConfigDetailsForm.resx">
+      <DependentUpon>ConfigDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserOrder\EditOrderStatusForm.resx">
       <DependentUpon>EditOrderStatusForm.cs</DependentUpon>

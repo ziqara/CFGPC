@@ -203,8 +203,10 @@
     <Compile Include="Component\RamSpec.cs" />
     <Compile Include="Component\StorageSpec.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Configuration\ConfigComponentInfo.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationComponent.cs" />
+    <Compile Include="Configuration\ConfigurationDetails.cs" />
     <Compile Include="Configuration\ConfigurationDto.cs" />
     <Compile Include="Configuration\ConfigurationRepository.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
@@ -213,6 +215,7 @@
     <Compile Include="Order\DeliveryMethod.cs" />
     <Compile Include="Order\IOrderRepository.cs" />
     <Compile Include="Order\Order.cs" />
+    <Compile Include="Order\OrderEnumExtensions.cs" />
     <Compile Include="Order\OrderRepository.cs" />
     <Compile Include="Order\OrderService.cs" />
     <Compile Include="Order\OrderStatus.cs" />

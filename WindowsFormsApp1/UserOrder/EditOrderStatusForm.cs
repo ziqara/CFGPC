@@ -24,15 +24,17 @@ namespace WindowsFormsApp1.UserOrder
             order_ = order;
 
             cbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbStatus.Items.AddRange(new object[]
-            {
-                OrderStatus.Pending,
-                OrderStatus.Processing,
-                OrderStatus.Assembled,
-                OrderStatus.Shipped,
-                OrderStatus.Delivered,
-                OrderStatus.Cancelled
-            });
+
+            cbStatus.DisplayMember = "Text";
+            cbStatus.ValueMember = "Value";
+
+            cbStatus.Items.Clear();
+            cbStatus.Items.Add(new ComboItem("Ожидает обработки", OrderStatus.Pending));
+            cbStatus.Items.Add(new ComboItem("В обработке", OrderStatus.Processing));
+            cbStatus.Items.Add(new ComboItem("Собран", OrderStatus.Assembled));
+            cbStatus.Items.Add(new ComboItem("Отправлен", OrderStatus.Shipped));
+            cbStatus.Items.Add(new ComboItem("Доставлен", OrderStatus.Delivered));
+            cbStatus.Items.Add(new ComboItem("Отменён", OrderStatus.Cancelled));
 
             this.Shown += EditOrderStatusForm_Shown;
             ThemeColor.ThemeChanged += ApplyTheme;
@@ -41,8 +43,22 @@ namespace WindowsFormsApp1.UserOrder
         private void EditOrderStatusForm_Load(object sender, EventArgs e)
         {
             lblOrder.Text = $"Заказ #{order_.OrderId}";
-            cbStatus.SelectedItem = order_.Status;
             chkPaid.Checked = order_.IsPaid;
+
+            // ВЫБОР текущего статуса
+            for (int i = 0; i < cbStatus.Items.Count; i++)
+            {
+                var item = cbStatus.Items[i] as ComboItem;
+                if (item != null && item.Value == order_.Status)
+                {
+                    cbStatus.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            // На всякий случай, если почему-то не нашли:
+            if (cbStatus.SelectedIndex < 0 && cbStatus.Items.Count > 0)
+                cbStatus.SelectedIndex = 0;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -54,7 +70,7 @@ namespace WindowsFormsApp1.UserOrder
                 return;
             }
 
-            var newStatus = (OrderStatus)cbStatus.SelectedItem;
+            var newStatus = ((ComboItem)cbStatus.SelectedItem).Value;
             bool paid = chkPaid.Checked;
 
             string result = service_.AdminUpdateOrderStatusAndPaid(order_.OrderId, newStatus, paid);
@@ -98,6 +114,20 @@ namespace WindowsFormsApp1.UserOrder
 
             if (lblOrder != null)
                 lblOrder.ForeColor = ThemeColor.PrimaryColor;
+        }
+
+        private class ComboItem
+        {
+            public string Text { get; set; }
+            public OrderStatus Value { get; set; }
+
+            public ComboItem(string text, OrderStatus value)
+            {
+                Text = text;
+                Value = value;
+            }
+
+            public override string ToString() => Text;
         }
     }
 }

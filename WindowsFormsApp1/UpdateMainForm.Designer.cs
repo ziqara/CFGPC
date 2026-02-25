@@ -30,8 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateMainForm));
             this.panelMenu = new System.Windows.Forms.Panel();
-            this.btnReviews = new System.Windows.Forms.Button();
-            this.btnWarrious = new System.Windows.Forms.Button();
             this.btnClients = new System.Windows.Forms.Button();
             this.btnSupplier = new System.Windows.Forms.Button();
             this.btnComponent = new System.Windows.Forms.Button();
@@ -55,8 +53,6 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
-            this.panelMenu.Controls.Add(this.btnReviews);
-            this.panelMenu.Controls.Add(this.btnWarrious);
             this.panelMenu.Controls.Add(this.btnClients);
             this.panelMenu.Controls.Add(this.btnSupplier);
             this.panelMenu.Controls.Add(this.btnComponent);
@@ -68,44 +64,6 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(220, 519);
             this.panelMenu.TabIndex = 0;
-            // 
-            // btnReviews
-            // 
-            this.btnReviews.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReviews.FlatAppearance.BorderSize = 0;
-            this.btnReviews.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReviews.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnReviews.ForeColor = System.Drawing.Color.White;
-            this.btnReviews.Image = ((System.Drawing.Image)(resources.GetObject("btnReviews.Image")));
-            this.btnReviews.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReviews.Location = new System.Drawing.Point(0, 440);
-            this.btnReviews.Name = "btnReviews";
-            this.btnReviews.Size = new System.Drawing.Size(220, 60);
-            this.btnReviews.TabIndex = 7;
-            this.btnReviews.Text = "     Отзывы";
-            this.btnReviews.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReviews.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnReviews.UseVisualStyleBackColor = true;
-            this.btnReviews.Click += new System.EventHandler(this.btnReviews_Click_1);
-            // 
-            // btnWarrious
-            // 
-            this.btnWarrious.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnWarrious.FlatAppearance.BorderSize = 0;
-            this.btnWarrious.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnWarrious.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnWarrious.ForeColor = System.Drawing.Color.White;
-            this.btnWarrious.Image = ((System.Drawing.Image)(resources.GetObject("btnWarrious.Image")));
-            this.btnWarrious.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnWarrious.Location = new System.Drawing.Point(0, 380);
-            this.btnWarrious.Name = "btnWarrious";
-            this.btnWarrious.Size = new System.Drawing.Size(220, 60);
-            this.btnWarrious.TabIndex = 6;
-            this.btnWarrious.Text = "     Гарантия";
-            this.btnWarrious.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnWarrious.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnWarrious.UseVisualStyleBackColor = true;
-            this.btnWarrious.Click += new System.EventHandler(this.btnWarrious_Click);
             // 
             // btnClients
             // 
@@ -312,13 +270,11 @@
         private System.Windows.Forms.Button btnOrders;
         private System.Windows.Forms.Button btnComponent;
         private System.Windows.Forms.Button btnConfig;
-        private System.Windows.Forms.Button btnWarrious;
         private System.Windows.Forms.Button btnClients;
         private System.Windows.Forms.Button btnSupplier;
         private System.Windows.Forms.Panel panelTitle;
         private System.Windows.Forms.Label lblTitile;
         private System.Windows.Forms.Panel panelDekstopPanel;
-        private System.Windows.Forms.Button btnReviews;
         private System.Windows.Forms.PictureBox logobox;
         private System.Windows.Forms.Button btnCloseChildForm;
         private System.Windows.Forms.PictureBox pictureBox1;

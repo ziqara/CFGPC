@@ -100,6 +100,11 @@
             // 
             this.nudWattage.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nudWattage.Location = new System.Drawing.Point(397, 39);
+            this.nudWattage.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nudWattage.Name = "nudWattage";
             this.nudWattage.Size = new System.Drawing.Size(100, 22);
             this.nudWattage.TabIndex = 100;
