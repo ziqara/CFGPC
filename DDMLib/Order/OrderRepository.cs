@@ -102,5 +102,52 @@ namespace DDMLib.Order
                 throw;
             }
         }
+
+        public bool ExistsById(int orderId)
+        {
+            using (var connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+                const string sql = "SELECT COUNT(*) FROM orders WHERE orderId=@id;";
+
+                using (var cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", orderId);
+                    return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+                }
+            }
+        }
+
+        public bool UpdateOrderStatusAndPaid(int orderId, OrderStatus status, bool isPaid)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(Config.ConnectionString))
+                {
+                    connection.Open();
+
+                    const string sql = @"
+                        UPDATE orders
+                        SET status=@status, isPaid=@paid
+                        WHERE orderId=@id;";
+
+                    using (var cmd = new MySqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@id", orderId);
+
+                        // В БД у тебя обычно lowercase: pending/processing...
+                        cmd.Parameters.AddWithValue("@status", status.ToString().ToLower());
+
+                        cmd.Parameters.AddWithValue("@paid", isPaid);
+
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -229,61 +229,38 @@
     <Compile Include="UpdateMainForm.Designer.cs">
       <DependentUpon>UpdateMainForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ComponentsForms\CaseForms\AddCaseForm.resx">
-      <DependentUpon>AddCaseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\CaseForms\CaseForm.resx">
-      <DependentUpon>CaseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\CaseForms\EditCaseForm.resx">
-      <DependentUpon>EditCaseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\CoolingForms\AddCoolingForm.resx">
-      <DependentUpon>AddCoolingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\CoolingForms\CoolingForm.resx">
-      <DependentUpon>CoolingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\CoolingForms\EditCoolingForm.resx">
-      <DependentUpon>EditCoolingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\GpuForms\AddGpuForm.resx">
-      <DependentUpon>AddGpuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\GpuForms\EditGpuForm.resx">
-      <DependentUpon>EditGpuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\GpuForms\GpuForm.resx">
-      <DependentUpon>GpuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\PsuForms\AddPsuForm.resx">
-      <DependentUpon>AddPsuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\PsuForms\EditPsuForm.resx">
-      <DependentUpon>EditPsuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\PsuForms\PsuForm.resx">
-      <DependentUpon>PsuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\RamForms\AddRamForm.resx">
-      <DependentUpon>AddRamForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\RamForms\EditRamForm.resx">
-      <DependentUpon>EditRamForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\RamForms\RamForm.resx">
-      <DependentUpon>RamForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\StorageForms\AddStorageForm.resx">
-      <DependentUpon>AddStorageForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\StorageForms\EditStorageForm.resx">
-      <DependentUpon>EditStorageForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComponentsForms\StorageForms\StorageForm.resx">
-      <DependentUpon>StorageForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SupplierForms\AddSupplierForm.resx">
+    <Compile Include="UserOrder\EditOrderStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOrder\EditOrderStatusForm.Designer.cs">
+      <DependentUpon>EditOrderStatusForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserOrder\EditUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOrder\EditUserForm.Designer.cs">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserOrder\UserCardControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserOrder\UserCardControl.Designer.cs">
+      <DependentUpon>UserCardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserOrder\UserCardVm.cs" />
+    <Compile Include="UserOrder\UserOrdersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOrder\UserOrdersForm.Designer.cs">
+      <DependentUpon>UserOrdersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserOrder\UsersCardsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOrder\UsersCardsForm.Designer.cs">
+      <DependentUpon>UsersCardsForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AddSupplierForm.resx">
       <DependentUpon>AddSupplierForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\CpuForms\AddCpuForm.resx">
@@ -327,6 +304,18 @@
     </Compile>
     <EmbeddedResource Include="UpdateMainForm.resx">
       <DependentUpon>UpdateMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserOrder\EditOrderStatusForm.resx">
+      <DependentUpon>EditOrderStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserOrder\EditUserForm.resx">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserOrder\UserOrdersForm.resx">
+      <DependentUpon>UserOrdersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserOrder\UsersCardsForm.resx">
+      <DependentUpon>UsersCardsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
