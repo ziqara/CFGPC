@@ -22,8 +22,21 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
 
             ramService_ = ramService ?? throw new ArgumentNullException(nameof(ramService));
             supplierService_ = new SupplierService(new MySqlSupplierRepository());
-
+            txtPhoto.ReadOnly = true;
             this.Shown += AddRamForm_Shown;
+        }
+
+        private string GetSavedPhotoPathForDb()
+        {
+            if (string.IsNullOrWhiteSpace(txtPhoto.Text))
+                return null;
+
+            var t = txtPhoto.Text.Trim();
+
+            if (t.StartsWith("/Resources/", StringComparison.OrdinalIgnoreCase))
+                return t;
+
+            return PhotoStorage.SavePhotoToResources(t); // вернет /Resources/xxx.jpg и скопирует файл
         }
 
         private void AddRamForm_Shown(object sender, EventArgs e)
@@ -76,7 +89,21 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Ram ram = BuildFromControls();
+            string savedPhoto = null;
+
+            try
+            {
+                savedPhoto = GetSavedPhotoPathForDb();
+                txtPhoto.Text = savedPhoto ?? "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось сохранить изображение.\n\n" + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Ram ram = BuildFromControls(savedPhoto);
 
             string result = ramService_.CreateRam(ram);
             if (!string.IsNullOrEmpty(result))
@@ -89,7 +116,7 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
             Close();
         }
 
-        private Ram BuildFromControls()
+        private Ram BuildFromControls(string savedPhotoPath)
         {
             int selectedInn = (int)cbxSupplier.SelectedValue;
 
@@ -102,7 +129,8 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
                 Brand = string.IsNullOrWhiteSpace(txtBrand.Text) ? null : txtBrand.Text.Trim(),
                 Model = string.IsNullOrWhiteSpace(txtModel.Text) ? null : txtModel.Text.Trim(),
                 Description = string.IsNullOrWhiteSpace(txtDesc.Text) ? null : txtDesc.Text.Trim(),
-                PhotoUrl = string.IsNullOrWhiteSpace(txtPhoto.Text) ? null : txtPhoto.Text.Trim(),
+
+                PhotoUrl = string.IsNullOrWhiteSpace(savedPhotoPath) ? null : savedPhotoPath,
 
                 Price = nudPrice.Value,
                 StockQuantity = (int)nudStock.Value,
@@ -121,6 +149,20 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void btnBrowsePhoto_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Выберите изображение";
+                ofd.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp";
+                ofd.Multiselect = false;
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                    txtPhoto.Text = ofd.FileName; // временно абсолютный путь
+            }
         }
     }
 }

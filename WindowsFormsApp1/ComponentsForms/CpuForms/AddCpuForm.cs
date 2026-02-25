@@ -22,7 +22,7 @@ namespace WindowsFormsApp1.ComponentsForms
 
             cpuService_ = cpuService ?? throw new ArgumentNullException(nameof(cpuService));
             supplierService_ = new SupplierService(new MySqlSupplierRepository());
-
+            txtPhoto.ReadOnly = true;
             this.Shown += AddCpuForm_Shown;
         }
 
@@ -68,7 +68,21 @@ namespace WindowsFormsApp1.ComponentsForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Cpu cpu = BuildCpuFromControls();
+            string savedPhoto = null;
+
+            try
+            {
+                savedPhoto = GetSavedPhotoPathForDb();
+                txtPhoto.Text = savedPhoto ?? "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось сохранить изображение.\n\n" + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Cpu cpu = BuildCpuFromControls(savedPhoto);
 
             string result = cpuService_.CreateCpu(cpu);
             if (!string.IsNullOrEmpty(result))
@@ -81,7 +95,7 @@ namespace WindowsFormsApp1.ComponentsForms
             Close();
         }
 
-        private Cpu BuildCpuFromControls()
+        private Cpu BuildCpuFromControls(string savedPhotoPath)
         {
             int selectedInn = (int)cbxSupplier.SelectedValue;
 
@@ -91,7 +105,8 @@ namespace WindowsFormsApp1.ComponentsForms
                 Brand = string.IsNullOrWhiteSpace(txtBrand.Text) ? null : txtBrand.Text.Trim(),
                 Model = string.IsNullOrWhiteSpace(txtModel.Text) ? null : txtModel.Text.Trim(),
                 Description = string.IsNullOrWhiteSpace(txtDesc.Text) ? null : txtDesc.Text.Trim(),
-                PhotoUrl = string.IsNullOrWhiteSpace(txtPhoto.Text) ? null : txtPhoto.Text.Trim(),
+
+                PhotoUrl = string.IsNullOrWhiteSpace(savedPhotoPath) ? null : savedPhotoPath,
 
                 Price = nudPrice.Value,
                 StockQuantity = (int)nudStock.Value,
@@ -109,6 +124,32 @@ namespace WindowsFormsApp1.ComponentsForms
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void btnBrowsePhoto_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Выберите изображение";
+                ofd.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp";
+                ofd.Multiselect = false;
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                    txtPhoto.Text = ofd.FileName;
+            }
+        }
+        private string GetSavedPhotoPathForDb()
+        {
+            if (string.IsNullOrWhiteSpace(txtPhoto.Text))
+                return null;
+
+            var t = txtPhoto.Text.Trim();
+
+            if (t.StartsWith("/Resources/", StringComparison.OrdinalIgnoreCase))
+                return t;
+
+            return PhotoStorage.SavePhotoToResources(t); // вернет /Resources/xxx.jpg и скопирует файл
         }
     }
 }

@@ -221,6 +221,7 @@
     <Compile Include="Order\OrderService.cs" />
     <Compile Include="Order\OrderStatus.cs" />
     <Compile Include="Order\PaymentMethod.cs" />
+    <Compile Include="PhotoStorage.cs" />
     <Compile Include="Session\SessionData.cs" />
     <Compile Include="Session\SessionManager.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />
