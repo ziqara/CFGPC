@@ -12,13 +12,13 @@ namespace ClientWebApp.Pages
         private readonly SessionManager _sessionManager;
         private readonly ConfigurationService _configurationService;
         private readonly OrderService _orderService;
-        private readonly UserService _userService; // ← Добавлено
+        private readonly UserService _userService;
 
         public CreateOrderModel(
             SessionManager sessionManager,
             ConfigurationService configurationService,
             OrderService orderService,
-            UserService userService) // ← Добавлен параметр
+            UserService userService)
         {
             _sessionManager = sessionManager;
             _configurationService = configurationService;
@@ -45,9 +45,8 @@ namespace ClientWebApp.Pages
 
             var userEmail = _sessionManager.GetUserEmailFromSession();
 
-            // Загружаем конкретную конфигурацию по ID
-            var configs = _configurationService.GetUserConfigurations(userEmail);
-            SelectedConfiguration = configs.FirstOrDefault(c => c.Configuration.ConfigId == configId);
+            // Загружаем конфигурацию - сначала проверяем пользовательские, потом предустановленные
+            SelectedConfiguration = LoadConfigurationById(configId, userEmail);
 
             if (SelectedConfiguration == null)
             {
@@ -55,26 +54,22 @@ namespace ClientWebApp.Pages
                 return Page();
             }
 
-            // Проверяем статус конфигурации
-            if (SelectedConfiguration.Configuration.Status != "validated" &&
-                SelectedConfiguration.Configuration.Status != "in_cart")
+            // Проверяем статус конфигурации (только для пользовательских сборок)
+            if (!SelectedConfiguration.Configuration.IsPreset) // Если это не предустановленная сборка
             {
-                ErrorMessage = "Данная конфигурация недоступна для заказа.";
-                return Page();
+                if (SelectedConfiguration.Configuration.Status != "validated" &&
+                    SelectedConfiguration.Configuration.Status != "in_cart")
+                {
+                    ErrorMessage = "Данная конфигурация недоступна для заказа.";
+                    return Page();
+                }
             }
 
-            // Заполняем данные заказа
+            // Загружаем адрес пользователя
             var user = _userService.ValidateUserExists(userEmail);
             if (user != null)
             {
                 UserProfileAddress = user.Address;
-            }
-
-            if (SelectedConfiguration.Configuration.Status != "validated" &&
-                SelectedConfiguration.Configuration.Status != "in_cart")
-            {
-                ErrorMessage = "Данная конфигурация недоступна для заказа.";
-                return Page();
             }
 
             // Заполняем данные заказа
@@ -114,8 +109,8 @@ namespace ClientWebApp.Pages
                     UserEmail = userEmail,
                     OrderDate = DateTime.Now,
                     Status = OrderStatus.Pending,
-                    TotalPrice = TotalWithDelivery, // Используем сумму с доставкой
-                    DeliveryAddress = OrderInput.DeliveryAddress,
+                    TotalPrice = TotalWithDelivery,
+                    DeliveryAddress = OrderInput.DeliveryMethod == DeliveryMethod.Courier ? OrderInput.DeliveryAddress : null,
                     DeliveryMethod = OrderInput.DeliveryMethod,
                     PaymentMethod = OrderInput.PaymentMethod,
                     IsPaid = false
@@ -123,7 +118,7 @@ namespace ClientWebApp.Pages
 
                 _orderService.CreateOrder(order);
 
-                //TempData["SuccessMessage"] = "Заказ успешно оформлен!";
+                TempData["SuccessMessage"] = "Заказ успешно оформлен!";
                 return RedirectToPage("/Orders");
             }
             catch (Exception ex)
@@ -135,13 +130,29 @@ namespace ClientWebApp.Pages
             }
         }
 
+        private ConfigurationDto? LoadConfigurationById(int configId, string userEmail)
+        {
+            // 1. Сначала ищем в пользовательских конфигурациях
+            var userConfigs = _configurationService.GetUserConfigurations(userEmail);
+            var userConfig = userConfigs.FirstOrDefault(c => c.Configuration.ConfigId == configId);
+
+            if (userConfig != null)
+            {
+                return userConfig;
+            }
+
+            // 2. Если не нашли, ищем среди предустановленных (isPreset = 1)
+            var presetConfigs = _configurationService.GetPresetConfigurations();
+            var presetConfig = presetConfigs.FirstOrDefault(c => c.Configuration.ConfigId == configId);
+
+            return presetConfig;
+        }
+
         private void LoadSelectedConfiguration(string userEmail, int configId)
         {
             if (configId > 0)
             {
-                var configs = _configurationService.GetUserConfigurations(userEmail);
-                SelectedConfiguration = configs.FirstOrDefault(c =>
-                    c.Configuration.ConfigId == configId);
+                SelectedConfiguration = LoadConfigurationById(configId, userEmail);
             }
         }
     }

@@ -46,16 +46,166 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddSupplierForm.cs">
+    <Compile Include="ComponentsForms\CaseForms\AddCaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddSupplierForm.Designer.cs">
+    <Compile Include="ComponentsForms\CaseForms\AddCaseForm.Designer.cs">
+      <DependentUpon>AddCaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CaseForms\CaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CaseForms\CaseForm.Designer.cs">
+      <DependentUpon>CaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CaseForms\EditCaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CaseForms\EditCaseForm.Designer.cs">
+      <DependentUpon>EditCaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\AddCoolingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\AddCoolingForm.Designer.cs">
+      <DependentUpon>AddCoolingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\CoolingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\CoolingForm.Designer.cs">
+      <DependentUpon>CoolingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\EditCoolingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CoolingForms\EditCoolingForm.Designer.cs">
+      <DependentUpon>EditCoolingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\AddGpuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\AddGpuForm.Designer.cs">
+      <DependentUpon>AddGpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\EditGpuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\EditGpuForm.Designer.cs">
+      <DependentUpon>EditGpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\GpuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\GpuForms\GpuForm.Designer.cs">
+      <DependentUpon>GpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\AddPsuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\AddPsuForm.Designer.cs">
+      <DependentUpon>AddPsuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\EditPsuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\EditPsuForm.Designer.cs">
+      <DependentUpon>EditPsuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\PsuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\PsuForms\PsuForm.Designer.cs">
+      <DependentUpon>PsuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\AddRamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\AddRamForm.Designer.cs">
+      <DependentUpon>AddRamForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\EditRamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\EditRamForm.Designer.cs">
+      <DependentUpon>EditRamForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\RamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\RamForms\RamForm.Designer.cs">
+      <DependentUpon>RamForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\AddStorageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\AddStorageForm.Designer.cs">
+      <DependentUpon>AddStorageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\EditStorageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\EditStorageForm.Designer.cs">
+      <DependentUpon>EditStorageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\StorageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\StorageForms\StorageForm.Designer.cs">
+      <DependentUpon>StorageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupplierForms\AddSupplierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SupplierForms\AddSupplierForm.Designer.cs">
       <DependentUpon>AddSupplierForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditSupplierForm.cs">
+    <Compile Include="ComponentsForms\CpuForms\AddCpuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditSupplierForm.Designer.cs">
+    <Compile Include="ComponentsForms\CpuForms\AddCpuForm.Designer.cs">
+      <DependentUpon>AddCpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CpuForms\CpuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CpuForms\CpuForm.Designer.cs">
+      <DependentUpon>CpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\CpuForms\EditCpuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\CpuForms\EditCpuForm.Designer.cs">
+      <DependentUpon>EditCpuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\MainFormForComponents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\MainFormForComponents.Designer.cs">
+      <DependentUpon>MainFormForComponents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\AddMotherboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\AddMotherboardForm.Designer.cs">
+      <DependentUpon>AddMotherboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\EditMotherboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\EditMotherboardForm.Designer.cs">
+      <DependentUpon>EditMotherboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\MotherboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentsForms\MotherboardForms\MotherboardForm.Designer.cs">
+      <DependentUpon>MotherboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupplierForms\EditSupplierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SupplierForms\EditSupplierForm.Designer.cs">
       <DependentUpon>EditSupplierForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -64,10 +214,10 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SupplierForm.cs">
+    <Compile Include="SupplierForms\SupplierForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SupplierForm.Designer.cs">
+    <Compile Include="SupplierForms\SupplierForm.Designer.cs">
       <DependentUpon>SupplierForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -113,13 +263,34 @@
     <EmbeddedResource Include="AddSupplierForm.resx">
       <DependentUpon>AddSupplierForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditSupplierForm.resx">
+    <EmbeddedResource Include="ComponentsForms\CpuForms\AddCpuForm.resx">
+      <DependentUpon>AddCpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CpuForms\CpuForm.resx">
+      <DependentUpon>CpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CpuForms\EditCpuForm.resx">
+      <DependentUpon>EditCpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\MainFormForComponents.resx">
+      <DependentUpon>MainFormForComponents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\MotherboardForms\AddMotherboardForm.resx">
+      <DependentUpon>AddMotherboardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\MotherboardForms\EditMotherboardForm.resx">
+      <DependentUpon>EditMotherboardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\MotherboardForms\MotherboardForm.resx">
+      <DependentUpon>MotherboardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SupplierForms\EditSupplierForm.resx">
       <DependentUpon>EditSupplierForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SupplierForm.resx">
+    <EmbeddedResource Include="SupplierForms\SupplierForm.resx">
       <DependentUpon>SupplierForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -165,5 +336,6 @@
       <Name>DDMLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

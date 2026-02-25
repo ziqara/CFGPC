@@ -118,7 +118,7 @@ namespace WindowsFormsApp1
 
         private void btnComponent_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new MainForm(), sender);
+            OpenChildForm(new MainFormForComponents(), sender);
         }
 
         private void btnClients_Click_1(object sender, EventArgs e)
