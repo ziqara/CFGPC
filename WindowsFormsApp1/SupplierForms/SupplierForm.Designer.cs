@@ -42,18 +42,18 @@
             // supplierDataTable
             // 
             this.supplierDataTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.supplierDataTable.Location = new System.Drawing.Point(96, 47);
+            this.supplierDataTable.Location = new System.Drawing.Point(27, 47);
             this.supplierDataTable.Name = "supplierDataTable";
             this.supplierDataTable.ReadOnly = true;
             this.supplierDataTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.supplierDataTable.Size = new System.Drawing.Size(544, 334);
+            this.supplierDataTable.Size = new System.Drawing.Size(672, 334);
             this.supplierDataTable.TabIndex = 0;
             // 
             // btnAddSupplier
             // 
             this.btnAddSupplier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddSupplier.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnAddSupplier.Location = new System.Drawing.Point(202, 387);
+            this.btnAddSupplier.Location = new System.Drawing.Point(186, 387);
             this.btnAddSupplier.Name = "btnAddSupplier";
             this.btnAddSupplier.Size = new System.Drawing.Size(99, 36);
             this.btnAddSupplier.TabIndex = 1;
@@ -64,7 +64,7 @@
             // txtSearchName
             // 
             this.txtSearchName.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtSearchName.Location = new System.Drawing.Point(239, 19);
+            this.txtSearchName.Location = new System.Drawing.Point(170, 20);
             this.txtSearchName.Name = "txtSearchName";
             this.txtSearchName.Size = new System.Drawing.Size(186, 22);
             this.txtSearchName.TabIndex = 2;
@@ -74,7 +74,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(93, 21);
+            this.label1.Location = new System.Drawing.Point(24, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(140, 16);
             this.label1.TabIndex = 3;
@@ -84,7 +84,7 @@
             // 
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnEdit.Location = new System.Drawing.Point(307, 387);
+            this.btnEdit.Location = new System.Drawing.Point(291, 387);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(134, 36);
             this.btnEdit.TabIndex = 4;
@@ -96,7 +96,7 @@
             // 
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnDelete.Location = new System.Drawing.Point(447, 387);
+            this.btnDelete.Location = new System.Drawing.Point(431, 387);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(93, 36);
             this.btnDelete.TabIndex = 5;
@@ -108,7 +108,7 @@
             // 
             this.cbxAddres.AutoSize = true;
             this.cbxAddres.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbxAddres.Location = new System.Drawing.Point(580, 22);
+            this.cbxAddres.Location = new System.Drawing.Point(633, 22);
             this.cbxAddres.Name = "cbxAddres";
             this.cbxAddres.Size = new System.Drawing.Size(66, 20);
             this.cbxAddres.TabIndex = 6;
@@ -120,7 +120,7 @@
             // 
             this.cbxPhone.AutoSize = true;
             this.cbxPhone.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbxPhone.Location = new System.Drawing.Point(487, 21);
+            this.cbxPhone.Location = new System.Drawing.Point(542, 21);
             this.cbxPhone.Name = "cbxPhone";
             this.cbxPhone.Size = new System.Drawing.Size(85, 20);
             this.cbxPhone.TabIndex = 7;
