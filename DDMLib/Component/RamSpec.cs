@@ -8,7 +8,8 @@ namespace DDMLib.Component
 {
     public class RamSpec
     {
-        public string Type { get; set; }
+        public int ComponentId { get; set; }
+        public string RamType { get; set; }
         public int CapacityGb { get; set; }
         public int SpeedMhz { get; set; }
         public int SlotsNeeded { get; set; }

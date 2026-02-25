@@ -1,4 +1,5 @@
 using DDMLib;
+using DDMLib.Compatibility;
 using DDMLib.Component;
 using DDMLib.Configuration;
 using DDMLib.Order;
@@ -28,6 +29,8 @@ builder.Services.AddScoped<ConfigurationService>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<OrderService>();
+
+builder.Services.AddScoped<CompatibilityChecker>();
 
 var app = builder.Build();
 

@@ -42,19 +42,38 @@ namespace ClientWebApp.Pages
             var orders = _orderService.GetOrdersByUserEmail(userEmail);
 
             // Получаем все конфигурации пользователя
-            var configurations = _configurationService.GetUserConfigurations(userEmail);
+            var userConfigurations = _configurationService.GetUserConfigurations(userEmail);
 
-            // Создаем словарь для быстрого поиска конфигурации по ID
-            var configDict = configurations.ToDictionary(
-                c => c.Configuration.ConfigId,
-                c => c);
+            // Получаем все предустановленные конфигурации
+            var presetConfigurations = _configurationService.GetPresetConfigurations();
+
+            // Создаем общий словарь для быстрого поиска конфигурации по ID
+            var allConfigurations = new Dictionary<int, ConfigurationDto>();
+
+            // Добавляем пользовательские конфигурации
+            foreach (var config in userConfigurations)
+            {
+                if (!allConfigurations.ContainsKey(config.Configuration.ConfigId))
+                {
+                    allConfigurations[config.Configuration.ConfigId] = config;
+                }
+            }
+
+            // Добавляем предустановленные конфигурации
+            foreach (var config in presetConfigurations)
+            {
+                if (!allConfigurations.ContainsKey(config.Configuration.ConfigId))
+                {
+                    allConfigurations[config.Configuration.ConfigId] = config;
+                }
+            }
 
             // Формируем ViewModel с названиями и деталями конфигураций
             UserOrders = orders.Select(order => new OrderViewModel
             {
                 Order = order,
-                Configuration = configDict.ContainsKey(order.ConfigId)
-                    ? configDict[order.ConfigId]
+                Configuration = allConfigurations.ContainsKey(order.ConfigId)
+                    ? allConfigurations[order.ConfigId]
                     : null
             }).ToList();
 

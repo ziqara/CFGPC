@@ -407,5 +407,88 @@ namespace DDMLib.Configuration
                 default: return string.IsNullOrWhiteSpace(type) ? "—" : type;
             }
         }
+
+        public int CreateConfiguration(Configuration configuration, List<int> componentIds)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            if (componentIds == null || !componentIds.Any())
+                throw new ArgumentException("Должен быть выбран хотя бы один компонент", nameof(componentIds));
+
+            int newConfigId = 0;
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // 1. Вставляем конфигурацию
+                            string insertConfigQuery = @"
+                        INSERT INTO configurations 
+                            (configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions)
+                        VALUES 
+                            (@configName, @description, @totalPrice, @targetUse, @status, @isPreset, @createdDate, @userEmail, @rgb, @otherOptions);
+                        SELECT LAST_INSERT_ID();";
+
+                            using (MySqlCommand cmdConfig = new MySqlCommand(insertConfigQuery, connection, transaction))
+                            {
+                                cmdConfig.Parameters.AddWithValue("@configName", configuration.ConfigName);
+                                cmdConfig.Parameters.AddWithValue("@description", configuration.Description ?? (object)DBNull.Value);
+                                cmdConfig.Parameters.AddWithValue("@totalPrice", configuration.TotalPrice);
+                                cmdConfig.Parameters.AddWithValue("@targetUse", configuration.TargetUse);
+                                cmdConfig.Parameters.AddWithValue("@status", configuration.Status ?? "draft");
+                                cmdConfig.Parameters.AddWithValue("@isPreset", configuration.IsPreset);
+                                cmdConfig.Parameters.AddWithValue("@createdDate", configuration.CreatedDate);
+                                cmdConfig.Parameters.AddWithValue("@userEmail", configuration.UserEmail);
+                                cmdConfig.Parameters.AddWithValue("@rgb", configuration.Rgb);
+                                cmdConfig.Parameters.AddWithValue("@otherOptions", configuration.OtherOptions ?? (object)DBNull.Value);
+
+                                newConfigId = Convert.ToInt32(cmdConfig.ExecuteScalar());
+                            }
+
+                            // 2. Вставляем связи с компонентами
+                            if (newConfigId > 0 && componentIds.Any())
+                            {
+                                string insertComponentsQuery = @"
+                            INSERT INTO config_components (configId, componentId, quantity)
+                            VALUES (@configId, @componentId, 1)";
+
+                                using (MySqlCommand cmdComponents = new MySqlCommand(insertComponentsQuery, connection, transaction))
+                                {
+                                    cmdComponents.Parameters.Add("@configId", MySqlDbType.Int32);
+                                    cmdComponents.Parameters.Add("@componentId", MySqlDbType.Int32);
+
+                                    foreach (int componentId in componentIds)
+                                    {
+                                        cmdComponents.Parameters["@configId"].Value = newConfigId;
+                                        cmdComponents.Parameters["@componentId"].Value = componentId;
+                                        cmdComponents.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+
+                            transaction.Commit();
+                            return newConfigId;
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            ErrorLogger.LogError("CreateConfiguration Transaction", ex.Message);
+                            throw;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.LogError("CreateConfiguration", ex.Message);
+                    throw;
+                }
+            }
+        }
     }
 }

@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="Compatibility\CompatibilityChecker.cs" />
     <Compile Include="Components\Case\Case.cs" />
     <Compile Include="Components\Case\CaseService.cs" />
     <Compile Include="Components\Case\CaseValidator.cs" />

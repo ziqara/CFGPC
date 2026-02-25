@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Фев 24 2026 г., 16:44
+-- Время создания: Фев 25 2026 г., 21:43
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.1.26
 
@@ -334,7 +334,11 @@ INSERT INTO `orders` (`orderId`, `configId`, `userEmail`, `orderDate`, `status`,
 (6, 1, 'test@gmail.com', '2026-02-14 17:58:17', 'pending', '86000.00', '', 'self', 'card', 0),
 (7, 1, 'test@gmail.com', '2026-02-14 17:59:18', 'pending', '86500.00', 'выаваыаыв', 'courier', 'card', 0),
 (8, 1, 'test@gmail.com', '2026-02-17 17:47:00', 'pending', '86500.00', 'выаваыаыв', 'courier', 'card', 0),
-(9, 1, 'test@gmail.com', '2026-02-17 17:49:19', 'pending', '86000.00', '', 'pickup', 'card', 0);
+(9, 1, 'test@gmail.com', '2026-02-17 17:49:19', 'pending', '86000.00', '', 'pickup', 'card', 0),
+(10, 6, 'test@gmail.com', '2026-02-25 22:41:50', 'pending', '68700.00', 'выаваыаыв', 'courier', 'card', 0),
+(11, 3, 'test@gmail.com', '2026-02-25 22:49:02', 'pending', '76400.00', 'выаваыаыв', 'courier', 'card', 0),
+(12, 6, 'test@gmail.com', '2026-02-25 22:50:11', 'pending', '68700.00', 'выаваыаыв', 'courier', 'card', 0),
+(13, 6, 'test@gmail.com', '2026-02-25 23:06:21', 'pending', '68700.00', 'выаваыаыв', 'courier', 'card', 0);
 
 -- --------------------------------------------------------
 
@@ -633,7 +637,7 @@ ALTER TABLE `config_components`
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT для таблицы `warranties`

@@ -8,6 +8,7 @@ namespace DDMLib.Component
 {
     public class StorageSpec
     {
+        public int ComponentId { get; set; }
         public string Interface { get; set; }
         public int CapacityGb { get; set; }
     }

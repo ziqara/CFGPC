@@ -8,6 +8,7 @@ namespace DDMLib.Component
 {
     public class CoolingSpec
     {
+        public int ComponentId { get; set; }
         public string CoolerType { get; set; }
         public int TdpSupport { get; set; }
         public int FanRpm { get; set; }

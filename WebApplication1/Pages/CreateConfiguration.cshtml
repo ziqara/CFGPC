@@ -1,0 +1,752 @@
+﻿@page
+@model WebApplication1.Pages.CreateConfigurationModel
+@{
+    ViewData["Title"] = "Создание конфигурации";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-microchip me-2" style="color: #764ba2;"></i>@ViewData["Title"]</h1>
+        <a asp-page="/Index" class="btn btn-outline-primary">
+            <i class="fas fa-home me-1"></i>На главную
+        </a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger mb-4">
+            <i class="fas fa-exclamation-circle me-2"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success mb-4">
+            <i class="fas fa-check-circle me-2"></i> @Model.SuccessMessage
+        </div>
+    }
+
+    <!-- Основная информация о конфигурации -->
+    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+            <h5 class="card-title text-white mb-0">
+                <i class="fas fa-info-circle me-2"></i>Основная информация
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color: #764ba2;">Название конфигурации</label>
+                    <input type="text" class="form-control" id="configName" placeholder="Например: Игровой ПК 2025" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color: #764ba2;">Цель использования</label>
+                    <select class="form-select" id="targetUse">
+                        <option value="">Выберите цель</option>
+                        <option value="gaming">Игровой</option>
+                        <option value="professional">Профессиональный</option>
+                        <option value="office">Офисный</option>
+                        <option value="student">Для студентов</option>
+                    </select>
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label fw-semibold" style="color: #764ba2;">Описание</label>
+                    <textarea class="form-control" id="description" rows="3" placeholder="Краткое описание вашей сборки..."></textarea>
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rgbCheckbox">
+                        <label class="form-check-label" for="rgbCheckbox">
+                            <i class="fas fa-lightbulb me-1" style="color: #764ba2;"></i> RGB-подсветка
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Выбор комплектующих -->
+    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+            <h5 class="card-title text-white mb-0">
+                <i class="fas fa-cogs me-2"></i>Выбор комплектующих
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <!-- Процессор -->
+            <div class="component-section mb-4" id="cpu-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-microchip me-2"></i>Процессор
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="cpu">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Процессор не выбран</p>
+                </div>
+                <div class="selected-component-info d-none" id="cpu-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="cpu-name"></h6>
+                            <small class="text-muted" id="cpu-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="cpu-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="cpu">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Материнская плата -->
+            <div class="component-section mb-4" id="motherboard-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-microchip me-2"></i>Материнская плата
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="motherboard">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="motherboard-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Материнская плата не выбрана</p>
+                </div>
+                <div class="selected-component-info d-none" id="motherboard-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="motherboard-name"></h6>
+                            <small class="text-muted" id="motherboard-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="motherboard-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="motherboard">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Оперативная память -->
+            <div class="component-section mb-4" id="ram-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-memory me-2"></i>Оперативная память
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="ram">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="ram-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-memory fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Оперативная память не выбрана</p>
+                </div>
+                <div class="selected-component-info d-none" id="ram-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="ram-name"></h6>
+                            <small class="text-muted" id="ram-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="ram-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="ram">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Видеокарта -->
+            <div class="component-section mb-4" id="gpu-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-plug me-2"></i>Видеокарта
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="gpu">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="gpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-plug fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Видеокарта не выбрана</p>
+                </div>
+                <div class="selected-component-info d-none" id="gpu-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="gpu-name"></h6>
+                            <small class="text-muted" id="gpu-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="gpu-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="gpu">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Накопитель -->
+            <div class="component-section mb-4" id="storage-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-hdd me-2"></i>Накопитель
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="storage">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="storage-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-hdd fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Накопитель не выбран</p>
+                </div>
+                <div class="selected-component-info d-none" id="storage-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="storage-name"></h6>
+                            <small class="text-muted" id="storage-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="storage-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="storage">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок питания -->
+            <div class="component-section mb-4" id="psu-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-bolt me-2"></i>Блок питания
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="psu">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="psu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-bolt fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Блок питания не выбран</p>
+                </div>
+                <div class="selected-component-info d-none" id="psu-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="psu-name"></h6>
+                            <small class="text-muted" id="psu-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="psu-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="psu">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Корпус -->
+            <div class="component-section mb-4" id="case-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-box me-2"></i>Корпус
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="case">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="case-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-box fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Корпус не выбран</p>
+                </div>
+                <div class="selected-component-info d-none" id="case-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="case-name"></h6>
+                            <small class="text-muted" id="case-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="case-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="case">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Охлаждение -->
+            <div class="component-section mb-4" id="cooling-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0" style="color: #764ba2;">
+                        <i class="fas fa-wind me-2"></i>Система охлаждения
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="cooling">
+                        <i class="fas fa-plus me-1"></i>Выбрать
+                    </button>
+                </div>
+                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cooling-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                    <i class="fas fa-wind fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Охлаждение не выбрано</p>
+                </div>
+                <div class="selected-component-info d-none" id="cooling-info">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                        <div>
+                            <h6 class="mb-1" id="cooling-name"></h6>
+                            <small class="text-muted" id="cooling-specs"></small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-3" style="color: #764ba2;" id="cooling-price"></span>
+                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="cooling">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Индикатор совместимости -->
+            <div id="compatibility-indicator" class="alert d-none mt-3"></div>
+        </div>
+    </div>
+
+    <!-- Итоговая стоимость -->
+    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+            <h5 class="card-title text-white mb-0">
+                <i class="fas fa-calculator me-2"></i>Итоговая стоимость
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0" style="color: #2d3748;">Общая сумма:</h4>
+                <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">0 ₽</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки действий -->
+    <div class="d-flex gap-3 justify-content-center mb-5">
+        <button class="btn btn-primary btn-lg px-5" id="saveConfigBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-save me-2"></i>Сохранить конфигурацию
+        </button>
+        <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-5">
+            <i class="fas fa-times me-2"></i>Отмена
+        </a>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
+            outline: none;
+        }
+
+    .component-section {
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .component-section:hover {
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+    .btn-outline-primary {
+        border-color: #764ba2;
+        color: #764ba2;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .btn-primary {
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+    .btn-outline-secondary {
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-secondary:hover {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+    /* Адаптивность */
+    @@media (max-width: 768px) {
+        .component-section {
+            padding: 1rem;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Загружаем сохраненные компоненты из localStorage при загрузке страницы
+        loadSelectedComponents();
+
+        // Обработчики для кнопок выбора компонентов
+        document.querySelectorAll('.select-component-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const componentType = this.dataset.type;
+                // Переходим на страницу компонентов с параметром type и returnUrl
+                window.location.href = `/Components?category=${componentType}&returnUrl=${encodeURIComponent('/CreateConfiguration')}&returnType=${componentType}`;
+            });
+        });
+
+        // Обработчики для кнопок удаления компонентов
+        document.querySelectorAll('.remove-component').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.type;
+                removeComponent(type);
+            });
+        });
+
+        // Обработчик сохранения конфигурации
+        document.getElementById('saveConfigBtn').addEventListener('click', function() {
+            saveConfiguration();
+        });
+
+        // Проверяем, есть ли выбранный компонент в localStorage (возврат со страницы Components)
+        checkForSelectedComponent();
+    });
+
+    function checkForSelectedComponent() {
+        const selectedComponent = localStorage.getItem('selectedComponent');
+        if (selectedComponent) {
+            try {
+                const component = JSON.parse(selectedComponent);
+
+                // Загружаем существующие компоненты
+                let allComponents = {};
+                const savedComponents = localStorage.getItem('allComponents');
+                if (savedComponents) {
+                    allComponents = JSON.parse(savedComponents);
+                }
+
+                // Добавляем новый компонент
+                allComponents[component.type] = component;
+
+                // Сохраняем все компоненты
+                localStorage.setItem('allComponents', JSON.stringify(allComponents));
+
+                // Добавляем компонент на страницу
+                addComponentToPage(component);
+
+                // Проверяем совместимость после добавления
+                checkAllCompatibility();
+
+                // Удаляем временный selectedComponent
+                localStorage.removeItem('selectedComponent');
+            } catch (e) {
+                console.error('Ошибка при парсинге компонента', e);
+            }
+        }
+    }
+
+    function loadSelectedComponents() {
+        const savedComponents = localStorage.getItem('allComponents');
+        if (savedComponents) {
+            try {
+                const allComponents = JSON.parse(savedComponents);
+                Object.values(allComponents).forEach(component => {
+                    addComponentToPage(component);
+                });
+                checkAllCompatibility();
+            } catch (e) {
+                console.error('Ошибка при загрузке компонентов', e);
+            }
+        }
+    }
+
+    function addComponentToPage(component) {
+        const type = component.type;
+
+        // Скрываем placeholder и показываем информацию о компоненте
+        const placeholder = document.getElementById(`${type}-placeholder`);
+        const info = document.getElementById(`${type}-info`);
+        const nameSpan = document.getElementById(`${type}-name`);
+        const specsSpan = document.getElementById(`${type}-specs`);
+        const priceSpan = document.getElementById(`${type}-price`);
+
+        if (placeholder && info && nameSpan && priceSpan) {
+            placeholder.classList.add('d-none');
+            info.classList.remove('d-none');
+
+            nameSpan.textContent = component.name;
+
+            // Формируем строку со спецификациями
+            let specsText = '';
+            if (component.specs) {
+                const specs = component.specs;
+                if (type === 'cpu') {
+                    specsText = `${specs.socket} | ${specs.cores} ядер | ${specs.tdp}Вт`;
+                } else if (type === 'motherboard') {
+                    specsText = `${specs.socket} | ${specs.ramType} | ${specs.formFactor}`;
+                } else if (type === 'ram') {
+                    specsText = `${specs.ramType} ${specs.capacityGb}ГБ | ${specs.speedMhz}МГц`;
+                } else if (type === 'gpu') {
+                    specsText = `${specs.pcieVersion} | ${specs.vramGb}ГБ | ${specs.tdp}Вт`;
+                } else if (type === 'storage') {
+                    specsText = `${specs.interface} | ${specs.capacityGb}ГБ`;
+                } else if (type === 'psu') {
+                    specsText = `${specs.wattage}Вт | ${specs.efficiencyRating}`;
+                } else if (type === 'case') {
+                    specsText = `${specs.formFactor} | ${specs.size}`;
+                } else if (type === 'cooling') {
+                    specsText = `${specs.coolerType} | ${specs.tdpSupport}Вт`;
+                }
+            }
+            if (specsSpan) {
+                specsSpan.textContent = specsText;
+            }
+
+            // Проверяем, что price существует и конвертируем в число
+            const price = parseFloat(component.price) || 0;
+            priceSpan.textContent = `${price.toLocaleString('ru-RU')} ₽`;
+
+            // Сохраняем ID и цену компонента в data-атрибут секции
+            const section = document.getElementById(`${type}-section`);
+            if (section) {
+                section.dataset.componentId = component.id;
+                section.dataset.componentPrice = price;
+                if (component.specs) {
+                    section.dataset.specs = JSON.stringify(component.specs);
+                }
+            }
+
+            // Пересчитываем общую стоимость
+            calculateTotalPrice();
+        } else {
+            console.error('Не найдены элементы для типа:', type);
+        }
+    }
+
+    function removeComponent(type) {
+        const placeholder = document.getElementById(`${type}-placeholder`);
+        const info = document.getElementById(`${type}-info`);
+        const section = document.getElementById(`${type}-section`);
+
+        if (placeholder && info) {
+            placeholder.classList.remove('d-none');
+            info.classList.add('d-none');
+
+            if (section) {
+                delete section.dataset.componentId;
+                delete section.dataset.componentPrice;
+                delete section.dataset.specs;
+            }
+
+            // Удаляем из localStorage
+            const savedComponents = localStorage.getItem('allComponents');
+            if (savedComponents) {
+                try {
+                    const allComponents = JSON.parse(savedComponents);
+                    delete allComponents[type];
+                    localStorage.setItem('allComponents', JSON.stringify(allComponents));
+                } catch (e) {
+                    console.error('Ошибка при удалении из localStorage', e);
+                }
+            }
+
+            // Пересчитываем общую стоимость и проверяем совместимость
+            calculateTotalPrice();
+            checkAllCompatibility();
+        }
+    }
+
+    function calculateTotalPrice() {
+        let total = 0;
+
+        // Список всех типов компонентов
+        const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
+
+        types.forEach(type => {
+            const section = document.getElementById(`${type}-section`);
+            if (section && section.dataset.componentPrice) {
+                const price = parseFloat(section.dataset.componentPrice) || 0;
+                total += price;
+            }
+        });
+
+        document.getElementById('totalPrice').textContent = `${total.toLocaleString('ru-RU')} ₽`;
+    }
+
+    function checkAllCompatibility() {
+        // Собираем все выбранные компоненты
+        const selectedComponents = {};
+        const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
+
+        types.forEach(type => {
+            const section = document.getElementById(`${type}-section`);
+            if (section && section.dataset.componentId) {
+                selectedComponents[type] = {
+                    id: parseInt(section.dataset.componentId),
+                    specs: section.dataset.specs ? JSON.parse(section.dataset.specs) : null
+                };
+            }
+        });
+
+        // Проверяем совместимость
+        const issues = [];
+
+        // CPU ↔ Motherboard (сокет)
+        if (selectedComponents.cpu && selectedComponents.motherboard) {
+            if (selectedComponents.cpu.specs?.socket !== selectedComponents.motherboard.specs?.socket) {
+                issues.push('❌ Процессор и материнская плата имеют разные сокеты');
+                markIncompatible('cpu', 'motherboard');
+            }
+        }
+
+        // RAM ↔ Motherboard (тип памяти)
+        if (selectedComponents.ram && selectedComponents.motherboard) {
+            if (selectedComponents.ram.specs?.ramType !== selectedComponents.motherboard.specs?.ramType) {
+                issues.push('❌ Оперативная память несовместима с материнской платой (разные типы)');
+                markIncompatible('ram', 'motherboard');
+            }
+        }
+
+        // GPU ↔ Motherboard (PCIe версия)
+        if (selectedComponents.gpu && selectedComponents.motherboard) {
+            if (selectedComponents.gpu.specs?.pcieVersion !== selectedComponents.motherboard.specs?.pcieVersion) {
+                issues.push('⚠️ Видеокарта может не полностью использовать возможности материнской платы');
+            }
+        }
+
+        // Motherboard ↔ Case (форм-фактор)
+        if (selectedComponents.motherboard && selectedComponents.case) {
+            if (selectedComponents.motherboard.specs?.formFactor !== selectedComponents.case.specs?.formFactor) {
+                issues.push('❌ Материнская плата не подходит к корпусу');
+                markIncompatible('motherboard', 'case');
+            }
+        }
+
+        // PSU мощность
+        if (selectedComponents.psu) {
+            let totalPower = 0;
+            if (selectedComponents.cpu?.specs?.tdp) totalPower += selectedComponents.cpu.specs.tdp;
+            if (selectedComponents.gpu?.specs?.tdp) totalPower += selectedComponents.gpu.specs.tdp;
+
+            if (selectedComponents.psu.specs?.wattage < totalPower * 1.2) {
+                issues.push('❌ Мощность блока питания недостаточна');
+                markIncompatible('psu');
+            }
+        }
+
+        // Cooling ↔ CPU (TDP)
+        if (selectedComponents.cooling && selectedComponents.cpu) {
+            if (selectedComponents.cooling.specs?.tdpSupport < selectedComponents.cpu.specs?.tdp) {
+                issues.push('❌ Охлаждение не справится с процессором');
+                markIncompatible('cooling', 'cpu');
+            }
+        }
+
+        // Отображаем предупреждения
+        const indicator = document.getElementById('compatibility-indicator');
+        if (issues.length > 0) {
+            indicator.className = 'alert alert-warning mt-3';
+            indicator.innerHTML = '<strong><i class="fas fa-exclamation-triangle me-2"></i>Проблемы совместимости:</strong><ul class="mb-0 mt-2">' +
+                issues.map(issue => `<li>${issue}</li>`).join('') + '</ul>';
+            indicator.classList.remove('d-none');
+        } else if (Object.keys(selectedComponents).length > 0) {
+            indicator.className = 'alert alert-success mt-3';
+            indicator.innerHTML = '<strong><i class="fas fa-check-circle me-2"></i>Все компоненты совместимы!</strong>';
+            indicator.classList.remove('d-none');
+        } else {
+            indicator.classList.add('d-none');
+        }
+    }
+
+    function markIncompatible(...types) {
+        types.forEach(type => {
+            const section = document.getElementById(`${type}-section`);
+            if (section) {
+                section.style.borderColor = '#dc3545';
+                section.style.backgroundColor = '#fff5f5';
+            }
+        });
+    }
+
+    function saveConfiguration() {
+        const configName = document.getElementById('configName').value;
+        const targetUse = document.getElementById('targetUse').value;
+        const description = document.getElementById('description').value;
+        const rgb = document.getElementById('rgbCheckbox').checked;
+
+        if (!configName) {
+            alert('Введите название конфигурации');
+            return;
+        }
+
+        if (!targetUse) {
+            alert('Выберите цель использования');
+            return;
+        }
+
+        // Собираем ID выбранных компонентов
+        const componentIds = [];
+        const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
+
+        types.forEach(type => {
+            const section = document.getElementById(`${type}-section`);
+            if (section && section.dataset.componentId) {
+                componentIds.push(parseInt(section.dataset.componentId));
+            }
+        });
+
+        if (componentIds.length === 0) {
+            alert('Выберите хотя бы один компонент');
+            return;
+        }
+
+        // Здесь будет отправка данных на сервер
+        console.log('Сохраняем конфигурацию:', {
+            configName,
+            targetUse,
+            description,
+            rgb,
+            componentIds,
+            totalPrice: document.getElementById('totalPrice').textContent
+        });
+
+        alert('Функция сохранения будет добавлена позже');
+    }
+</script>

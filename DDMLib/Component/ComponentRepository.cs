@@ -103,9 +103,9 @@ namespace DDMLib.Component
                     {
                         connection.Open();
                         string specQuery = @"
-                            SELECT componentId, ramType, capacityGb, speedMhz, slotsNeeded
-                            FROM rams
-                            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
+            SELECT componentId, ramType, capacityGb, speedMhz, slotsNeeded
+            FROM rams
+            WHERE componentId IN (" + string.Join(",", componentIds) + ")";
 
                         MySqlCommand specCommand = new MySqlCommand(specQuery, connection);
                         using (MySqlDataReader specReader = specCommand.ExecuteReader())
@@ -123,7 +123,7 @@ namespace DDMLib.Component
 
                                 var spec = new RamSpec
                                 {
-                                    Type = GetStringOrEmpty(iType),
+                                    RamType = GetStringOrEmpty(iType), // Исправлено: RamType вместо Type
                                     CapacityGb = GetInt32OrZero(iCap),
                                     SpeedMhz = GetInt32OrZero(iSpeed),
                                     SlotsNeeded = GetInt32OrZero(iSlots)
@@ -387,6 +387,169 @@ namespace DDMLib.Component
                 PhotoUrl = GetStringOrEmpty(iPhoto),
                 SupplierId = GetInt32OrZero(iSupplier)
             };
+        }
+
+        public T GetComponentSpec<T>(int componentId) where T : class
+        {
+            string tableName = GetTableNameForType<T>();
+            if (string.IsNullOrEmpty(tableName))
+                return null;
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+                string sql = $"SELECT * FROM {tableName} WHERE componentId = @ComponentId";
+
+                using (MySqlCommand command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@ComponentId", componentId);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return MapSpecFromReader<T>(reader);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Эти методы теперь private, так как они не в интерфейсе
+        private string GetTableNameForType<T>()
+        {
+            if (typeof(T) == typeof(CpuSpec)) return "cpus";
+            if (typeof(T) == typeof(MotherboardSpec)) return "motherboards";
+            if (typeof(T) == typeof(RamSpec)) return "rams";
+            if (typeof(T) == typeof(GpuSpec)) return "gpus";
+            if (typeof(T) == typeof(StorageSpec)) return "storages";
+            if (typeof(T) == typeof(PsuSpec)) return "psus";
+            if (typeof(T) == typeof(CaseSpec)) return "cases";
+            if (typeof(T) == typeof(CoolingSpec)) return "coolings";
+            return null;
+        }
+
+        private T MapSpecFromReader<T>(MySqlDataReader reader) where T : class
+        {
+            if (typeof(T) == typeof(CpuSpec))
+            {
+                return new CpuSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    Socket = reader.GetString("socket"),
+                    Cores = reader.GetInt32("cores"),
+                    Tdp = reader.GetInt32("tdp")
+                } as T;
+            }
+            if (typeof(T) == typeof(MotherboardSpec))
+            {
+                return new MotherboardSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    Socket = reader.GetString("socket"),
+                    Chipset = reader.GetString("chipset"),
+                    RamType = reader.GetString("ramType"),
+                    PcieVersion = reader.GetString("pcieVersion"),
+                    FormFactor = reader.GetString("formFactor")
+                } as T;
+            }
+            if (typeof(T) == typeof(RamSpec))
+            {
+                return new RamSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    RamType = reader.GetString("ramType"), // Исправлено: RamType вместо Type
+                    CapacityGb = reader.GetInt32("capacityGb"),
+                    SpeedMhz = reader.GetInt32("speedMhz"),
+                    SlotsNeeded = reader.GetInt32("slotsNeeded")
+                } as T;
+            }
+            if (typeof(T) == typeof(GpuSpec))
+            {
+                return new GpuSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    PcieVersion = reader.GetString("pcieVersion"),
+                    Tdp = reader.GetInt32("tdp"),
+                    VramGb = reader.GetInt32("vramGb")
+                } as T;
+            }
+            if (typeof(T) == typeof(StorageSpec))
+            {
+                return new StorageSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    Interface = reader.GetString("interface"),
+                    CapacityGb = reader.GetInt32("capacityGb")
+                } as T;
+            }
+            if (typeof(T) == typeof(PsuSpec))
+            {
+                return new PsuSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    Wattage = reader.GetInt32("wattage"),
+                    EfficiencyRating = reader.GetString("efficiencyRating")
+                } as T;
+            }
+            if (typeof(T) == typeof(CaseSpec))
+            {
+                return new CaseSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    FormFactor = reader.GetString("formFactor"),
+                    Size = reader.GetString("size")
+                } as T;
+            }
+            if (typeof(T) == typeof(CoolingSpec))
+            {
+                return new CoolingSpec
+                {
+                    ComponentId = reader.GetInt32("componentId"),
+                    CoolerType = reader.GetString("coolerType"),
+                    TdpSupport = reader.GetInt32("tdpSupport"),
+                    FanRpm = reader.GetInt32("fanRpm"),
+                    Size = reader.IsDBNull(reader.GetOrdinal("size")) ? null : reader.GetString("size"),
+                    IsRgb = reader.GetBoolean("isRgb")
+                } as T;
+            }
+            return null;
+        }
+
+        public Component GetComponentById(int componentId)
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = @"
+                        SELECT componentId, name, brand, model, componentType, price, 
+                               stockQuantity, description, isAvailable, photoUrl, supplierInn
+                        FROM components 
+                        WHERE componentId = @ComponentId";
+
+                    using (MySqlCommand command = new MySqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@ComponentId", componentId);
+
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return MapComponentFromReader(reader);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.LogError("GetComponentById", ex.Message);
+                    throw;
+                }
+            }
+            return null;
         }
     }
 }

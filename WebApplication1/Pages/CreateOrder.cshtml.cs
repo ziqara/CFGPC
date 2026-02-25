@@ -118,7 +118,6 @@ namespace ClientWebApp.Pages
 
                 _orderService.CreateOrder(order);
 
-                TempData["SuccessMessage"] = "Заказ успешно оформлен!";
                 return RedirectToPage("/Orders");
             }
             catch (Exception ex)

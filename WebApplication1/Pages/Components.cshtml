@@ -1,6 +1,6 @@
 ﻿@page
 @using DDMLib.Component
-@model ComponentsPageModel
+@model WebApplication1.Pages.ComponentsModel
 @{
     ViewData["Title"] = "Комплектующие";
     string GetCategoryDisplayName(string category)
@@ -19,6 +19,8 @@
         };
     }
     string currentCategoryName = GetCategoryDisplayName(Request.Query["category"].FirstOrDefault() ?? "cpu");
+    string returnUrl = Request.Query["returnUrl"].FirstOrDefault();
+    string returnType = Request.Query["returnType"].FirstOrDefault();
 }
 
 <!DOCTYPE html>
@@ -33,8 +35,6 @@
         body {
             background-color: #f5f7fa;
             padding-top: 20px;
-            /* padding-left убираем, так как панель теперь в сетке */
-            /* margin: 0; убираем */
         }
 
         .page-header {
@@ -54,10 +54,6 @@
         }
 
         .sidebar {
-            /* position: fixed; УБРАНО */
-            /* top: 0; УБРАНО */
-            /* left: 0; УБРАНО */
-            /* height: 100vh; УБРАНО */
             background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
             border: 1px solid #2c3e50;
             border-radius: 8px;
@@ -66,12 +62,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            min-width: 250px; /* Ширина панели */
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-            /* height: fit-content; или height: auto; чтобы высота была по содержимому */
+            min-width: 250px;
             height: fit-content;
-            /* position: sticky; можно добавить, если хочешь, чтобы она "липила" при прокрутке внутри своего контейнера */
-            /* top: 20px; для sticky */
         }
 
         .category-item {
@@ -140,6 +132,17 @@
                 background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             }
 
+            .component-card.incompatible {
+                opacity: 0.6;
+                background-color: #fff5f5;
+                border-left: 4px solid #dc3545;
+            }
+
+                .component-card.incompatible:hover {
+                    transform: none;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                }
+
         .component-image {
             width: 100%;
             height: 200px;
@@ -206,24 +209,83 @@
             border: none;
             font-size: 0.7rem;
         }
+
+        .btn-select {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+            .btn-select:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+
+            .btn-select:disabled {
+                background: #6c757d;
+                cursor: not-allowed;
+            }
+
+                .btn-select:disabled:hover {
+                    transform: none;
+                    box-shadow: none;
+                }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .compatibility-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 5px;
+            display: inline-block;
+        }
+
+            .compatibility-badge.compatible {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .compatibility-badge.incompatible {
+                background-color: #dc3545;
+                color: white;
+            }
+
+        .compatibility-tooltip {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="page-header">
-            <div class="container text-center">
+            <div class="container text-center position-relative">
                 <h1 class="page-title">
                     <i class="fas fa-microchip me-3"></i>
                     @currentCategoryName
                 </h1>
+                @if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    <a href="@returnUrl" class="btn btn-light mt-3 back-button">
+                        <i class="fas fa-arrow-left me-2"></i>Вернуться к сборке
+                    </a>
+                }
             </div>
         </div>
 
         <div class="row g-4">
-            <!-- Добавлен отступ между колонками -->
             <!-- Левая панель с категориями -->
             <div class="col-md-3">
-                <!-- Ширина панели: md - 3/12 -->
                 <div class="sidebar">
                     <div class="category-item @(Request.Query["category"].FirstOrDefault() == "cpu" ? "active" : "")">
                         <span class="clickable-text" onclick="loadCategory('cpu')">
@@ -270,18 +332,30 @@
 
             <!-- Основная область с комплектующими -->
             <div class="col-md-9">
-                <!-- Ширина основного контента: md - 9/12 -->
                 <div id="components-container">
                     @if (Model.Components != null && Model.Components.Any())
                     {
                         <div class="row g-4">
                             @foreach (var component in Model.Components)
                             {
+                                bool isCompatible = Model.IsComponentCompatible(component.Component.ComponentId);
+                                string compatibilityClass = isCompatible ? "" : "incompatible";
+
                                 <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="component-card h-100">
+                                    <div class="component-card h-100 @compatibilityClass"
+                                         data-component-id="@component.Component.ComponentId"
+                                         data-component-type="@component.Component.Type">
                                         <img src="@component.Component.PhotoUrl" alt="@component.Component.Name" class="component-image" />
 
-                                        <h5 class="component-name">@component.Component.Name</h5>
+                                        <h5 class="component-name">
+                                            @component.Component.Name
+                                            @if (!isCompatible)
+                                            {
+                                                <span class="compatibility-badge incompatible">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </span>
+                                            }
+                                        </h5>
 
                                         <div class="component-specs">
                                             <span class="badge bg-secondary me-2">@component.Component.Brand</span>
@@ -289,7 +363,7 @@
                                         </div>
 
                                         <div class="component-price">
-                                            <i class="fas fa-ruble-sign me-1"></i>@component.Component.Price.ToString("F2")
+                                            <i class="fas fa-ruble-sign me-1"></i>@component.Component.Price.ToString("N0")
                                         </div>
 
                                         <p class="component-description">@component.Component.Description</p>
@@ -305,9 +379,10 @@
                                                 }
                                                 @if (component.Specs is RamSpec ramSpec)
                                                 {
-                                                    <div><i class="fas fa-memory category-icon"></i><strong>Тип:</strong> @ramSpec.Type</div>
+                                                    <div><i class="fas fa-memory category-icon"></i><strong>Тип:</strong> @ramSpec.RamType</div>
                                                     <div><i class="fas fa-microchip category-icon"></i><strong>Объём:</strong> @ramSpec.CapacityGb ГБ</div>
                                                     <div><i class="fas fa-bolt category-icon"></i><strong>Частота:</strong> @ramSpec.SpeedMhz МГц</div>
+                                                    <div><i class="fas fa-layer-group category-icon"></i><strong>Слотов:</strong> @ramSpec.SlotsNeeded</div>
                                                 }
                                                 @if (component.Specs is CpuSpec cpuSpec)
                                                 {
@@ -320,6 +395,8 @@
                                                     <div><i class="fas fa-microchip category-icon"></i><strong>Сокет:</strong> @moboSpec.Socket</div>
                                                     <div><i class="fas fa-chip category-icon"></i><strong>Чипсет:</strong> @moboSpec.Chipset</div>
                                                     <div><i class="fas fa-memory category-icon"></i><strong>ОЗУ:</strong> @moboSpec.RamType</div>
+                                                    <div><i class="fas fa-plug category-icon"></i><strong>PCIe:</strong> @moboSpec.PcieVersion</div>
+                                                    <div><i class="fas fa-arrows-alt category-icon"></i><strong>Форм-фактор:</strong> @moboSpec.FormFactor</div>
                                                 }
                                                 @if (component.Specs is StorageSpec storageSpec)
                                                 {
@@ -341,6 +418,38 @@
                                                     <div><i class="fas fa-wind category-icon"></i><strong>Тип:</strong> @coolingSpec.CoolerType</div>
                                                     <div><i class="fas fa-fire category-icon"></i><strong>TDP:</strong> @coolingSpec.TdpSupport Вт</div>
                                                     <div><i class="fas fa-tachometer-alt category-icon"></i><strong>Обороты:</strong> @coolingSpec.FanRpm RPM</div>
+                                                }
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(returnUrl))
+                                            {
+                                                if (isCompatible)
+                                                {
+                                                    <button class="btn btn-select mt-3 select-component"
+                                                            data-component-id="@component.Component.ComponentId"
+                                                            data-component-name="@component.Component.Name"
+                                                            data-component-price="@component.Component.Price"
+                                                            data-component-type="@Request.Query["category"].FirstOrDefault()"
+                                                            data-component-specs='@System.Text.Json.JsonSerializer.Serialize(component.Specs)'>
+                                                        <i class="fas fa-check-circle me-1"></i>Выбрать
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-select mt-3" disabled>
+                                                        <i class="fas fa-ban me-1"></i>Несовместим
+                                                    </button>
+                                                    @if (Model.GetCompatibilityIssues(component.Component.ComponentId).Any())
+                                                    {
+                                                        <div class="compatibility-tooltip">
+                                                            @foreach (var issue in Model.GetCompatibilityIssues(component.Component.ComponentId))
+                                                            {
+                                                                <small><i class="fas fa-info-circle"></i> @issue</small>
+
+                                                                <br />
+                                                            }
+                                                        </div>
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -365,10 +474,66 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function loadCategory(category) {
-            window.location.href = `/Components?category=${category}`;
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <text>
+                    // Сохраняем текущие выбранные компоненты перед переходом
+                    const savedComponents = localStorage.getItem('allComponents');
+                    window.location.href = `/Components?category=${category}&returnUrl=${encodeURIComponent('@returnUrl')}&returnType=${category}&components=${encodeURIComponent(savedComponents || '')}`;
+            </text>
+        }
+        else
+        {
+            <text>
+                    window.location.href = `/Components?category=${category}`;
+            </text>
+        }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем выбранные компоненты из URL параметра
+            const urlParams = new URLSearchParams(window.location.search);
+            const componentsParam = urlParams.get('components');
+            if (componentsParam) {
+                try {
+                    const components = JSON.parse(decodeURIComponent(componentsParam));
+                    localStorage.setItem('allComponents', JSON.stringify(components));
+                } catch (e) {
+                    console.error('Ошибка при загрузке компонентов из URL', e);
+                }
+            }
+
+            // Обработчики для кнопок выбора компонента
+            document.querySelectorAll('.select-component').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    let specs = {};
+                    try {
+                        specs = JSON.parse(this.dataset.componentSpecs || '{}');
+                    } catch (e) {
+                        console.error('Ошибка парсинга спецификаций', e);
+                    }
+
+                    const component = {
+                        id: this.dataset.componentId,
+                        name: this.dataset.componentName,
+                        price: this.dataset.componentPrice,
+                        type: this.dataset.componentType,
+                        specs: specs
+                    };
+
+                    // Сохраняем выбранный компонент в localStorage
+                    localStorage.setItem('selectedComponent', JSON.stringify(component));
+
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <text>
+                            window.location.href = '@returnUrl';
+            </text>
+        }
+                });
+            });
+
+            // Анимация появления карточек
             const cards = document.querySelectorAll('.component-card');
             cards.forEach((card, index) => {
                 setTimeout(() => {

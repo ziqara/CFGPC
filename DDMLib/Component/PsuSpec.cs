@@ -8,6 +8,7 @@ namespace DDMLib.Component
 {
     public class PsuSpec
     {
+        public int ComponentId { get; set; }
         public int Wattage { get; set; }
         public string EfficiencyRating { get; set; }
     }

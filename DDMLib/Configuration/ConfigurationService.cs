@@ -63,5 +63,38 @@ namespace DDMLib.Configuration
         {
             return configurationRepository_.GetPresetConfigurations();
         }
+
+        public int CreateConfiguration(Configuration configuration, List<int> componentIds)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            if (string.IsNullOrWhiteSpace(configuration.ConfigName))
+                throw new ArgumentException("Название конфигурации обязательно", nameof(configuration.ConfigName));
+
+            if (string.IsNullOrWhiteSpace(configuration.UserEmail))
+                throw new ArgumentException("Email пользователя обязателен", nameof(configuration.UserEmail));
+
+            if (componentIds == null || !componentIds.Any())
+                throw new ArgumentException("Должен быть выбран хотя бы один компонент", nameof(componentIds));
+
+            try
+            {
+                // Устанавливаем значения по умолчанию
+                configuration.CreatedDate = DateTime.Now;
+                configuration.Status = "draft";
+                configuration.IsPreset = false;
+
+                // Рассчитываем общую сумму (если нужно)
+                // Здесь можно добавить логику подсчета суммы из компонентов
+
+                return configurationRepository_.CreateConfiguration(configuration, componentIds);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ConfigurationService.CreateConfiguration", ex.Message);
+                throw;
+            }
+        }
     }
 }

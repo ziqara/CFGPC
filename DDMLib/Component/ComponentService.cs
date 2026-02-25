@@ -19,5 +19,32 @@ namespace DDMLib.Component
         {
             return componentRepository_.GetComponentsByCategory(category);
         }
+
+        // DDMLib/Component/ComponentService.cs
+        public T GetComponentSpec<T>(int componentId) where T : class
+        {
+            try
+            {
+                return componentRepository_.GetComponentSpec<T>(componentId);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError($"GetComponentSpec<{typeof(T).Name}>", ex.Message);
+                return null;
+            }
+        }
+
+        public Component GetComponentById(int componentId)
+        {
+            try
+            {
+                return componentRepository_.GetComponentById(componentId);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("GetComponentById", ex.Message);
+                return null;
+            }
+        }
     }
 }
