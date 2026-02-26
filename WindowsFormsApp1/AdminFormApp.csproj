@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Orders\AllOrdersCardsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Orders\AllOrdersCardsForm.Designer.cs">
+      <DependentUpon>AllOrdersCardsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\OrderCardControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Orders\OrderCardControl.Designer.cs">
+      <DependentUpon>OrderCardControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SupplierForms\AddSupplierForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -323,6 +335,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\StorageForms\EditStorageForm.resx">
       <DependentUpon>EditStorageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Orders\AllOrdersCardsForm.resx">
+      <DependentUpon>AllOrdersCardsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Orders\OrderCardControl.resx">
+      <DependentUpon>OrderCardControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SupplierForms\EditSupplierForm.resx">
       <DependentUpon>EditSupplierForm.cs</DependentUpon>

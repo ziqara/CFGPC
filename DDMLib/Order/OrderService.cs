@@ -73,5 +73,17 @@ namespace DDMLib.Order
             bool ok = _orderRepository.UpdateOrderStatusAndPaid(orderId, status, isPaid);
             return ok ? string.Empty : "Не удалось обновить заказ (ошибка БД)";
         }
+
+        public List<Order> GetAllOrders()
+        {
+            try
+            {
+                return _orderRepository.GetAllOrders();
+            }
+            catch
+            {
+                throw; // ошибка пробрасывается в ui
+            }
+        }
     }
 }

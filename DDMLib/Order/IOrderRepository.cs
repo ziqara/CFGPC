@@ -12,6 +12,7 @@ namespace DDMLib.Order
         void AddOrder(Order order);
 
         // ADMIN
+        List<Order> GetAllOrders();
         bool ExistsById(int orderId);
         bool UpdateOrderStatusAndPaid(int orderId, OrderStatus status, bool isPaid);
     }
