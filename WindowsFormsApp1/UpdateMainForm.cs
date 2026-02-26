@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApp1.ComponentsForms;
+using WindowsFormsApp1.ConfigForms;
 using WindowsFormsApp1.Orders;
 using WindowsFormsApp1.UserOrder;
 
@@ -115,7 +116,7 @@ namespace WindowsFormsApp1
 
         private void btnConfig_Click_1(object sender, EventArgs e)
         {
-            OpenChildForm(new MainForm(), sender);
+            OpenChildForm(new BuildsForm(), sender);
         }
 
         private void btnComponent_Click(object sender, EventArgs e)
