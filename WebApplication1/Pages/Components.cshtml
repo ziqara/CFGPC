@@ -230,21 +230,18 @@
             margin-top: 10px;
         }
 
-        /* Стили для несовместимых карточек */
-        .component-card.incompatible {
-            opacity: 0.5;
-            background-color: #f8f9fa;
-            border-left: 4px solid #dc3545;
+        /* Стили для сообщения о пустом результате после фильтрации */
+        .filter-empty-message {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+            font-size: 1.2rem;
         }
 
-            .component-card.incompatible:hover {
-                transform: none;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            }
-
-            .component-card.incompatible .btn-select {
-                background: #6c757d;
-                pointer-events: none;
+            .filter-empty-message i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                color: #bdc3c7;
             }
     </style>
 </head>
@@ -317,7 +314,7 @@
                 <div id="components-container">
                     @if (Model.Components != null && Model.Components.Any())
                     {
-                        <div class="row g-4">
+                        <div class="row g-4" id="components-row">
                             @foreach (var component in Model.Components)
                             {
                                 // Создаем объект со спецификациями для передачи в data-атрибут
@@ -376,11 +373,11 @@
 
                                 string specsJson = System.Text.Json.JsonSerializer.Serialize(specsForJs);
 
-                                <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="component-card h-100"
-                                         data-component-id="@component.Component.ComponentId"
-                                         data-component-type="@component.Component.Type"
-                                         data-component-specs='@Html.Raw(specsJson)'>
+                                <div class="col-md-6 col-lg-4 col-xl-3 component-card-wrapper"
+                                     data-component-id="@component.Component.ComponentId"
+                                     data-component-type="@component.Component.Type"
+                                     data-component-specs='@Html.Raw(specsJson)'>
+                                    <div class="component-card h-100">
                                         <img src="@component.Component.PhotoUrl" alt="@component.Component.Name" class="component-image" />
 
                                         <h5 class="component-name">
@@ -476,6 +473,12 @@
                             <p class="text-muted">Попробуйте выбрать другую категорию или вернитесь позже</p>
                         </div>
                     }
+                    <!-- Контейнер для сообщения, когда все компоненты отфильтрованы -->
+                    <div id="filter-empty-message" class="filter-empty-message" style="display: none;">
+                        <i class="fas fa-filter"></i>
+                        <h4>Нет совместимых компонентов</h4>
+                        <p class="text-muted">С текущими выбранными компонентами нет совместимых вариантов в этой категории.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -487,7 +490,6 @@
         @if (!string.IsNullOrEmpty(returnUrl))
         {
             <text>
-                        // Просто переходим на выбранную категорию, без передачи параметров
                         window.location.href = `/Components?category=${category}&returnUrl=${encodeURIComponent('@returnUrl')}&returnType=${category}`;
             </text>
         }
@@ -567,10 +569,14 @@
                 return true;
             }
 
-            // Проходим по всем карточкам и проверяем совместимость
-            document.querySelectorAll('.component-card').forEach(card => {
-                const cardType = card.dataset.componentType;
-                const specsAttr = card.dataset.componentSpecs;
+            // Проходим по всем карточкам и скрываем несовместимые
+            let visibleCount = 0;
+            const wrappers = document.querySelectorAll('.component-card-wrapper');
+
+            wrappers.forEach(wrapper => {
+                const cardType = wrapper.dataset.componentType;
+                const specsAttr = wrapper.dataset.componentSpecs;
+
                 if (!specsAttr) return;
 
                 let cardSpecs;
@@ -584,20 +590,26 @@
                 const compatible = isComponentCompatible(cardType, cardSpecs);
 
                 if (!compatible) {
-                    card.classList.add('incompatible');
-                    const btn = card.querySelector('.select-component');
-                    if (btn) {
-                        btn.disabled = true;
-                        btn.textContent = 'Несовместим';
-                    }
+                    wrapper.style.display = 'none';
+                } else {
+                    visibleCount++;
                 }
             });
+
+            // Показываем сообщение, если нет совместимых компонентов
+            const emptyMessage = document.getElementById('filter-empty-message');
+            const componentsRow = document.getElementById('components-row');
+
+            if (visibleCount === 0 && componentsRow) {
+                componentsRow.style.display = 'none';
+                if (emptyMessage) {
+                    emptyMessage.style.display = 'block';
+                }
+            }
 
             // Обработчики для кнопок выбора компонента
             document.querySelectorAll('.select-component').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (this.disabled) return;
-
                     let specs = {};
                     try {
                         specs = JSON.parse(this.dataset.componentSpecs || '{}');
