@@ -427,7 +427,7 @@ namespace DDMLib.Configuration
                     {
                         try
                         {
-                            // 1. Вставляем конфигурацию
+                            // 1. Вставляем конфигурацию - обратите внимание на поле status
                             string insertConfigQuery = @"
                         INSERT INTO configurations 
                             (configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions)
@@ -441,7 +441,7 @@ namespace DDMLib.Configuration
                                 cmdConfig.Parameters.AddWithValue("@description", configuration.Description ?? (object)DBNull.Value);
                                 cmdConfig.Parameters.AddWithValue("@totalPrice", configuration.TotalPrice);
                                 cmdConfig.Parameters.AddWithValue("@targetUse", configuration.TargetUse);
-                                cmdConfig.Parameters.AddWithValue("@status", configuration.Status ?? "draft");
+                                cmdConfig.Parameters.AddWithValue("@status", configuration.Status); // Статус передается правильно
                                 cmdConfig.Parameters.AddWithValue("@isPreset", configuration.IsPreset);
                                 cmdConfig.Parameters.AddWithValue("@createdDate", configuration.CreatedDate);
                                 cmdConfig.Parameters.AddWithValue("@userEmail", configuration.UserEmail);

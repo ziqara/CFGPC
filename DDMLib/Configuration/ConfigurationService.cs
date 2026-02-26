@@ -80,13 +80,17 @@ namespace DDMLib.Configuration
 
             try
             {
-                // Устанавливаем значения по умолчанию
-                configuration.CreatedDate = DateTime.Now;
-                configuration.Status = "draft";
-                configuration.IsPreset = false;
+                // Устанавливаем значения по умолчанию ТОЛЬКО если они не заданы
+                if (configuration.CreatedDate == DateTime.MinValue)
+                    configuration.CreatedDate = DateTime.Now;
 
-                // Рассчитываем общую сумму (если нужно)
-                // Здесь можно добавить логику подсчета суммы из компонентов
+                if (string.IsNullOrEmpty(configuration.Status))
+                    configuration.Status = "draft";
+
+                // Не перезаписываем статус, если он уже задан!
+                // configuration.Status = "draft"; // <-- ЭТО НУЖНО УБРАТЬ!
+
+                configuration.IsPreset = false;
 
                 return configurationRepository_.CreateConfiguration(configuration, componentIds);
             }

@@ -14,334 +14,349 @@
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger mb-4">
-            <i class="fas fa-exclamation-circle me-2"></i> @Model.ErrorMessage
-        </div>
+            <div class="alert alert-danger mb-4">
+                <i class="fas fa-exclamation-circle me-2"></i> @Model.ErrorMessage
+            </div>
     }
 
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-        <div class="alert alert-success mb-4">
-            <i class="fas fa-check-circle me-2"></i> @Model.SuccessMessage
-        </div>
+            <div class="alert alert-success mb-4">
+                <i class="fas fa-check-circle me-2"></i> @Model.SuccessMessage
+            </div>
     }
 
-    <!-- Основная информация о конфигурации -->
-    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
-        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
-            <h5 class="card-title text-white mb-0">
-                <i class="fas fa-info-circle me-2"></i>Основная информация
-            </h5>
-        </div>
-        <div class="card-body p-4">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color: #764ba2;">Название конфигурации</label>
-                    <input type="text" class="form-control" id="configName" placeholder="Например: Игровой ПК 2025" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color: #764ba2;">Цель использования</label>
-                    <select class="form-select" id="targetUse">
-                        <option value="">Выберите цель</option>
-                        <option value="gaming">Игровой</option>
-                        <option value="professional">Профессиональный</option>
-                        <option value="office">Офисный</option>
-                        <option value="student">Для студентов</option>
-                    </select>
-                </div>
-                <div class="col-12 mb-3">
-                    <label class="form-label fw-semibold" style="color: #764ba2;">Описание</label>
-                    <textarea class="form-control" id="description" rows="3" placeholder="Краткое описание вашей сборки..."></textarea>
-                </div>
-                <div class="col-12 mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="rgbCheckbox">
-                        <label class="form-check-label" for="rgbCheckbox">
-                            <i class="fas fa-lightbulb me-1" style="color: #764ba2;"></i> RGB-подсветка
-                        </label>
+    <form method="post" id="configForm">
+        <!-- Основная информация о конфигурации -->
+        <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+            <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+                <h5 class="card-title text-white mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Основная информация
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold" style="color: #764ba2;">Название конфигурации</label>
+                        <input type="text" class="form-control" id="configName" name="ConfigName" placeholder="Например: Игровой ПК 2025" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold" style="color: #764ba2;">Цель использования</label>
+                        <select class="form-select" id="targetUse" name="TargetUse" required>
+                            <option value="">Выберите цель</option>
+                            <option value="gaming">Игровой</option>
+                            <option value="professional">Профессиональный</option>
+                            <option value="office">Офисный</option>
+                            <option value="student">Для студентов</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-semibold" style="color: #764ba2;">Описание</label>
+                        <textarea class="form-control" id="description" name="Description" rows="3" placeholder="Краткое описание вашей сборки..."></textarea>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rgbCheckbox" name="Rgb">
+                            <label class="form-check-label" for="rgbCheckbox">
+                                <i class="fas fa-lightbulb me-1" style="color: #764ba2;"></i> RGB-подсветка
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Поле для статуса -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold" style="color: #764ba2;">Статус конфигурации</label>
+                        <select class="form-select" id="configStatus" name="Status" required>
+                            <option value="draft">Черновик</option>
+                            <option value="validated">Готовая сборка</option>
+                        </select>
+                        <small class="text-muted" id="statusHelp">Для статуса "Готовая сборка" необходимо выбрать все компоненты</small>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Выбор комплектующих -->
-    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
-        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
-            <h5 class="card-title text-white mb-0">
-                <i class="fas fa-cogs me-2"></i>Выбор комплектующих
-            </h5>
-        </div>
-        <div class="card-body p-4">
-            <!-- Процессор -->
-            <div class="component-section mb-4" id="cpu-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-microchip me-2"></i>Процессор
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="cpu">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Процессор не выбран</p>
-                </div>
-                <div class="selected-component-info d-none" id="cpu-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="cpu-name"></h6>
-                            <small class="text-muted" id="cpu-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="cpu-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="cpu">
-                                <i class="fas fa-times"></i>
-                            </button>
+        <!-- Скрытые поля для ID выбранных компонентов -->
+        <input type="hidden" name="ComponentIds" id="componentIds" value="" />
+
+        <!-- Выбор комплектующих -->
+        <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+            <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+                <h5 class="card-title text-white mb-0">
+                    <i class="fas fa-cogs me-2"></i>Выбор комплектующих
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <!-- Процессор -->
+                <div class="component-section mb-4" id="cpu-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-microchip me-2"></i>Процессор
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="cpu">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Процессор не выбран</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="cpu-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="cpu-name"></h6>
+                                <small class="text-muted" id="cpu-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="cpu-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="cpu">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Материнская плата -->
-            <div class="component-section mb-4" id="motherboard-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-microchip me-2"></i>Материнская плата
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="motherboard">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="motherboard-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Материнская плата не выбрана</p>
-                </div>
-                <div class="selected-component-info d-none" id="motherboard-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="motherboard-name"></h6>
-                            <small class="text-muted" id="motherboard-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="motherboard-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="motherboard">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Материнская плата -->
+                <div class="component-section mb-4" id="motherboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-microchip me-2"></i>Материнская плата
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="motherboard">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="motherboard-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-microchip fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Материнская плата не выбрана</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="motherboard-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="motherboard-name"></h6>
+                                <small class="text-muted" id="motherboard-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="motherboard-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="motherboard">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Оперативная память -->
-            <div class="component-section mb-4" id="ram-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-memory me-2"></i>Оперативная память
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="ram">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="ram-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-memory fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Оперативная память не выбрана</p>
-                </div>
-                <div class="selected-component-info d-none" id="ram-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="ram-name"></h6>
-                            <small class="text-muted" id="ram-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="ram-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="ram">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Оперативная память -->
+                <div class="component-section mb-4" id="ram-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-memory me-2"></i>Оперативная память
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="ram">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="ram-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-memory fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Оперативная память не выбрана</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="ram-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="ram-name"></h6>
+                                <small class="text-muted" id="ram-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="ram-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="ram">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Видеокарта -->
-            <div class="component-section mb-4" id="gpu-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-plug me-2"></i>Видеокарта
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="gpu">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="gpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-plug fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Видеокарта не выбрана</p>
-                </div>
-                <div class="selected-component-info d-none" id="gpu-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="gpu-name"></h6>
-                            <small class="text-muted" id="gpu-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="gpu-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="gpu">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Видеокарта -->
+                <div class="component-section mb-4" id="gpu-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-plug me-2"></i>Видеокарта
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="gpu">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="gpu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-plug fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Видеокарта не выбрана</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="gpu-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="gpu-name"></h6>
+                                <small class="text-muted" id="gpu-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="gpu-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="gpu">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Накопитель -->
-            <div class="component-section mb-4" id="storage-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-hdd me-2"></i>Накопитель
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="storage">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="storage-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-hdd fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Накопитель не выбран</p>
-                </div>
-                <div class="selected-component-info d-none" id="storage-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="storage-name"></h6>
-                            <small class="text-muted" id="storage-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="storage-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="storage">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Накопитель -->
+                <div class="component-section mb-4" id="storage-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-hdd me-2"></i>Накопитель
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="storage">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="storage-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-hdd fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Накопитель не выбран</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="storage-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="storage-name"></h6>
+                                <small class="text-muted" id="storage-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="storage-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="storage">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Блок питания -->
-            <div class="component-section mb-4" id="psu-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-bolt me-2"></i>Блок питания
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="psu">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="psu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-bolt fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Блок питания не выбран</p>
-                </div>
-                <div class="selected-component-info d-none" id="psu-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="psu-name"></h6>
-                            <small class="text-muted" id="psu-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="psu-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="psu">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Блок питания -->
+                <div class="component-section mb-4" id="psu-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-bolt me-2"></i>Блок питания
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="psu">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="psu-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-bolt fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Блок питания не выбран</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="psu-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="psu-name"></h6>
+                                <small class="text-muted" id="psu-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="psu-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="psu">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Корпус -->
-            <div class="component-section mb-4" id="case-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-box me-2"></i>Корпус
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="case">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="case-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-box fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Корпус не выбран</p>
-                </div>
-                <div class="selected-component-info d-none" id="case-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="case-name"></h6>
-                            <small class="text-muted" id="case-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="case-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="case">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Корпус -->
+                <div class="component-section mb-4" id="case-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-box me-2"></i>Корпус
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="case">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="case-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-box fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Корпус не выбран</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="case-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="case-name"></h6>
+                                <small class="text-muted" id="case-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="case-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="case">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Охлаждение -->
-            <div class="component-section mb-4" id="cooling-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0" style="color: #764ba2;">
-                        <i class="fas fa-wind me-2"></i>Система охлаждения
-                    </h6>
-                    <button class="btn btn-sm btn-outline-primary select-component-btn" data-type="cooling">
-                        <i class="fas fa-plus me-1"></i>Выбрать
-                    </button>
-                </div>
-                <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cooling-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
-                    <i class="fas fa-wind fa-2x text-muted mb-2"></i>
-                    <p class="text-muted mb-0">Охлаждение не выбрано</p>
-                </div>
-                <div class="selected-component-info d-none" id="cooling-info">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
-                        <div>
-                            <h6 class="mb-1" id="cooling-name"></h6>
-                            <small class="text-muted" id="cooling-specs"></small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold me-3" style="color: #764ba2;" id="cooling-price"></span>
-                            <button class="btn btn-sm btn-link text-danger remove-component" data-type="cooling">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <!-- Охлаждение -->
+                <div class="component-section mb-4" id="cooling-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0" style="color: #764ba2;">
+                            <i class="fas fa-wind me-2"></i>Система охлаждения
+                        </h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary select-component-btn" data-type="cooling">
+                            <i class="fas fa-plus me-1"></i>Выбрать
+                        </button>
+                    </div>
+                    <div class="selected-component-placeholder p-3 rounded-3 text-center" id="cooling-placeholder" style="background: #f8f9fa; border: 2px dashed #e9ecef;">
+                        <i class="fas fa-wind fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Охлаждение не выбрано</p>
+                    </div>
+                    <div class="selected-component-info d-none" id="cooling-info">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: #f0f3ff; border-left: 4px solid #764ba2;">
+                            <div>
+                                <h6 class="mb-1" id="cooling-name"></h6>
+                                <small class="text-muted" id="cooling-specs"></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-3" style="color: #764ba2;" id="cooling-price"></span>
+                                <button type="button" class="btn btn-sm btn-link text-danger remove-component" data-type="cooling">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Индикатор совместимости -->
-            <div id="compatibility-indicator" class="alert d-none mt-3"></div>
-        </div>
-    </div>
-
-    <!-- Итоговая стоимость -->
-    <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
-        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
-            <h5 class="card-title text-white mb-0">
-                <i class="fas fa-calculator me-2"></i>Итоговая стоимость
-            </h5>
-        </div>
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0" style="color: #2d3748;">Общая сумма:</h4>
-                <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">0 ₽</h3>
+                <!-- Индикатор совместимости -->
+                <div id="compatibility-indicator" class="alert d-none mt-3"></div>
             </div>
         </div>
-    </div>
 
-    <!-- Кнопки действий -->
-    <div class="d-flex gap-3 justify-content-center mb-5">
-        <button class="btn btn-primary btn-lg px-5" id="saveConfigBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <i class="fas fa-save me-2"></i>Сохранить конфигурацию
-        </button>
-        <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-5">
-            <i class="fas fa-times me-2"></i>Отмена
-        </a>
-    </div>
+        <!-- Итоговая стоимость -->
+        <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
+            <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
+                <h5 class="card-title text-white mb-0">
+                    <i class="fas fa-calculator me-2"></i>Итоговая стоимость
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0" style="color: #2d3748;">Общая сумма:</h4>
+                    <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">0 ₽</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="d-flex gap-3 justify-content-center mb-5">
+            <button type="submit" class="btn btn-primary btn-lg px-5" id="saveConfigBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-save me-2"></i>Сохранить конфигурацию
+            </button>
+            <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-5">
+                <i class="fas fa-times me-2"></i>Отмена
+            </a>
+        </div>
+    </form>
 </div>
 
 <style>
@@ -420,12 +435,18 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Загружаем сохраненные данные формы из localStorage
+        loadFormData();
+
         // Загружаем сохраненные компоненты из localStorage при загрузке страницы
         loadSelectedComponents();
 
         // Обработчики для кнопок выбора компонентов
         document.querySelectorAll('.select-component-btn').forEach(btn => {
             btn.addEventListener('click', function() {
+                // Сохраняем данные формы перед переходом
+                saveFormData();
+
                 const componentType = this.dataset.type;
                 // Переходим на страницу компонентов с параметром type и returnUrl
                 window.location.href = `/Components?category=${componentType}&returnUrl=${encodeURIComponent('/CreateConfiguration')}&returnType=${componentType}`;
@@ -440,14 +461,99 @@
             });
         });
 
-        // Обработчик сохранения конфигурации
-        document.getElementById('saveConfigBtn').addEventListener('click', function() {
-            saveConfiguration();
-        });
+        // Обработчик изменения статуса
+        const statusSelect = document.getElementById('configStatus');
+        if (statusSelect) {
+            statusSelect.addEventListener('change', function() {
+                validateStatusAvailability();
+                saveFormData(); // Сохраняем при изменении
+            });
+        }
+
+        // Обработчики для сохранения данных при вводе
+        const configName = document.getElementById('configName');
+        const targetUse = document.getElementById('targetUse');
+        const description = document.getElementById('description');
+        const rgbCheckbox = document.getElementById('rgbCheckbox');
+
+        if (configName) {
+            configName.addEventListener('input', saveFormData);
+        }
+        if (targetUse) {
+            targetUse.addEventListener('change', saveFormData);
+        }
+        if (description) {
+            description.addEventListener('input', saveFormData);
+        }
+        if (rgbCheckbox) {
+            rgbCheckbox.addEventListener('change', saveFormData);
+        }
 
         // Проверяем, есть ли выбранный компонент в localStorage (возврат со страницы Components)
         checkForSelectedComponent();
+
+        // Обработчик отправки формы
+        const configForm = document.getElementById('configForm');
+        if (configForm) {
+            configForm.addEventListener('submit', function(e) {
+                const status = document.getElementById('configStatus').value;
+                const allComponentsSelected = checkAllComponentsSelected();
+
+                if (status === 'validated' && !allComponentsSelected) {
+                    e.preventDefault();
+                    alert('Невозможно сохранить как готовую сборку. Выбраны не все компоненты.');
+                    return false;
+                }
+
+                // Обновляем поле с ID компонентов перед отправкой
+                updateComponentIdsField();
+
+                // Очищаем сохраненные данные после успешной отправки
+                // (очистка произойдет после редиректа из TempData)
+                return true;
+            });
+        }
     });
+
+    // Функция для сохранения данных формы в localStorage
+    function saveFormData() {
+        const formData = {
+            configName: document.getElementById('configName')?.value || '',
+            targetUse: document.getElementById('targetUse')?.value || '',
+            description: document.getElementById('description')?.value || '',
+            rgb: document.getElementById('rgbCheckbox')?.checked || false,
+            status: document.getElementById('configStatus')?.value || 'draft'
+        };
+
+        localStorage.setItem('configurationFormData', JSON.stringify(formData));
+        console.log('Данные формы сохранены', formData);
+    }
+
+    // Функция для загрузки данных формы из localStorage
+    function loadFormData() {
+        const savedFormData = localStorage.getItem('configurationFormData');
+        if (savedFormData) {
+            try {
+                const formData = JSON.parse(savedFormData);
+
+                const configName = document.getElementById('configName');
+                const targetUse = document.getElementById('targetUse');
+                const description = document.getElementById('description');
+                const rgbCheckbox = document.getElementById('rgbCheckbox');
+                const statusSelect = document.getElementById('configStatus');
+
+                if (configName) configName.value = formData.configName || '';
+                if (targetUse) targetUse.value = formData.targetUse || '';
+                if (description) description.value = formData.description || '';
+                if (rgbCheckbox) rgbCheckbox.checked = formData.rgb || false;
+                if (statusSelect) statusSelect.value = formData.status || 'draft';
+
+                console.log('Данные формы загружены', formData);
+            } catch (e) {
+                console.error('Ошибка при загрузке данных формы', e);
+            }
+        }
+    }
 
     function checkForSelectedComponent() {
         const selectedComponent = localStorage.getItem('selectedComponent');
@@ -491,13 +597,14 @@
                     addComponentToPage(component);
                 });
                 checkAllCompatibility();
+                updateComponentIdsField(); // Добавляем обновление поля после загрузки
             } catch (e) {
                 console.error('Ошибка при загрузке компонентов', e);
             }
         }
     }
 
-            function addComponentToPage(component) {
+    function addComponentToPage(component) {
         const type = component.type;
 
         // Скрываем placeholder и показываем информацию о компоненте
@@ -523,8 +630,6 @@
                     specs = {};
                 }
             }
-
-            console.log('Спецификации для', type, specs);
 
             // Формируем строку со спецификациями в зависимости от типа
             let specsText = '';
@@ -566,8 +671,17 @@
             // Пересчитываем общую стоимость
             calculateTotalPrice();
 
+            // Обновляем скрытое поле с ID компонентов
+            updateComponentIdsField();
+
             // Проверяем совместимость после добавления
             setTimeout(checkAllCompatibility, 100);
+
+            // Проверяем доступность статуса "Готовая сборка"
+            validateStatusAvailability();
+
+            // Сохраняем данные формы (на всякий случай)
+            saveFormData();
         } else {
             console.error('Не найдены элементы для типа:', type);
         }
@@ -602,7 +716,31 @@
 
             // Пересчитываем общую стоимость и проверяем совместимость
             calculateTotalPrice();
+            updateComponentIdsField();
             checkAllCompatibility();
+
+            // Проверяем доступность статуса "Готовая сборка"
+            validateStatusAvailability();
+
+            // Сохраняем данные формы
+            saveFormData();
+        }
+    }
+
+    function updateComponentIdsField() {
+        const componentIds = [];
+        const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
+
+        types.forEach(type => {
+            const section = document.getElementById(`${type}-section`);
+            if (section && section.dataset.componentId) {
+                componentIds.push(parseInt(section.dataset.componentId));
+            }
+        });
+
+        const componentIdsField = document.getElementById('componentIds');
+        if (componentIdsField) {
+            componentIdsField.value = componentIds.join(',');
         }
     }
 
@@ -620,10 +758,13 @@
             }
         });
 
-        document.getElementById('totalPrice').textContent = `${total.toLocaleString('ru-RU')} ₽`;
+        const totalPriceElement = document.getElementById('totalPrice');
+        if (totalPriceElement) {
+            totalPriceElement.textContent = `${total.toLocaleString('ru-RU')} ₽`;
+        }
     }
 
-       function checkAllCompatibility() {
+    function checkAllCompatibility() {
         // Собираем все выбранные компоненты
         const selectedComponents = {};
         const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
@@ -745,48 +886,49 @@
         });
     }
 
-    function saveConfiguration() {
-        const configName = document.getElementById('configName').value;
-        const targetUse = document.getElementById('targetUse').value;
-        const description = document.getElementById('description').value;
-        const rgb = document.getElementById('rgbCheckbox').checked;
+    function validateStatusAvailability() {
+        const statusSelect = document.getElementById('configStatus');
+        const statusHelp = document.getElementById('statusHelp');
 
-        if (!configName) {
-            alert('Введите название конфигурации');
-            return;
+        if (!statusSelect || !statusHelp) return;
+
+        // Проверяем, выбраны ли все компоненты
+        const allComponentsSelected = checkAllComponentsSelected();
+
+        if (statusSelect.value === 'validated' && !allComponentsSelected) {
+            statusSelect.value = 'draft';
+            statusHelp.innerHTML = '<span class="text-danger">Для статуса "Готовая сборка" необходимо выбрать все компоненты. Статус изменен на "Черновик".</span>';
+        } else if (statusSelect.value === 'validated' && allComponentsSelected) {
+            statusHelp.innerHTML = '<span class="text-success">Все компоненты выбраны. Можно сохранить как готовую сборку.</span>';
+        } else {
+            statusHelp.innerHTML = 'Для статуса "Готовая сборка" необходимо выбрать все компоненты';
         }
 
-        if (!targetUse) {
-            alert('Выберите цель использования');
-            return;
-        }
+        // Сохраняем статус в localStorage
+        saveFormData();
+    }
 
-        // Собираем ID выбранных компонентов
-        const componentIds = [];
-        const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
+    function checkAllComponentsSelected() {
+        const requiredTypes = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
 
-        types.forEach(type => {
+        for (let type of requiredTypes) {
             const section = document.getElementById(`${type}-section`);
-            if (section && section.dataset.componentId) {
-                componentIds.push(parseInt(section.dataset.componentId));
+            if (!section || !section.dataset.componentId) {
+                return false;
             }
-        });
-
-        if (componentIds.length === 0) {
-            alert('Выберите хотя бы один компонент');
-            return;
         }
-
-        // Здесь будет отправка данных на сервер
-        console.log('Сохраняем конфигурацию:', {
-            configName,
-            targetUse,
-            description,
-            rgb,
-            componentIds,
-            totalPrice: document.getElementById('totalPrice').textContent
-        });
-
-        alert('Функция сохранения будет добавлена позже');
+        return true;
     }
 </script>
+
+@if (TempData["ClearLocalStorage"] != null && (bool)TempData["ClearLocalStorage"])
+{
+        <script>
+            // Очищаем localStorage после успешного сохранения
+            localStorage.removeItem('allComponents');
+            localStorage.removeItem('configurationFormData'); // Очищаем данные формы
+
+            // Немедленный переход на страницу профиля пользователя
+            window.location.href = '/UserProfile';
+        </script>
+}
