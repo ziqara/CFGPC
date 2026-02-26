@@ -25,33 +25,44 @@ namespace WebApplication1.Pages
         public List<ComponentDto> Components { get; set; } = new List<ComponentDto>();
         public Dictionary<string, int> SelectedComponents { get; set; } = new Dictionary<string, int>();
 
-        public void OnGet([FromQuery] string category = "cpu", [FromQuery] string components = null)
+        public IActionResult OnGet([FromQuery] string category = "cpu")
         {
             try
             {
-                Components = _componentService.GetComponentsByCategory(category);
+                // Получаем все компоненты категории
+                var allComponents = _componentService.GetComponentsByCategory(category);
 
                 // Загружаем выбранные компоненты из параметра
-                if (!string.IsNullOrEmpty(components))
+                string componentsJson = Request.Query["components"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(componentsJson))
                 {
                     try
                     {
-                        var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(components);
-                        SelectedComponents = dict.ToDictionary(
-                            kv => kv.Key,
-                            kv => int.Parse(kv.Value.ToString())
-                        );
+                        SelectedComponents = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(componentsJson);
                     }
                     catch { }
                 }
 
-                ErrorLogger.LogError("OnGet ComponentsModel", $"Загружено компонентов: {Components.Count}");
+                // Фильтруем компоненты по совместимости
+                // Если есть выбранные компоненты, показываем только совместимые
+                if (SelectedComponents != null && SelectedComponents.Any())
+                {
+                    Components = _compatibilityChecker.FilterCompatibleComponents(category, allComponents, SelectedComponents);
+                    ErrorLogger.LogError("OnGet ComponentsModel", $"Отфильтровано компонентов: {Components.Count} из {allComponents.Count}");
+                }
+                else
+                {
+                    // Если нет выбранных компонентов, показываем все
+                    Components = allComponents;
+                }
             }
             catch (Exception ex)
             {
                 ErrorLogger.LogError("OnGet ComponentsModel", ex.Message);
                 Components = new List<ComponentDto>();
             }
+
+            return Page();
         }
 
         public bool IsComponentCompatible(int componentId)

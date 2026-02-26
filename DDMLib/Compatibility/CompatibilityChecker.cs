@@ -12,7 +12,7 @@ namespace DDMLib.Compatibility
 
         public CompatibilityChecker(ComponentService componentService)
         {
-            _componentService = componentService;
+            _componentService = componentService ?? throw new ArgumentNullException(nameof(componentService));
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DDMLib.Compatibility
             if (ram == null || motherboard == null)
                 return false;
 
-            return ram.RamType == motherboard.RamType; // Теперь работает, так как в RamSpec есть RamType
+            return ram.RamType == motherboard.RamType;
         }
 
         /// <summary>
@@ -52,9 +52,8 @@ namespace DDMLib.Compatibility
             var motherboard = _componentService.GetComponentSpec<MotherboardSpec>(motherboardId);
 
             if (gpu == null || motherboard == null)
-                return true; // Если нет данных, считаем совместимым
+                return true;
 
-            // Строгая проверка: версии должны совпадать
             return gpu.PcieVersion == motherboard.PcieVersion;
         }
 
@@ -98,11 +97,9 @@ namespace DDMLib.Compatibility
                         var gpu = _componentService.GetComponentSpec<GpuSpec>(componentId);
                         if (gpu != null) totalPower += gpu.Tdp;
                         break;
-                        // Можно добавить другие компоненты с известным TDP
                 }
             }
 
-            // Добавляем запас 20%
             return psu.Wattage >= totalPower * 1.2;
         }
 
@@ -210,6 +207,85 @@ namespace DDMLib.Compatibility
             }
 
             return issues;
+        }
+
+        /// <summary>
+        /// Фильтрует компоненты по совместимости с уже выбранными
+        /// </summary>
+        public List<ComponentDto> FilterCompatibleComponents(string category, List<ComponentDto> components, Dictionary<string, int> selectedComponents)
+        {
+            if (selectedComponents == null || !selectedComponents.Any())
+                return components;
+
+            var filtered = new List<ComponentDto>();
+
+            foreach (var component in components)
+            {
+                bool isCompatible = true;
+
+                switch (category)
+                {
+                    case "motherboard":
+                        // Если выбран процессор, фильтруем по сокету
+                        if (selectedComponents.ContainsKey("cpu"))
+                        {
+                            var cpuSpec = _componentService.GetComponentSpec<CpuSpec>(selectedComponents["cpu"]);
+                            var moboSpec = component.Specs as MotherboardSpec;
+                            if (cpuSpec != null && moboSpec != null && cpuSpec.Socket != moboSpec.Socket)
+                                isCompatible = false;
+                        }
+                        break;
+
+                    case "cpu":
+                        // Если выбрана материнская плата, фильтруем по сокету
+                        if (selectedComponents.ContainsKey("motherboard"))
+                        {
+                            var moboSpec = _componentService.GetComponentSpec<MotherboardSpec>(selectedComponents["motherboard"]);
+                            var cpuSpec = component.Specs as CpuSpec;
+                            if (moboSpec != null && cpuSpec != null && cpuSpec.Socket != moboSpec.Socket)
+                                isCompatible = false;
+                        }
+                        break;
+
+                    case "ram":
+                        // Если выбрана материнская плата, фильтруем по типу памяти
+                        if (selectedComponents.ContainsKey("motherboard"))
+                        {
+                            var moboSpec = _componentService.GetComponentSpec<MotherboardSpec>(selectedComponents["motherboard"]);
+                            var ramSpec = component.Specs as RamSpec;
+                            if (moboSpec != null && ramSpec != null && ramSpec.RamType != moboSpec.RamType)
+                                isCompatible = false;
+                        }
+                        break;
+
+                    case "cooling":
+                        // Если выбран процессор, фильтруем по TDP
+                        if (selectedComponents.ContainsKey("cpu"))
+                        {
+                            var cpuSpec = _componentService.GetComponentSpec<CpuSpec>(selectedComponents["cpu"]);
+                            var coolingSpec = component.Specs as CoolingSpec;
+                            if (cpuSpec != null && coolingSpec != null && coolingSpec.TdpSupport < cpuSpec.Tdp)
+                                isCompatible = false;
+                        }
+                        break;
+
+                    case "case":
+                        // Если выбрана материнская плата, фильтруем по форм-фактору
+                        if (selectedComponents.ContainsKey("motherboard"))
+                        {
+                            var moboSpec = _componentService.GetComponentSpec<MotherboardSpec>(selectedComponents["motherboard"]);
+                            var caseSpec = component.Specs as CaseSpec;
+                            if (moboSpec != null && caseSpec != null && moboSpec.FormFactor != caseSpec.FormFactor)
+                                isCompatible = false;
+                        }
+                        break;
+                }
+
+                if (isCompatible)
+                    filtered.Add(component);
+            }
+
+            return filtered;
         }
     }
 }
