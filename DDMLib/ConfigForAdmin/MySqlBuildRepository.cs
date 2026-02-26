@@ -163,8 +163,8 @@ namespace DDMLib
             {
                 conn.Open();
                 string sql = @"
-                INSERT IGNORE INTO users (email, passwordHash, fullName, phone, address, role)
-                VALUES (@email, 'admin', 'Administrator', NULL, NULL, 'admin');";
+                INSERT IGNORE INTO users (email, passwordHash, fullName, phone, address)
+                VALUES (@email, 'admin', 'Administrator', NULL, NULL);";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {

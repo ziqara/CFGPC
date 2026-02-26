@@ -37,7 +37,6 @@ namespace WindowsFormsApp1.ConfigForms
             cbCase.SelectedIndexChanged += (s, e) => UpdateTotal();
             cbCooling.SelectedIndexChanged += (s, e) => UpdateTotal();
 
-            btnSave.Click += btnSave_Click;
             btnCancel.Click += (s, e) => this.DialogResult = DialogResult.Cancel;
 
         }
@@ -49,6 +48,7 @@ namespace WindowsFormsApp1.ConfigForms
                 Bind(cbMotherboard, compService_.GetMotherboards());
                 Bind(cbStorage, compService_.GetStorages());
                 UpdateTotal();
+                ApplyTheme();
             }
             catch (Exception ex)
             {
@@ -67,10 +67,9 @@ namespace WindowsFormsApp1.ConfigForms
             Bind(cbGpu, compService_.GetGpusByMb(mb.ComponentId));
             Bind(cbCase, compService_.GetCasesByMb(mb.ComponentId));
 
-            // зависимые
+            // Обновляем охлаждение и БП
             cbCooling.DataSource = null;
             cbPsu.DataSource = null;
-
             UpdateTotal();
         }
 
@@ -79,15 +78,24 @@ namespace WindowsFormsApp1.ConfigForms
             var cpu = cbCpu.SelectedItem as ComponentItem;
             if (cpu == null) return;
 
-            Bind(cbCooling, compService_.GetCoolingsByCpu(cpu.ComponentId));
+            Bind(cbCooling, compService_.GetCoolingsByCpu(cpu.ComponentId)); // Обновляем охлаждение по процессору
 
-            RefreshPsuIfPossible();
+            RefreshPsuIfPossible(); // Обновляем БП по процессору и видеокарте
             UpdateTotal();
         }
 
         private void CbGpu_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var cpu = cbCpu.SelectedItem as ComponentItem;
+            if (cpu == null) return;
+
+            // Обновляем охлаждения
+            Bind(cbCooling, compService_.GetCoolingsByCpu(cpu.ComponentId));
+
+            // Обновляем блок питания
             RefreshPsuIfPossible();
+
+            // Обновляем итоговую цену
             UpdateTotal();
         }
 
@@ -98,10 +106,11 @@ namespace WindowsFormsApp1.ConfigForms
 
             if (cpu == null || gpu == null)
             {
-                cbPsu.DataSource = null;
+                cbPsu.DataSource = null; // Очищаем список блоков питания, если нет процессора или видеокарты
                 return;
             }
 
+            // Обновляем блок питания
             Bind(cbPsu, compService_.GetPsusByCpuGpu(cpu.ComponentId, gpu.ComponentId));
         }
 
@@ -160,6 +169,52 @@ namespace WindowsFormsApp1.ConfigForms
                 MessageBox.Show(result, "Ошибка сохранения",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ApplyTheme()
+        {
+            // Применяем стиль для заголовков и кнопок
+            this.BackColor = Color.FromArgb(245, 245, 245); // Светлый фон
+
+            // Заголовки
+            lblTotal.ForeColor = ThemeColor.PrimaryColor;
+            lblTotal.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+
+            // Введем стиль для ComboBox (используем границы, шрифт)
+            ApplyComboBoxStyle(cbMotherboard);
+            ApplyComboBoxStyle(cbCpu);
+            ApplyComboBoxStyle(cbGpu);
+            ApplyComboBoxStyle(cbRam);
+            ApplyComboBoxStyle(cbStorage);
+            ApplyComboBoxStyle(cbPsu);
+            ApplyComboBoxStyle(cbCase);
+            ApplyComboBoxStyle(cbCooling);
+
+            // Применяем стиль для кнопок
+            ApplyButtonStyle(btnSave);
+            ApplyButtonStyle(btnCancel);
+        }
+
+        private void ApplyComboBoxStyle(ComboBox comboBox)
+        {
+            comboBox.BackColor = Color.White;
+            comboBox.ForeColor = Color.Black;
+            comboBox.Font = new Font("Segoe UI", 9f);
+            comboBox.FlatStyle = FlatStyle.Flat;
+        }
+
+        private void ApplyButtonStyle(Button btn)
+        {
+            btn.BackColor = ThemeColor.PrimaryColor;
+            btn.ForeColor = Color.White;
+            btn.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
+            btn.FlatAppearance.BorderSize = 1;
+
+            // Hover эффекты для кнопок
+            btn.MouseEnter += (s, e) => btn.BackColor = ThemeColor.SecondaryColor;
+            btn.MouseLeave += (s, e) => btn.BackColor = ThemeColor.PrimaryColor;
         }
     }
 }

@@ -208,6 +208,7 @@
     <Compile Include="ConfigForAdmin\BuildDraft.cs" />
     <Compile Include="ConfigForAdmin\BuildService.cs" />
     <Compile Include="ConfigForAdmin\BuildValidator.cs" />
+    <Compile Include="ConfigForAdmin\ComponentAdmin.cs" />
     <Compile Include="ConfigForAdmin\ComponentItem.cs" />
     <Compile Include="ConfigForAdmin\ComponentServiceAdmin.cs" />
     <Compile Include="ConfigForAdmin\IBuildRepository.cs" />

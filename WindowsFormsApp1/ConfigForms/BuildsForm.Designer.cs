@@ -32,7 +32,6 @@
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.chkOnlyPresets = new System.Windows.Forms.CheckBox();
-            this.lblTitle = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flpCards
@@ -48,11 +47,11 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnCreate.Location = new System.Drawing.Point(752, 12);
+            this.btnCreate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCreate.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnCreate.Location = new System.Drawing.Point(140, 24);
             this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(120, 30);
+            this.btnCreate.Size = new System.Drawing.Size(154, 30);
             this.btnCreate.TabIndex = 1;
             this.btnCreate.Text = "Создать сборку";
             this.btnCreate.UseVisualStyleBackColor = true;
@@ -60,9 +59,9 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnRefresh.Location = new System.Drawing.Point(626, 12);
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnRefresh.Location = new System.Drawing.Point(14, 24);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(120, 30);
             this.btnRefresh.TabIndex = 2;
@@ -71,30 +70,21 @@
             // 
             // chkOnlyPresets
             // 
+            this.chkOnlyPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkOnlyPresets.AutoSize = true;
-            this.chkOnlyPresets.Location = new System.Drawing.Point(12, 38);
+            this.chkOnlyPresets.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkOnlyPresets.Location = new System.Drawing.Point(716, 34);
             this.chkOnlyPresets.Name = "chkOnlyPresets";
-            this.chkOnlyPresets.Size = new System.Drawing.Size(107, 17);
+            this.chkOnlyPresets.Size = new System.Drawing.Size(130, 20);
             this.chkOnlyPresets.TabIndex = 3;
             this.chkOnlyPresets.Text = "Готовый пресет";
             this.chkOnlyPresets.UseVisualStyleBackColor = true;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoEllipsis = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(12, 12);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(400, 23);
-            this.lblTitle.TabIndex = 4;
-            this.lblTitle.Text = "Сборки ПК";
             // 
             // BuildsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 600);
-            this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.chkOnlyPresets);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnCreate);
@@ -114,6 +104,5 @@
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.CheckBox chkOnlyPresets;
-        private System.Windows.Forms.Label lblTitle;
     }
 }

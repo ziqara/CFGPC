@@ -59,38 +59,40 @@
             // lblHeader
             // 
             this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblHeader.Location = new System.Drawing.Point(12, 9);
+            this.lblHeader.Location = new System.Drawing.Point(270, 9);
             this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(480, 23);
+            this.lblHeader.Size = new System.Drawing.Size(201, 23);
             this.lblHeader.TabIndex = 0;
             this.lblHeader.Text = "Создание сборки (пресет)";
             // 
             // lblName
             // 
-            this.lblName.Location = new System.Drawing.Point(12, 40);
+            this.lblName.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblName.Location = new System.Drawing.Point(33, 39);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(120, 18);
+            this.lblName.Size = new System.Drawing.Size(79, 18);
             this.lblName.TabIndex = 1;
             this.lblName.Text = "Название";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(138, 38);
+            this.txtName.Location = new System.Drawing.Point(118, 38);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(514, 20);
             this.txtName.TabIndex = 2;
             // 
             // lblDesc
             // 
-            this.lblDesc.Location = new System.Drawing.Point(12, 69);
+            this.lblDesc.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblDesc.Location = new System.Drawing.Point(33, 67);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(120, 18);
+            this.lblDesc.Size = new System.Drawing.Size(79, 18);
             this.lblDesc.TabIndex = 3;
             this.lblDesc.Text = "Описание";
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(138, 67);
+            this.txtDescription.Location = new System.Drawing.Point(118, 67);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -115,6 +117,7 @@
             this.groupBox1.Controls.Add(this.lblRam);
             this.groupBox1.Controls.Add(this.lblCpu);
             this.groupBox1.Controls.Add(this.lblMb);
+            this.groupBox1.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(15, 133);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(637, 300);
@@ -127,7 +130,7 @@
             this.cbCooling.FormattingEnabled = true;
             this.cbCooling.Location = new System.Drawing.Point(123, 262);
             this.cbCooling.Name = "cbCooling";
-            this.cbCooling.Size = new System.Drawing.Size(498, 21);
+            this.cbCooling.Size = new System.Drawing.Size(498, 24);
             this.cbCooling.TabIndex = 15;
             // 
             // cbCase
@@ -135,7 +138,7 @@
             this.cbCase.FormattingEnabled = true;
             this.cbCase.Location = new System.Drawing.Point(123, 231);
             this.cbCase.Name = "cbCase";
-            this.cbCase.Size = new System.Drawing.Size(498, 21);
+            this.cbCase.Size = new System.Drawing.Size(498, 24);
             this.cbCase.TabIndex = 14;
             // 
             // cbPsu
@@ -143,7 +146,7 @@
             this.cbPsu.FormattingEnabled = true;
             this.cbPsu.Location = new System.Drawing.Point(123, 200);
             this.cbPsu.Name = "cbPsu";
-            this.cbPsu.Size = new System.Drawing.Size(498, 21);
+            this.cbPsu.Size = new System.Drawing.Size(498, 24);
             this.cbPsu.TabIndex = 13;
             // 
             // cbStorage
@@ -151,7 +154,7 @@
             this.cbStorage.FormattingEnabled = true;
             this.cbStorage.Location = new System.Drawing.Point(123, 169);
             this.cbStorage.Name = "cbStorage";
-            this.cbStorage.Size = new System.Drawing.Size(498, 21);
+            this.cbStorage.Size = new System.Drawing.Size(498, 24);
             this.cbStorage.TabIndex = 12;
             // 
             // cbGpu
@@ -159,7 +162,7 @@
             this.cbGpu.FormattingEnabled = true;
             this.cbGpu.Location = new System.Drawing.Point(123, 138);
             this.cbGpu.Name = "cbGpu";
-            this.cbGpu.Size = new System.Drawing.Size(498, 21);
+            this.cbGpu.Size = new System.Drawing.Size(498, 24);
             this.cbGpu.TabIndex = 11;
             // 
             // cbRam
@@ -167,7 +170,7 @@
             this.cbRam.FormattingEnabled = true;
             this.cbRam.Location = new System.Drawing.Point(123, 107);
             this.cbRam.Name = "cbRam";
-            this.cbRam.Size = new System.Drawing.Size(498, 21);
+            this.cbRam.Size = new System.Drawing.Size(498, 24);
             this.cbRam.TabIndex = 10;
             // 
             // cbCpu
@@ -175,7 +178,7 @@
             this.cbCpu.FormattingEnabled = true;
             this.cbCpu.Location = new System.Drawing.Point(123, 76);
             this.cbCpu.Name = "cbCpu";
-            this.cbCpu.Size = new System.Drawing.Size(498, 21);
+            this.cbCpu.Size = new System.Drawing.Size(498, 24);
             this.cbCpu.TabIndex = 9;
             // 
             // cbMotherboard
@@ -183,7 +186,7 @@
             this.cbMotherboard.FormattingEnabled = true;
             this.cbMotherboard.Location = new System.Drawing.Point(123, 45);
             this.cbMotherboard.Name = "cbMotherboard";
-            this.cbMotherboard.Size = new System.Drawing.Size(498, 21);
+            this.cbMotherboard.Size = new System.Drawing.Size(498, 24);
             this.cbMotherboard.TabIndex = 8;
             // 
             // lblCooling
@@ -261,7 +264,8 @@
             // 
             // btnSave
             // 
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnSave.Location = new System.Drawing.Point(452, 437);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(200, 30);
@@ -272,7 +276,8 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnCancel.Location = new System.Drawing.Point(246, 437);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(200, 30);
@@ -285,6 +290,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(664, 479);
+            this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblTotal);
@@ -296,7 +302,6 @@
             this.Controls.Add(this.lblHeader);
             this.Name = "ConfiguratorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Конфигуратор";
             this.Shown += new System.EventHandler(this.ConfiguratorForm_Shown);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

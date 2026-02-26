@@ -25,10 +25,12 @@ namespace WindowsFormsApp1.ConfigForms
             this.Shown += BuildsForm_Shown;
             chkOnlyPresets.CheckedChanged += (s, e) => RenderCards();
             btnRefresh.Click += (s, e) => LoadCards();
+            ThemeColor.ThemeChanged += ApplyTheme;
         }
 
         private void BuildsForm_Shown(object sender, EventArgs e)
         {
+            ApplyTheme();
             LoadCards();
         }
 
@@ -72,12 +74,16 @@ namespace WindowsFormsApp1.ConfigForms
             {
                 var c = new BuildCardControl();
                 c.Bind(card);
+                c.ApplyThemeCard();
+
+
                 c.DeleteRequested += Card_DeleteRequested;
                 flpCards.Controls.Add(c);
             }
 
             flpCards.ResumeLayout();
         }
+
 
         private void Card_DeleteRequested(object sender, int configId)
         {
@@ -104,6 +110,30 @@ namespace WindowsFormsApp1.ConfigForms
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LoadCards();
             }
+        }
+
+        private void ApplyTheme()
+        {
+            if (this.IsDisposed) return;
+
+            // Все кнопки на форме
+            foreach (Control c in this.Controls)
+            {
+                if (c is Button btn)
+                {
+                    btn.BackColor = ThemeColor.PrimaryColor;
+                    btn.ForeColor = Color.White;
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
+                    btn.FlatAppearance.BorderSize = 1;
+                }
+            }
+
+            // Чекбокс
+            chkOnlyPresets.ForeColor = ThemeColor.PrimaryColor;
+
+            // Фон панели карточек
+            flpCards.BackColor = Color.FromArgb(248, 249, 250);
         }
     }
 }

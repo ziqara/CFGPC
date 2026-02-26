@@ -59,9 +59,9 @@
             // 
             this.lblStatus.AutoEllipsis = true;
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblStatus.Location = new System.Drawing.Point(10, 76);
+            this.lblStatus.Location = new System.Drawing.Point(10, 56);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(530, 36);
+            this.lblStatus.Size = new System.Drawing.Size(530, 20);
             this.lblStatus.TabIndex = 3;
             this.lblStatus.Text = "Статус";
             // 
@@ -80,11 +80,12 @@
             // 
             this.lblPreset.AutoEllipsis = true;
             this.lblPreset.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblPreset.Location = new System.Drawing.Point(10, 56);
+            this.lblPreset.Location = new System.Drawing.Point(10, 86);
             this.lblPreset.Name = "lblPreset";
-            this.lblPreset.Size = new System.Drawing.Size(530, 18);
+            this.lblPreset.Size = new System.Drawing.Size(147, 18);
             this.lblPreset.TabIndex = 2;
             this.lblPreset.Text = "Готовый пресет: Да/Нет";
+            this.lblPreset.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // BuildCardControl
             // 
@@ -93,9 +94,9 @@
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.lblPreset);
             this.Controls.Add(this.lblMeta);
             this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.lblPreset);
             this.Name = "BuildCardControl";
             this.Size = new System.Drawing.Size(680, 120);
             this.ResumeLayout(false);

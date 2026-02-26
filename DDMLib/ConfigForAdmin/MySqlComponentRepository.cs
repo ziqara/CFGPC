@@ -209,33 +209,52 @@ namespace DDMLib.ConfigForAdmin
             {
                 conn.Open();
 
+                // Получаем TDP процессора
                 using (var cmd1 = new MySqlCommand("SELECT tdp FROM cpus WHERE componentId=@id;", conn))
                 {
                     cmd1.Parameters.AddWithValue("@id", cpuId);
                     cpuTdp = Convert.ToInt32(cmd1.ExecuteScalar());
+                    if (cpuTdp == 0)
+                    {
+                        Console.WriteLine("Invalid CPU TDP value (0).");  // Логируем ошибку, если TDP процессора равен 0
+                    }
                 }
 
+                // Получаем TDP видеокарты
                 using (var cmd2 = new MySqlCommand("SELECT tdp FROM gpus WHERE componentId=@id;", conn))
                 {
                     cmd2.Parameters.AddWithValue("@id", gpuId);
                     gpuTdp = Convert.ToInt32(cmd2.ExecuteScalar());
+                    if (gpuTdp == 0)
+                    {
+                        Console.WriteLine("Invalid GPU TDP value (0).");  // Логируем ошибку, если TDP видеокарты равен 0
+                    }
                 }
             }
 
-            // простая формула + запас
-            int needWatt = (int)Math.Ceiling((cpuTdp + gpuTdp + 100) * 1.3);
+            // Проверка на корректность значений TDP
+            if (cpuTdp <= 0 || gpuTdp <= 0)
+            {
+                Console.WriteLine("Invalid TDP values. Cannot calculate PSU requirements.");
+                return new List<ComponentItem>(); // Возвращаем пустой список, если TDP некорректные
+            }
 
+            // Рассчитываем необходимую мощность блока питания (с запасом)
+            int needWatt = (int)Math.Ceiling((cpuTdp + gpuTdp + 100) * 1.3);
+            Console.WriteLine($"Calculated Power Need: {needWatt}W");
+
+            // Запрос на выборку блоков питания, которые могут обеспечить необходимую мощность
             var list = new List<ComponentItem>();
             using (var conn = new MySqlConnection(Config.ConnectionString))
             {
                 conn.Open();
                 string sql = @"
-                SELECT p.componentId, c.name, c.price, c.isAvailable, c.stockQuantity
-                FROM psus p
-                JOIN components c ON c.componentId = p.componentId
-                WHERE p.wattage >= @needWatt
-                  AND c.isAvailable=1 AND c.stockQuantity>0
-                ORDER BY p.wattage, c.price;";
+        SELECT p.componentId, c.name, c.price, c.isAvailable, c.stockQuantity
+        FROM psus p
+        JOIN components c ON c.componentId = p.componentId
+        WHERE p.wattage >= @needWatt
+          AND c.isAvailable=1 AND c.stockQuantity>0
+        ORDER BY p.wattage, c.price;";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
