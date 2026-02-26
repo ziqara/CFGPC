@@ -56,7 +56,7 @@
             position: relative;
         }
 
-        .avatar-img {
+        .avatar-img-large {
             width: 150px;
             height: 150px;
             border-radius: 50%;
@@ -65,7 +65,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .avatar-placeholder {
+        .avatar-placeholder-large {
             width: 150px;
             height: 150px;
             border-radius: 50%;
@@ -79,7 +79,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        /* Стили для кнопки загрузки аватара */
         .avatar-upload-wrapper {
             position: relative;
             margin-top: 1rem;
@@ -213,7 +212,6 @@
                 outline: none;
             }
 
-        /* Стили для карточек конфигураций */
         .config-card {
             background: white;
             border: none;
@@ -266,7 +264,6 @@
             margin-bottom: 0;
         }
 
-        /* Единый стиль для статуса */
         .config-status-badge {
             padding: 0.25rem 0.5rem;
             border-radius: 6px;
@@ -296,7 +293,6 @@
                 color: white;
             }
 
-        /* Стиль для имени файла */
         .file-name {
             font-size: 0.8rem;
             color: #6c757d;
@@ -365,11 +361,11 @@
                         <div class="avatar-container">
                             @if (!string.IsNullOrEmpty(Model.AvatarBase64))
                             {
-                                <img src="data:@Model.AvatarMimeType;base64,@Model.AvatarBase64" alt="Аватар" class="avatar-img" />
+                                <img src="data:@Model.AvatarMimeType;base64,@Model.AvatarBase64" alt="Аватар" class="avatar-img-large" />
                             }
                             else
                             {
-                                <div class="avatar-placeholder">
+                                <div class="avatar-placeholder-large">
                                     <i class="fas fa-user"></i>
                                 </div>
                             }
@@ -472,7 +468,7 @@
             </div>
         </div>
 
-        <!-- Раздел: Конфигурации пользователя (как в первом файле) -->
+        <!-- Раздел: Конфигурации пользователя -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10 col-xl-8">
                 <div class="card shadow-lg border-0">
@@ -488,7 +484,6 @@
                                 @foreach (var configDto in Model.UserConfigurations)
                                 {
                                     <div class="col-md-6 mb-4">
-                                        <!-- Добавлен data-bs-toggle и data-bs-target для открытия модального окна -->
                                         <div class="config-card h-100" data-bs-toggle="modal" data-bs-target="#configModal-@configDto.Configuration.ConfigId">
                                             <h5 class="config-name">@configDto.Configuration.ConfigName</h5>
                                             <div class="config-meta">
@@ -506,7 +501,7 @@
                                                             "validated" => "validated",
                                                             "in_cart" => "in_cart",
                                                             "ordered" => "ordered",
-                                                            _ => "draft" // Значение по умолчанию
+                                                            _ => "draft"
                                                         };
                                                         string statusText = configDto.Configuration.Status switch
                                                         {
@@ -514,7 +509,7 @@
                                                             "validated" => "Проверена",
                                                             "in_cart" => "В корзине",
                                                             "ordered" => "Заказана",
-                                                            _ => "Неизвестный статус" // Текст по умолчанию
+                                                            _ => "Неизвестный статус"
                                                         };
                                                     }
                                                     <span class="config-status-badge @statusClass">@statusText</span>
@@ -523,8 +518,8 @@
                                             <p class="config-description">@configDto.Configuration.Description</p>
                                         </div>
                                     </div>
-                                    <!-- Модальное окно для каждой конфигурации (как в первом файле) -->
-                                    <!-- Модальное окно для каждой конфигурации (как в первом файле) -->
+
+                                    <!-- Модальное окно для каждой конфигурации -->
                                     <div class="modal fade" id="configModal-@configDto.Configuration.ConfigId" tabindex="-1" aria-labelledby="configModalLabel-@configDto.Configuration.ConfigId" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content border-0 shadow">
@@ -602,10 +597,19 @@
                                                             </form>
                                                         </div>
                                                         <div>
-                                                            <a asp-page="/CreateOrder" asp-route-configId="@configDto.Configuration.ConfigId"
-                                                               class="btn btn-primary me-2">
-                                                                <i class="fas fa-shopping-cart me-2"></i>Заказать
+                                                            <!-- Кнопка редактирования (для всех статусов) -->
+                                                            <a asp-page="/EditConfiguration" asp-route-id="@configDto.Configuration.ConfigId"
+                                                               class="btn btn-outline-primary me-2">
+                                                                <i class="fas fa-edit me-2"></i>Редактировать
                                                             </a>
+
+                                                            @if (configDto.Configuration.Status != "draft")
+                                                            {
+                                                                <a asp-page="/CreateOrder" asp-route-configId="@configDto.Configuration.ConfigId"
+                                                                   class="btn btn-primary me-2">
+                                                                    <i class="fas fa-shopping-cart me-2"></i>Заказать
+                                                                </a>
+                                                            }
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                                         </div>
                                                     </div>
@@ -726,7 +730,6 @@
         <partial name="_ValidationScriptsPartial" />
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Показ модального окна при ошибках
             @if (!ViewContext.ModelState.IsValid && ViewData["ShowModal"]?.ToString() == "true")
             {
                 <text>
@@ -735,7 +738,6 @@
                 </text>
             }
 
-                // Обработка выбора файла для аватара
                 const avatarFileInput = document.getElementById('avatarFile');
                 const fileNameDisplay = document.getElementById('fileName');
 
@@ -743,8 +745,6 @@
                     avatarFileInput.addEventListener('change', function(e) {
                         if (this.files && this.files[0]) {
                             fileNameDisplay.textContent = this.files[0].name;
-
-                            // Автоматическая отправка формы при выборе файла
                             this.form.submit();
                         }
                     });

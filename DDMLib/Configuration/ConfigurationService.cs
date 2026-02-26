@@ -100,5 +100,37 @@ namespace DDMLib.Configuration
                 throw;
             }
         }
+
+        public bool UpdateConfiguration(Configuration configuration, List<int> componentIds)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            if (componentIds == null || !componentIds.Any())
+                throw new ArgumentException("Должен быть выбран хотя бы один компонент", nameof(componentIds));
+
+            try
+            {
+                return configurationRepository_.UpdateConfiguration(configuration, componentIds);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ConfigurationService.UpdateConfiguration", ex.Message);
+                throw;
+            }
+        }
+
+        public ConfigurationDto GetConfigurationById(int configId)
+        {
+            try
+            {
+                return configurationRepository_.GetConfigurationById(configId);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ConfigurationService.GetConfigurationById", ex.Message);
+                return null;
+            }
+        }
     }
 }

@@ -490,5 +490,147 @@ namespace DDMLib.Configuration
                 }
             }
         }
+
+        public bool UpdateConfiguration(Configuration configuration, List<int> componentIds)
+        {
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+                using (MySqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Обновляем основную информацию конфигурации
+                        string updateConfigQuery = @"
+                    UPDATE configurations 
+                    SET configName = @configName,
+                        description = @description,
+                        totalPrice = @totalPrice,
+                        targetUse = @targetUse,
+                        status = @status,
+                        rgb = @rgb,
+                        otherOptions = @otherOptions
+                    WHERE configId = @configId AND userEmail = @userEmail";
+
+                        using (MySqlCommand cmdConfig = new MySqlCommand(updateConfigQuery, connection, transaction))
+                        {
+                            cmdConfig.Parameters.AddWithValue("@configId", configuration.ConfigId);
+                            cmdConfig.Parameters.AddWithValue("@configName", configuration.ConfigName);
+                            cmdConfig.Parameters.AddWithValue("@description", configuration.Description ?? (object)DBNull.Value);
+                            cmdConfig.Parameters.AddWithValue("@totalPrice", configuration.TotalPrice);
+                            cmdConfig.Parameters.AddWithValue("@targetUse", configuration.TargetUse);
+                            cmdConfig.Parameters.AddWithValue("@status", configuration.Status);
+                            cmdConfig.Parameters.AddWithValue("@rgb", configuration.Rgb);
+                            cmdConfig.Parameters.AddWithValue("@otherOptions", configuration.OtherOptions ?? (object)DBNull.Value);
+                            cmdConfig.Parameters.AddWithValue("@userEmail", configuration.UserEmail);
+
+                            int rowsAffected = cmdConfig.ExecuteNonQuery();
+                            if (rowsAffected == 0)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+                        }
+
+                        // 2. Удаляем старые связи с компонентами
+                        string deleteComponentsQuery = "DELETE FROM config_components WHERE configId = @configId";
+                        using (MySqlCommand cmdDelete = new MySqlCommand(deleteComponentsQuery, connection, transaction))
+                        {
+                            cmdDelete.Parameters.AddWithValue("@configId", configuration.ConfigId);
+                            cmdDelete.ExecuteNonQuery();
+                        }
+
+                        // 3. Вставляем новые связи с компонентами
+                        if (componentIds.Any())
+                        {
+                            string insertComponentsQuery = @"
+                        INSERT INTO config_components (configId, componentId, quantity)
+                        VALUES (@configId, @componentId, 1)";
+
+                            using (MySqlCommand cmdComponents = new MySqlCommand(insertComponentsQuery, connection, transaction))
+                            {
+                                cmdComponents.Parameters.Add("@configId", MySqlDbType.Int32);
+                                cmdComponents.Parameters.Add("@componentId", MySqlDbType.Int32);
+
+                                foreach (int componentId in componentIds)
+                                {
+                                    cmdComponents.Parameters["@configId"].Value = configuration.ConfigId;
+                                    cmdComponents.Parameters["@componentId"].Value = componentId;
+                                    cmdComponents.ExecuteNonQuery();
+                                }
+                            }
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        ErrorLogger.LogError("UpdateConfiguration Transaction", ex.Message);
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public ConfigurationDto GetConfigurationById(int configId)
+        {
+            Configuration configuration = null;
+            List<DDMLib.Component.Component> components = new List<DDMLib.Component.Component>();
+
+            using (MySqlConnection connection = new MySqlConnection(Config.ConnectionString))
+            {
+                connection.Open();
+
+                // Получаем информацию о конфигурации
+                string configQuery = @"
+            SELECT configId, configName, description, totalPrice, targetUse, status, isPreset, createdDate, userEmail, rgb, otherOptions
+            FROM configurations
+            WHERE configId = @configId";
+
+                using (MySqlCommand cmd = new MySqlCommand(configQuery, connection))
+                {
+                    cmd.Parameters.AddWithValue("@configId", configId);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            configuration = MapConfigurationFromReader(reader);
+                        }
+                    }
+                }
+
+                if (configuration == null)
+                    return null;
+
+                // Получаем компоненты конфигурации
+                string componentsQuery = @"
+            SELECT c.componentId, c.name, c.brand, c.model, c.componentType, c.price, c.stockQuantity, c.description, c.isAvailable, c.photoUrl, c.supplierInn
+            FROM config_components cc
+            JOIN components c ON cc.componentId = c.componentId
+            WHERE cc.configId = @configId";
+
+                using (MySqlCommand cmd = new MySqlCommand(componentsQuery, connection))
+                {
+                    cmd.Parameters.AddWithValue("@configId", configId);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            components.Add(MapComponentFromReader(reader));
+                        }
+                    }
+                }
+            }
+
+            return new ConfigurationDto
+            {
+                Configuration = configuration,
+                Components = components
+            };
+        }
     }
 }

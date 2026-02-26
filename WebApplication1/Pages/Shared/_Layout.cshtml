@@ -133,6 +133,53 @@
                 color: white;
                 transform: translateY(-1px);
             }
+
+        /* Базовые стили для аватара (везде) */
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+            margin-right: 0.5rem;
+        }
+
+        .avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            margin-right: 0.5rem;
+            color: #6c757d;
+        }
+
+        /* Стили для крупного аватара на странице профиля */
+        .avatar-img-large {
+            width: 150px !important;
+            height: 150px !important;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-placeholder-large {
+            width: 150px !important;
+            height: 150px !important;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 5px solid #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>

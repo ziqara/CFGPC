@@ -1235,3 +1235,115 @@
 2026-02-26 22:50:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
 2026-02-26 22:50:38 | UserProfileModel OnPostLogout | Logout initiated.
 2026-02-26 22:50:38 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-26 22:52:23 | UserProfileModel OnGet | Started
+2026-02-26 22:52:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:52:39 | UserProfileModel OnGet | Started
+2026-02-26 22:52:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:52:41 | UserProfileModel OnGet | Started
+2026-02-26 22:52:41 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:16 | UserProfileModel OnGet | Started
+2026-02-26 22:57:16 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:19 | UserProfileModel OnGet | Started
+2026-02-26 22:57:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:21 | UserProfileModel OnGet | Started
+2026-02-26 22:57:21 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:23 | UserProfileModel OnGet | Started
+2026-02-26 22:57:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:27 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:57:27 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:57:27 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:57:36 | UserProfileModel OnGet | Started
+2026-02-26 22:57:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:40 | UserProfileModel OnGet | Started
+2026-02-26 22:57:40 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:42 | UserProfileModel OnGet | Started
+2026-02-26 22:57:42 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:45 | UserProfileModel OnGet | Started
+2026-02-26 22:57:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:58:09 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-26 22:58:09 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-26 22:58:22 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-26 22:58:22 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-26 22:58:26 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-26 22:58:26 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 23:00:40 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:40 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:40 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:42 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:42 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 23:00:42 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:44 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:44 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:44 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:47 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:47 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:47 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:49 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:49 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:49 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:52 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:52 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:52 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:56 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:56 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:56 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:59 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:59 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:59 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:01:06 | UserProfileModel OnGet | Started
+2026-02-26 23:01:07 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:02:16 | UserProfileModel OnGet | Started
+2026-02-26 23:02:16 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:03:02 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:03:02 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:03:02 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:03:05 | UserProfileModel OnGet | Started
+2026-02-26 23:03:05 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:03:12 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 16
+2026-02-26 23:03:12 | UserProfileModel OnPostDeleteConfiguration | Configuration 16 deleted successfully.
+2026-02-26 23:07:09 | UserProfileModel OnGet | Started
+2026-02-26 23:07:09 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:06 | UserProfileModel OnGet | Started
+2026-02-26 23:41:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:07 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-26 23:41:07 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-26 23:41:14 | UserProfileModel OnGet | Started
+2026-02-26 23:41:14 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:23 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:41:23 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:41:23 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:41:28 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:41:28 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 23:41:28 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:49:48 | UserProfileModel OnGet | Started
+2026-02-26 23:49:48 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:58:39 | UserProfileModel OnGet | Started
+2026-02-26 23:58:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:58:50 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:58:50 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:58:50 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:58:55 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:58:55 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:58:55 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 00:00:01 | UserProfileModel OnGet | Started
+2026-02-27 00:00:01 | UserProfileModel OnGet | Profile and configurations loaded successfully.
