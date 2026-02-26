@@ -132,17 +132,6 @@
                 background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             }
 
-            .component-card.incompatible {
-                opacity: 0.6;
-                background-color: #fff5f5;
-                border-left: 4px solid #dc3545;
-            }
-
-                .component-card.incompatible:hover {
-                    transform: none;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-                }
-
         .component-image {
             width: 100%;
             height: 200px;
@@ -241,29 +230,22 @@
             margin-top: 10px;
         }
 
-        .compatibility-badge {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            margin-left: 5px;
-            display: inline-block;
+        /* Стили для несовместимых карточек */
+        .component-card.incompatible {
+            opacity: 0.5;
+            background-color: #f8f9fa;
+            border-left: 4px solid #dc3545;
         }
 
-            .compatibility-badge.compatible {
-                background-color: #28a745;
-                color: white;
+            .component-card.incompatible:hover {
+                transform: none;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             }
 
-            .compatibility-badge.incompatible {
-                background-color: #dc3545;
-                color: white;
+            .component-card.incompatible .btn-select {
+                background: #6c757d;
+                pointer-events: none;
             }
-
-        .compatibility-tooltip {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
     </style>
 </head>
 <body>
@@ -338,23 +320,71 @@
                         <div class="row g-4">
                             @foreach (var component in Model.Components)
                             {
-                                bool isCompatible = Model.IsComponentCompatible(component.Component.ComponentId);
-                                string compatibilityClass = isCompatible ? "" : "incompatible";
+                                // Создаем объект со спецификациями для передачи в data-атрибут
+                                var specsForJs = new Dictionary<string, object>();
+                                if (component.Specs != null)
+                                {
+                                    if (component.Specs is CpuSpec cpu)
+                                    {
+                                        specsForJs["socket"] = cpu.Socket;
+                                        specsForJs["cores"] = cpu.Cores;
+                                        specsForJs["tdp"] = cpu.Tdp;
+                                    }
+                                    else if (component.Specs is MotherboardSpec mb)
+                                    {
+                                        specsForJs["socket"] = mb.Socket;
+                                        specsForJs["ramType"] = mb.RamType;
+                                        specsForJs["formFactor"] = mb.FormFactor;
+                                        specsForJs["pcieVersion"] = mb.PcieVersion;
+                                    }
+                                    else if (component.Specs is RamSpec ram)
+                                    {
+                                        specsForJs["ramType"] = ram.RamType;
+                                        specsForJs["capacityGb"] = ram.CapacityGb;
+                                        specsForJs["speedMhz"] = ram.SpeedMhz;
+                                        specsForJs["slotsNeeded"] = ram.SlotsNeeded;
+                                    }
+                                    else if (component.Specs is GpuSpec gpu)
+                                    {
+                                        specsForJs["pcieVersion"] = gpu.PcieVersion;
+                                        specsForJs["tdp"] = gpu.Tdp;
+                                        specsForJs["vramGb"] = gpu.VramGb;
+                                    }
+                                    else if (component.Specs is StorageSpec storage)
+                                    {
+                                        specsForJs["interface"] = storage.Interface;
+                                        specsForJs["capacityGb"] = storage.CapacityGb;
+                                    }
+                                    else if (component.Specs is PsuSpec psu)
+                                    {
+                                        specsForJs["wattage"] = psu.Wattage;
+                                        specsForJs["efficiencyRating"] = psu.EfficiencyRating;
+                                    }
+                                    else if (component.Specs is CaseSpec caseSpec)
+                                    {
+                                        specsForJs["formFactor"] = caseSpec.FormFactor;
+                                        specsForJs["size"] = caseSpec.Size;
+                                    }
+                                    else if (component.Specs is CoolingSpec cooling)
+                                    {
+                                        specsForJs["coolerType"] = cooling.CoolerType;
+                                        specsForJs["tdpSupport"] = cooling.TdpSupport;
+                                        specsForJs["fanRpm"] = cooling.FanRpm;
+                                        specsForJs["isRgb"] = cooling.IsRgb;
+                                    }
+                                }
+
+                                string specsJson = System.Text.Json.JsonSerializer.Serialize(specsForJs);
 
                                 <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="component-card h-100 @compatibilityClass"
+                                    <div class="component-card h-100"
                                          data-component-id="@component.Component.ComponentId"
-                                         data-component-type="@component.Component.Type">
+                                         data-component-type="@component.Component.Type"
+                                         data-component-specs='@Html.Raw(specsJson)'>
                                         <img src="@component.Component.PhotoUrl" alt="@component.Component.Name" class="component-image" />
 
                                         <h5 class="component-name">
                                             @component.Component.Name
-                                            @if (!isCompatible)
-                                            {
-                                                <span class="compatibility-badge incompatible">
-                                                    <i class="fas fa-exclamation-triangle"></i>
-                                                </span>
-                                            }
                                         </h5>
 
                                         <div class="component-specs">
@@ -423,90 +453,14 @@
 
                                             @if (!string.IsNullOrEmpty(returnUrl))
                                             {
-                                                if (isCompatible)
-                                                {
-                                                    // Создаем объект со спецификациями для передачи
-                                                    var specsForJs = new Dictionary<string, object>();
-                                                    if (component.Specs != null)
-                                                    {
-                                                        if (component.Specs is CpuSpec cpu)
-                                                        {
-                                                            specsForJs["socket"] = cpu.Socket;
-                                                            specsForJs["cores"] = cpu.Cores;
-                                                            specsForJs["tdp"] = cpu.Tdp;
-                                                        }
-                                                        else if (component.Specs is MotherboardSpec mb)
-                                                        {
-                                                            specsForJs["socket"] = mb.Socket;
-                                                            specsForJs["ramType"] = mb.RamType;
-                                                            specsForJs["formFactor"] = mb.FormFactor;
-                                                            specsForJs["pcieVersion"] = mb.PcieVersion;
-                                                        }
-                                                        else if (component.Specs is RamSpec ram)
-                                                        {
-                                                            specsForJs["ramType"] = ram.RamType;
-                                                            specsForJs["capacityGb"] = ram.CapacityGb;
-                                                            specsForJs["speedMhz"] = ram.SpeedMhz;
-                                                            specsForJs["slotsNeeded"] = ram.SlotsNeeded;
-                                                        }
-                                                        else if (component.Specs is GpuSpec gpu)
-                                                        {
-                                                            specsForJs["pcieVersion"] = gpu.PcieVersion;
-                                                            specsForJs["tdp"] = gpu.Tdp;
-                                                            specsForJs["vramGb"] = gpu.VramGb;
-                                                        }
-                                                        else if (component.Specs is StorageSpec storage)
-                                                        {
-                                                            specsForJs["interface"] = storage.Interface;
-                                                            specsForJs["capacityGb"] = storage.CapacityGb;
-                                                        }
-                                                        else if (component.Specs is PsuSpec psu)
-                                                        {
-                                                            specsForJs["wattage"] = psu.Wattage;
-                                                            specsForJs["efficiencyRating"] = psu.EfficiencyRating;
-                                                        }
-                                                        else if (component.Specs is CaseSpec caseSpec)
-                                                        {
-                                                            specsForJs["formFactor"] = caseSpec.FormFactor;
-                                                            specsForJs["size"] = caseSpec.Size;
-                                                        }
-                                                        else if (component.Specs is CoolingSpec cooling)
-                                                        {
-                                                            specsForJs["coolerType"] = cooling.CoolerType;
-                                                            specsForJs["tdpSupport"] = cooling.TdpSupport;
-                                                            specsForJs["fanRpm"] = cooling.FanRpm;
-                                                            specsForJs["isRgb"] = cooling.IsRgb;
-                                                        }
-                                                    }
-
-                                                    string specsJson = System.Text.Json.JsonSerializer.Serialize(specsForJs);
-
-                                                    <button class="btn btn-select mt-3 select-component"
-                                                            data-component-id="@component.Component.ComponentId"
-                                                            data-component-name="@component.Component.Name"
-                                                            data-component-price="@component.Component.Price"
-                                                            data-component-type="@Request.Query["category"].FirstOrDefault()"
-                                                            data-component-specs='@Html.Raw(specsJson)'>
-                                                        <i class="fas fa-check-circle me-1"></i>Выбрать
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button class="btn btn-select mt-3" disabled>
-                                                        <i class="fas fa-ban me-1"></i>Несовместим
-                                                    </button>
-                                                    @if (Model.GetCompatibilityIssues(component.Component.ComponentId).Any())
-                                                    {
-                                                        <div class="compatibility-tooltip">
-                                                            @foreach (var issue in Model.GetCompatibilityIssues(component.Component.ComponentId))
-                                                            {
-                                                                <small><i class="fas fa-info-circle"></i> @issue</small>
-
-                                                                <br />
-                                                            }
-                                                        </div>
-                                                    }
-                                                }
+                                                <button class="btn btn-select mt-3 select-component"
+                                                        data-component-id="@component.Component.ComponentId"
+                                                        data-component-name="@component.Component.Name"
+                                                        data-component-price="@component.Component.Price"
+                                                        data-component-type="@Request.Query["category"].FirstOrDefault()"
+                                                        data-component-specs='@Html.Raw(specsJson)'>
+                                                    <i class="fas fa-check-circle me-1"></i>Выбрать
+                                                </button>
                                             }
                                         </div>
                                     </div>
@@ -529,54 +483,121 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-                        function loadCategory(category) {
+        function loadCategory(category) {
         @if (!string.IsNullOrEmpty(returnUrl))
         {
             <text>
-                    // Получаем текущие выбранные компоненты из localStorage
-                    const savedComponents = localStorage.getItem('allComponents');
-                    let componentsParam = '';
-                    if (savedComponents) {
-                        try {
-                            // Преобразуем в формат с только ID для передачи
-                            const allComponents = JSON.parse(savedComponents);
-                            const idsOnly = {};
-                            Object.keys(allComponents).forEach(key => {
-                                // Сохраняем только ID для фильтрации
-                                idsOnly[key] = parseInt(allComponents[key].id);
-                            });
-                            componentsParam = '&components=' + encodeURIComponent(JSON.stringify(idsOnly));
-                        } catch (e) {
-                            console.error('Ошибка при подготовке компонентов', e);
-                        }
-                    }
-                    window.location.href = `/Components?category=${category}&returnUrl=${encodeURIComponent('@returnUrl')}&returnType=${category}${componentsParam}`;
+                        // Просто переходим на выбранную категорию, без передачи параметров
+                        window.location.href = `/Components?category=${category}&returnUrl=${encodeURIComponent('@returnUrl')}&returnType=${category}`;
             </text>
         }
         else
         {
             <text>
-                    window.location.href = `/Components?category=${category}`;
+                        window.location.href = `/Components?category=${category}`;
             </text>
         }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Загружаем выбранные компоненты из URL параметра
-            const urlParams = new URLSearchParams(window.location.search);
-            const componentsParam = urlParams.get('components');
-            if (componentsParam) {
+            // Загружаем выбранные компоненты из localStorage
+            const savedComponents = localStorage.getItem('allComponents');
+            let selectedComponents = {};
+            if (savedComponents) {
                 try {
-                    const components = JSON.parse(decodeURIComponent(componentsParam));
-                    localStorage.setItem('allComponents', JSON.stringify(components));
+                    selectedComponents = JSON.parse(savedComponents);
+                    console.log('Selected components for compatibility check:', selectedComponents);
                 } catch (e) {
-                    console.error('Ошибка при загрузке компонентов из URL', e);
+                    console.error('Ошибка парсинга выбранных компонентов', e);
                 }
             }
+
+            // Функция проверки совместимости одного компонента с уже выбранными
+            function isComponentCompatible(cardType, cardSpecs) {
+                if (!selectedComponents || Object.keys(selectedComponents).length === 0) return true;
+
+                switch (cardType) {
+                    case 'cpu':
+                        if (selectedComponents.motherboard) {
+                            const moboSpecs = selectedComponents.motherboard.specs;
+                            if (moboSpecs && cardSpecs.socket && cardSpecs.socket !== moboSpecs.socket) return false;
+                        }
+                        break;
+
+                    case 'motherboard':
+                        if (selectedComponents.cpu) {
+                            const cpuSpecs = selectedComponents.cpu.specs;
+                            if (cpuSpecs && cardSpecs.socket && cardSpecs.socket !== cpuSpecs.socket) return false;
+                        }
+                        if (selectedComponents.ram) {
+                            const ramSpecs = selectedComponents.ram.specs;
+                            if (ramSpecs && cardSpecs.ramType && cardSpecs.ramType !== ramSpecs.ramType) return false;
+                        }
+                        if (selectedComponents.case) {
+                            const caseSpecs = selectedComponents.case.specs;
+                            if (caseSpecs && cardSpecs.formFactor && cardSpecs.formFactor !== caseSpecs.formFactor) return false;
+                        }
+                        break;
+
+                    case 'ram':
+                        if (selectedComponents.motherboard) {
+                            const moboSpecs = selectedComponents.motherboard.specs;
+                            if (moboSpecs && cardSpecs.ramType && cardSpecs.ramType !== moboSpecs.ramType) return false;
+                        }
+                        break;
+
+                    case 'case':
+                        if (selectedComponents.motherboard) {
+                            const moboSpecs = selectedComponents.motherboard.specs;
+                            if (moboSpecs && cardSpecs.formFactor && cardSpecs.formFactor !== moboSpecs.formFactor) return false;
+                        }
+                        break;
+
+                    case 'cooling':
+                        if (selectedComponents.cpu) {
+                            const cpuSpecs = selectedComponents.cpu.specs;
+                            if (cpuSpecs && cardSpecs.tdpSupport && cardSpecs.tdpSupport < cpuSpecs.tdp) return false;
+                        }
+                        break;
+
+                    // Для остальных типов пока нет строгих проверок
+                    default:
+                        return true;
+                }
+                return true;
+            }
+
+            // Проходим по всем карточкам и проверяем совместимость
+            document.querySelectorAll('.component-card').forEach(card => {
+                const cardType = card.dataset.componentType;
+                const specsAttr = card.dataset.componentSpecs;
+                if (!specsAttr) return;
+
+                let cardSpecs;
+                try {
+                    cardSpecs = JSON.parse(specsAttr);
+                } catch (e) {
+                    console.error('Ошибка парсинга спецификаций карточки', e);
+                    return;
+                }
+
+                const compatible = isComponentCompatible(cardType, cardSpecs);
+
+                if (!compatible) {
+                    card.classList.add('incompatible');
+                    const btn = card.querySelector('.select-component');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'Несовместим';
+                    }
+                }
+            });
 
             // Обработчики для кнопок выбора компонента
             document.querySelectorAll('.select-component').forEach(btn => {
                 btn.addEventListener('click', function() {
+                    if (this.disabled) return;
+
                     let specs = {};
                     try {
                         specs = JSON.parse(this.dataset.componentSpecs || '{}');

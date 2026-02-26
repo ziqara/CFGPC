@@ -977,3 +977,39 @@
 2026-02-26 08:45:33 | OnGet ComponentsModel | Загружено компонентов: 2
 2026-02-26 08:59:47 | OnGet ComponentsModel | Загружено компонентов: 3 из 3
 2026-02-26 09:01:29 | OnGet ComponentsModel | Загружено компонентов: 2 из 2
+2026-02-26 19:46:12 | GetPresetConfigurations | Unable to connect to any of the specified MySQL hosts
+2026-02-26 19:46:45 | UserProfileModel OnGet | Started
+2026-02-26 19:46:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 19:54:06 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 3
+2026-02-26 19:54:09 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 2
+2026-02-26 19:54:14 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 2
+2026-02-26 19:59:45 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 19:59:45 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 19:59:45 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 19:59:48 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 19:59:48 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 19:59:48 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:05:33 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:05:33 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:05:33 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:05:46 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:05:46 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:05:46 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:11:49 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:11:49 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:11:49 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:11:52 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:11:52 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:11:52 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:21 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:21 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:15:21 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:23 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:23 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:15:23 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:31 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:31 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:15:31 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:35 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:35 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:15:35 | OnGet ComponentsModel | No selected components, showing all
