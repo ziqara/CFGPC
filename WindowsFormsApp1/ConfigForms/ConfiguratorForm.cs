@@ -60,14 +60,22 @@ namespace WindowsFormsApp1.ConfigForms
         private void CbMotherboard_SelectedIndexChanged(object sender, EventArgs e)
         {
             var mb = cbMotherboard.SelectedItem as ComponentItem;
-            if (mb == null) return;
+            if (mb == null)
+            {
+                // Если выбор сброшен — очищаем все списки, зависящие от МП
+                cbCpu.DataSource = null;
+                cbRam.DataSource = null;
+                cbGpu.DataSource = null;
+                cbCase.DataSource = null;
+                UpdateTotal();
+                return;
+            }
 
             Bind(cbCpu, compService_.GetCpusByMb(mb.ComponentId));
             Bind(cbRam, compService_.GetRamsByMb(mb.ComponentId));
             Bind(cbGpu, compService_.GetGpusByMb(mb.ComponentId));
             Bind(cbCase, compService_.GetCasesByMb(mb.ComponentId));
 
-            // Обновляем охлаждение и БП
             cbCooling.DataSource = null;
             cbPsu.DataSource = null;
             UpdateTotal();
@@ -116,10 +124,12 @@ namespace WindowsFormsApp1.ConfigForms
 
         private void Bind(ComboBox cb, List<ComponentItem> items)
         {
-            cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.DataSource = null;
+            cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.DataSource = items ?? new List<ComponentItem>();
-            if (cb.Items.Count > 0) cb.SelectedIndex = 0;
+
+            // ВАЖНО: устанавливаем -1, чтобы комбобокс был пустым
+            cb.SelectedIndex = -1;
         }
 
         private decimal PriceOf(ComboBox cb)
@@ -199,7 +209,7 @@ namespace WindowsFormsApp1.ConfigForms
         {
             comboBox.BackColor = Color.White;
             comboBox.ForeColor = Color.Black;
-            comboBox.Font = new Font("Segoe UI", 9f);
+            comboBox.Font = new Font("Arial", 9f);
             comboBox.FlatStyle = FlatStyle.Flat;
         }
 
@@ -207,7 +217,7 @@ namespace WindowsFormsApp1.ConfigForms
         {
             btn.BackColor = ThemeColor.PrimaryColor;
             btn.ForeColor = Color.White;
-            btn.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            btn.Font = new Font("Arial", 9f, FontStyle.Bold);
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
             btn.FlatAppearance.BorderSize = 1;

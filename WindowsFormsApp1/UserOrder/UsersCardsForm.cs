@@ -92,8 +92,7 @@ namespace WindowsFormsApp1.UserOrder
 
             string search = txtSearch.Text?.Trim() ?? "";
             bool onlyActive = cbxActiveOrders.Checked;
-
-            IEnumerable<User> query = allUsers_;
+            IEnumerable<User> query = allUsers_.Where(u => u.Email != null && !u.Email.Equals("admin", StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(search))
             {

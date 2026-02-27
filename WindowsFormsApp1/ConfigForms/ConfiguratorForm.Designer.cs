@@ -143,6 +143,7 @@
             // 
             // cbPsu
             // 
+            this.cbPsu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPsu.FormattingEnabled = true;
             this.cbPsu.Location = new System.Drawing.Point(123, 200);
             this.cbPsu.Name = "cbPsu";

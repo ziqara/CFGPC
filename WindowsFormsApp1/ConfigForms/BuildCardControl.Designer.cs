@@ -41,7 +41,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblTitle.Location = new System.Drawing.Point(10, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(530, 22);
+            this.lblTitle.Size = new System.Drawing.Size(236, 22);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "#1 · Название сборки";
             // 
@@ -68,7 +68,7 @@
             // btnDelete
             // 
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnDelete.Location = new System.Drawing.Point(550, 10);
+            this.btnDelete.Location = new System.Drawing.Point(531, 43);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(120, 30);
             this.btnDelete.TabIndex = 4;
@@ -80,7 +80,7 @@
             // 
             this.lblPreset.AutoEllipsis = true;
             this.lblPreset.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblPreset.Location = new System.Drawing.Point(10, 86);
+            this.lblPreset.Location = new System.Drawing.Point(519, 10);
             this.lblPreset.Name = "lblPreset";
             this.lblPreset.Size = new System.Drawing.Size(147, 18);
             this.lblPreset.TabIndex = 2;
@@ -92,11 +92,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblPreset);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblMeta);
             this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblPreset);
             this.Name = "BuildCardControl";
             this.Size = new System.Drawing.Size(680, 120);
             this.ResumeLayout(false);

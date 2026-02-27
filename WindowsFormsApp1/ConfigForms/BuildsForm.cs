@@ -19,19 +19,25 @@ namespace WindowsFormsApp1.ConfigForms
         public BuildsForm()
         {
             InitializeComponent();
-
             buildService_ = new BuildService(new MySqlBuildRepository());
 
-            this.Shown += BuildsForm_Shown;
+
+            cmbSort.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // Подписка на события (RenderCards будет вызываться при смене индекса)
             chkOnlyPresets.CheckedChanged += (s, e) => RenderCards();
+            cmbSort.SelectedIndexChanged += (s, e) => RenderCards();
             btnRefresh.Click += (s, e) => LoadCards();
+
             ThemeColor.ThemeChanged += ApplyTheme;
+            this.Shown += BuildsForm_Shown;
         }
 
         private void BuildsForm_Shown(object sender, EventArgs e)
         {
+            InitFilters(); // Сначала заполняем списки
             ApplyTheme();
-            LoadCards();
+            LoadCards();   // Внутри вызовется RenderCards
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
@@ -61,21 +67,61 @@ namespace WindowsFormsApp1.ConfigForms
 
         private void RenderCards()
         {
-            bool onlyPresets = chkOnlyPresets.Checked;
+            // Безопасная проверка на случай, если данные еще не загружены
+            if (all_ == null)
+            {
+                labelCount.Text = "Найдено: 0";
+                return;
+            }
 
             flpCards.SuspendLayout();
             flpCards.Controls.Clear();
 
-            IEnumerable<BuildCard> items = all_;
-            if (onlyPresets)
-                items = all_.FindAll(x => x.IsPreset);
+            // 1. Фильтрация
+            var query = all_.AsEnumerable();
+            if (chkOnlyPresets.Checked)
+            {
+                query = query.Where(x => x.IsPreset);
+            }
 
-            foreach (var card in items)
+            // 2. Сортировка (switch-case)
+            switch (cmbSort.SelectedIndex)
+            {
+                case 1: // Дешевые
+                    query = query.OrderBy(x => x.TotalPrice);
+                    break;
+                case 2: // Дорогие
+                    query = query.OrderByDescending(x => x.TotalPrice);
+                    break;
+                case 3: // Популярные (Заказы)
+                    query = query.OrderByDescending(x => x.OrdersCount);
+                    break;
+                default: // Новые
+                    query = query.OrderByDescending(x => x.CreatedDate);
+                    break;
+            }
+
+            // 3. Получаем итоговый список
+            var filteredList = query.ToList();
+
+            // ОБНОВЛЯЕМ СЧЕТЧИК
+            labelCount.Text = $"Найдено: {filteredList.Count}";
+
+            // 4. Отрисовка
+            foreach (var card in filteredList)
             {
                 var c = new BuildCardControl();
                 c.Bind(card);
                 c.ApplyThemeCard();
 
+                var btnInfo = new Button
+                {
+                    Text = "Подробнее",
+                    Dock = DockStyle.Bottom,
+                    Height = 30
+                };
+                btnInfo.Click += (s, e) => ShowBuildDetails(card);
+                c.Controls.Add(btnInfo);
 
                 c.DeleteRequested += Card_DeleteRequested;
                 flpCards.Controls.Add(c);
@@ -84,6 +130,12 @@ namespace WindowsFormsApp1.ConfigForms
             flpCards.ResumeLayout();
         }
 
+        private void ShowBuildDetails(BuildCard card)
+        {
+            // Открываем форму с подробной информацией о сборке
+            var detailsForm = new BuildDetailsForm(card);
+            detailsForm.ShowDialog();
+        }
 
         private void Card_DeleteRequested(object sender, int configId)
         {
@@ -134,6 +186,39 @@ namespace WindowsFormsApp1.ConfigForms
 
             // Фон панели карточек
             flpCards.BackColor = Color.FromArgb(248, 249, 250);
+        }
+
+        private void cmbSortByPrice_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RenderCards();
+        }
+
+        private void cmbSortByDate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RenderCards();
+        }
+
+        private void InitFilters()
+        {
+            cmbSort.Items.Clear();
+            cmbSort.Items.Add("По умолчанию (Новинки)"); // Индекс 0
+            cmbSort.Items.Add("Сначала дешевые");        // Индекс 1
+            cmbSort.Items.Add("Сначала дорогие");        // Индекс 2
+            cmbSort.Items.Add("Самые популярные");       // Индекс 3
+            cmbSort.SelectedIndex = 0;
+
+            labelCount.Text = "Найдено: 0";
+        }
+
+        private void btnCreate_Click_1(object sender, EventArgs e)
+        {
+            using (var f = new ConfiguratorForm())
+            {
+                if (f.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadCards();
+                }
+            }
         }
     }
 }

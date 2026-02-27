@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using DDMLib;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using DDMLib;
+using System;
 
 namespace WindowsFormsApp1.ConfigForms
 {
     public partial class BuildCardControl : UserControl
     {
         public event EventHandler<int> DeleteRequested;
-        public event EventHandler<int> ViewDetailsRequested;
         private bool _hovered = false;
         private BuildCard card_;
 
@@ -49,14 +42,12 @@ namespace WindowsFormsApp1.ConfigForms
 
             btnDelete.Enabled = card.CanDelete;
 
-
             // легкая подсветка проблем
             if (card.HasAvailabilityProblems)
                 BackColor = Color.FromArgb(255, 245, 245);
             else
                 BackColor = Color.White;
         }
-
 
         internal void ApplyThemeCard()
         {

@@ -977,3 +977,7 @@
 2026-02-26 08:45:33 | OnGet ComponentsModel | Загружено компонентов: 2
 2026-02-26 08:59:47 | OnGet ComponentsModel | Загружено компонентов: 3 из 3
 2026-02-26 09:01:29 | OnGet ComponentsModel | Загружено компонентов: 2 из 2
+2026-02-27 02:01:29 | UserProfileModel OnGet | Started
+2026-02-27 02:01:29 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 02:01:34 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-27 02:01:34 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.

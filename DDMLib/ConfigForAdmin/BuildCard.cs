@@ -19,17 +19,5 @@ namespace DDMLib
         public bool CanDelete => OrdersCount == 0;
         public bool HasAvailabilityProblems => BadComponents > 0;
 
-        public string Description { get; set; }  // Добавлено описание сборки
-        public string TargetUse { get; set; }  // Цель использования (gaming, professional, office, student)
-        public string Status { get; set; }  // Статус сборки
-        public string OtherOptions { get; set; }  // Дополнительные параметры
-
-        // Метод для получения компонентов сборки
-        public List<ComponentAdmin> GetComponents()
-        {
-            // Здесь может быть логика получения компонентов для этой сборки
-            return new List<ComponentAdmin>(); // Пример возвращаемого значения
-        }
-
     }
 }

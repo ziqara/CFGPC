@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DDMLib.Configuration;
 
 namespace DDMLib
 {
@@ -14,6 +15,11 @@ namespace DDMLib
         {
             repo_ = repo ?? throw new ArgumentNullException(nameof(repo));
             validator_ = validator ?? new BuildValidator();
+        }
+
+        public ConfigurationDto GetBuildDetails(int configId)
+        {
+            return repo_.GetConfigurationDto(configId);
         }
 
         public List<BuildCard> GetBuildCards(bool onlyPresets)

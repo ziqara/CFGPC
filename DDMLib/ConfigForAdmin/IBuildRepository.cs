@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DDMLib.Configuration;
 
 namespace DDMLib
 {
@@ -17,5 +18,7 @@ namespace DDMLib
         decimal SumComponentsPrice(int[] componentIds);
 
         void EnsureAdminExists(string adminEmail);
+
+        ConfigurationDto GetConfigurationDto(int configId);
     }
 }
