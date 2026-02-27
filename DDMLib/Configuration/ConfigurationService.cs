@@ -80,13 +80,17 @@ namespace DDMLib.Configuration
 
             try
             {
-                // Устанавливаем значения по умолчанию
-                configuration.CreatedDate = DateTime.Now;
-                configuration.Status = "draft";
-                configuration.IsPreset = false;
+                // Устанавливаем значения по умолчанию ТОЛЬКО если они не заданы
+                if (configuration.CreatedDate == DateTime.MinValue)
+                    configuration.CreatedDate = DateTime.Now;
 
-                // Рассчитываем общую сумму (если нужно)
-                // Здесь можно добавить логику подсчета суммы из компонентов
+                if (string.IsNullOrEmpty(configuration.Status))
+                    configuration.Status = "draft";
+
+                // Не перезаписываем статус, если он уже задан!
+                // configuration.Status = "draft"; // <-- ЭТО НУЖНО УБРАТЬ!
+
+                configuration.IsPreset = false;
 
                 return configurationRepository_.CreateConfiguration(configuration, componentIds);
             }
@@ -94,6 +98,38 @@ namespace DDMLib.Configuration
             {
                 ErrorLogger.LogError("ConfigurationService.CreateConfiguration", ex.Message);
                 throw;
+            }
+        }
+
+        public bool UpdateConfiguration(Configuration configuration, List<int> componentIds)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            if (componentIds == null || !componentIds.Any())
+                throw new ArgumentException("Должен быть выбран хотя бы один компонент", nameof(componentIds));
+
+            try
+            {
+                return configurationRepository_.UpdateConfiguration(configuration, componentIds);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ConfigurationService.UpdateConfiguration", ex.Message);
+                throw;
+            }
+        }
+
+        public ConfigurationDto GetConfigurationById(int configId)
+        {
+            try
+            {
+                return configurationRepository_.GetConfigurationById(configId);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError("ConfigurationService.GetConfigurationById", ex.Message);
+                return null;
             }
         }
     }

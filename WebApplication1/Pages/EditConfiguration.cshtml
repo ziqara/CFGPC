@@ -1,32 +1,45 @@
-﻿@page
-@model WebApplication1.Pages.CreateConfigurationModel
+﻿@page "{id:int}"
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @{
-    ViewData["Title"] = "Создание конфигурации";
+    var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+    var componentsJson = JsonSerializer.Serialize(Model.Components, jsonOptions);
+}
+@model WebApplication1.Pages.EditConfigurationModel
+@{
+    ViewData["Title"] = "Редактирование конфигурации";
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1><i class="fas fa-microchip me-2" style="color: #764ba2;"></i>@ViewData["Title"]</h1>
-        <a asp-page="/Index" class="btn btn-outline-primary">
-            <i class="fas fa-home me-1"></i>На главную
+        <h1><i class="fas fa-edit me-2" style="color: #764ba2;"></i>@ViewData["Title"]</h1>
+        <a asp-page="/UserProfile" class="btn btn-outline-primary">
+            <i class="fas fa-user me-1"></i>В профиль
         </a>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-            <div class="alert alert-danger mb-4">
-                <i class="fas fa-exclamation-circle me-2"></i> @Model.ErrorMessage
-            </div>
+        <div class="alert alert-danger mb-4">
+            <i class="fas fa-exclamation-circle me-2"></i> @Model.ErrorMessage
+        </div>
     }
 
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-            <div class="alert alert-success mb-4">
-                <i class="fas fa-check-circle me-2"></i> @Model.SuccessMessage
-            </div>
+        <div class="alert alert-success mb-4">
+            <i class="fas fa-check-circle me-2"></i> @Model.SuccessMessage
+        </div>
     }
 
     <form method="post" id="configForm">
+        <input type="hidden" name="ConfigId" value="@Model.ConfigId" />
+
         <!-- Основная информация о конфигурации -->
         <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
             <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px 16px 0 0;">
@@ -38,25 +51,25 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold" style="color: #764ba2;">Название конфигурации</label>
-                        <input type="text" class="form-control" id="configName" name="ConfigName" placeholder="Например: Игровой ПК 2025" required />
+                        <input type="text" class="form-control" id="configName" name="ConfigName" value="@Model.ConfigName" placeholder="Например: Игровой ПК 2025" required />
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold" style="color: #764ba2;">Цель использования</label>
                         <select class="form-select" id="targetUse" name="TargetUse" required>
                             <option value="">Выберите цель</option>
-                            <option value="gaming">Игровой</option>
-                            <option value="professional">Профессиональный</option>
-                            <option value="office">Офисный</option>
-                            <option value="student">Для студентов</option>
+                            <option value="gaming" selected="@(Model.TargetUse == "gaming")">Игровой</option>
+                            <option value="professional" selected="@(Model.TargetUse == "professional")">Профессиональный</option>
+                            <option value="office" selected="@(Model.TargetUse == "office")">Офисный</option>
+                            <option value="student" selected="@(Model.TargetUse == "student")">Для студентов</option>
                         </select>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label fw-semibold" style="color: #764ba2;">Описание</label>
-                        <textarea class="form-control" id="description" name="Description" rows="3" placeholder="Краткое описание вашей сборки..."></textarea>
+                        <textarea class="form-control" id="description" name="Description" rows="3" placeholder="Краткое описание вашей сборки...">@Model.Description</textarea>
                     </div>
                     <div class="col-12 mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rgbCheckbox" name="Rgb">
+                            <input class="form-check-input" type="checkbox" id="rgbCheckbox" name="Rgb" checked="@Model.Rgb">
                             <label class="form-check-label" for="rgbCheckbox">
                                 <i class="fas fa-lightbulb me-1" style="color: #764ba2;"></i> RGB-подсветка
                             </label>
@@ -67,8 +80,8 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold" style="color: #764ba2;">Статус конфигурации</label>
                         <select class="form-select" id="configStatus" name="Status" required>
-                            <option value="draft">Черновик</option>
-                            <option value="validated">Готовая сборка</option>
+                            <option value="draft" selected="@(Model.Status == "draft")">Черновик</option>
+                            <option value="validated" selected="@(Model.Status == "validated")">Готовая сборка</option>
                         </select>
                         <small class="text-muted" id="statusHelp">Для статуса "Готовая сборка" необходимо выбрать все компоненты</small>
                     </div>
@@ -77,7 +90,7 @@
         </div>
 
         <!-- Скрытые поля для ID выбранных компонентов -->
-        <input type="hidden" name="ComponentIds" id="componentIds" value="" />
+        <input type="hidden" name="ComponentIds" id="componentIds" value="@string.Join(",", Model.ComponentIdList)" />
 
         <!-- Выбор комплектующих -->
         <div class="card border-0 shadow-lg mb-4" style="border-radius: 16px;">
@@ -342,17 +355,17 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0" style="color: #2d3748;">Общая сумма:</h4>
-                    <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">0 ₽</h3>
+                    <h3 class="mb-0" id="totalPrice" style="color: #764ba2; font-weight: 700;">@Model.TotalPrice.ToString("F2") ₽</h3>
                 </div>
             </div>
         </div>
 
         <!-- Кнопки действий -->
         <div class="d-flex gap-3 justify-content-center mb-5">
-            <button type="submit" class="btn btn-primary btn-lg px-5" id="saveConfigBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <i class="fas fa-save me-2"></i>Сохранить конфигурацию
+            <button type="submit" class="btn btn-primary btn-lg px-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-save me-2"></i>Сохранить изменения
             </button>
-            <a asp-page="/Index" class="btn btn-outline-secondary btn-lg px-5">
+            <a asp-page="/UserProfile" class="btn btn-outline-secondary btn-lg px-5">
                 <i class="fas fa-times me-2"></i>Отмена
             </a>
         </div>
@@ -420,7 +433,6 @@
             transform: translateY(-2px);
         }
 
-    /* Адаптивность */
     @@media (max-width: 768px) {
         .component-section {
             padding: 1rem;
@@ -434,22 +446,20 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Загружаем сохраненные данные формы из localStorage
-        loadFormData();
+    const componentsJson = '@Html.Raw(componentsJson)';
 
-        // Загружаем сохраненные компоненты из localStorage при загрузке страницы
-        loadSelectedComponents();
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM загружен, начинаем загрузку компонентов...');
+
+        // Загружаем существующие компоненты из модели
+        loadExistingComponents();
 
         // Обработчики для кнопок выбора компонентов
         document.querySelectorAll('.select-component-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                // Сохраняем данные формы перед переходом
                 saveFormData();
-
                 const componentType = this.dataset.type;
-                // Переходим на страницу компонентов с параметром type и returnUrl
-                window.location.href = `/Components?category=${componentType}&returnUrl=${encodeURIComponent('/CreateConfiguration')}&returnType=${componentType}`;
+                window.location.href = `/Components?category=${componentType}&returnUrl=${encodeURIComponent('/EditConfiguration/' + @Model.ConfigId)}&returnType=${componentType}`;
             });
         });
 
@@ -466,7 +476,7 @@
         if (statusSelect) {
             statusSelect.addEventListener('change', function() {
                 validateStatusAvailability();
-                saveFormData(); // Сохраняем при изменении
+                saveFormData();
             });
         }
 
@@ -476,20 +486,12 @@
         const description = document.getElementById('description');
         const rgbCheckbox = document.getElementById('rgbCheckbox');
 
-        if (configName) {
-            configName.addEventListener('input', saveFormData);
-        }
-        if (targetUse) {
-            targetUse.addEventListener('change', saveFormData);
-        }
-        if (description) {
-            description.addEventListener('input', saveFormData);
-        }
-        if (rgbCheckbox) {
-            rgbCheckbox.addEventListener('change', saveFormData);
-        }
+        if (configName) configName.addEventListener('input', saveFormData);
+        if (targetUse) targetUse.addEventListener('change', saveFormData);
+        if (description) description.addEventListener('input', saveFormData);
+        if (rgbCheckbox) rgbCheckbox.addEventListener('change', saveFormData);
 
-        // Проверяем, есть ли выбранный компонент в localStorage (возврат со страницы Components)
+        // Проверяем, есть ли выбранный компонент в localStorage
         checkForSelectedComponent();
 
         // Обработчик отправки формы
@@ -505,17 +507,80 @@
                     return false;
                 }
 
-                // Обновляем поле с ID компонентов перед отправкой
                 updateComponentIdsField();
-
-                // Очищаем сохраненные данные после успешной отправки
-                // (очистка произойдет после редиректа из TempData)
                 return true;
             });
         }
     });
 
-    // Функция для сохранения данных формы в localStorage
+    function loadExistingComponents() {
+        try {
+            // Получаем данные о компонентах из модели
+    @{
+        var serializedComponents = System.Text.Json.JsonSerializer.Serialize(Model.Components, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            });
+    }
+            const componentsJson = '@Html.Raw(serializedComponents)';
+            console.log('Получены компоненты из модели (JSON):', componentsJson);
+
+            if (!componentsJson || componentsJson === '[]' || componentsJson === 'null' || componentsJson === '') {
+                console.log('Нет компонентов для загрузки');
+                return;
+            }
+
+            const components = JSON.parse(componentsJson);
+            console.log('Распарсенные компоненты:', components);
+
+            if (!components || components.length === 0) {
+                console.log('Компоненты отсутствуют');
+                return;
+            }
+
+            // Очищаем localStorage и загружаем компоненты
+            let allComponents = {};
+
+            components.forEach((comp, index) => {
+                console.log(`Обработка компонента ${index}:`, comp);
+
+                // Убедимся, что тип в нижнем регистре
+                const type = comp.type ? comp.type.toLowerCase() : '';
+                if (!type) {
+                    console.warn('Компонент без типа:', comp);
+                    return;
+                }
+
+                allComponents[type] = {
+                    id: comp.id,
+                    name: comp.name || '',
+                    type: type,
+                    price: comp.price || 0,
+                    specs: comp.specs || {}
+                };
+            });
+
+            console.log('Сохранение в localStorage:', allComponents);
+            localStorage.setItem('allComponents', JSON.stringify(allComponents));
+
+            // Отображаем компоненты на странице
+            Object.values(allComponents).forEach(component => {
+                addComponentToPage(component);
+            });
+
+            // Обновляем поле с ID компонентов
+            updateComponentIdsField();
+            checkAllCompatibility();
+            validateStatusAvailability();
+
+            console.log('Загрузка компонентов завершена');
+        } catch (e) {
+            console.error('Ошибка при загрузке компонентов:', e);
+        }
+    }
+
     function saveFormData() {
         const formData = {
             configName: document.getElementById('configName')?.value || '',
@@ -524,90 +589,39 @@
             rgb: document.getElementById('rgbCheckbox')?.checked || false,
             status: document.getElementById('configStatus')?.value || 'draft'
         };
-
         localStorage.setItem('configurationFormData', JSON.stringify(formData));
         console.log('Данные формы сохранены', formData);
-    }
-
-    // Функция для загрузки данных формы из localStorage
-    function loadFormData() {
-        const savedFormData = localStorage.getItem('configurationFormData');
-        if (savedFormData) {
-            try {
-                const formData = JSON.parse(savedFormData);
-
-                const configName = document.getElementById('configName');
-                const targetUse = document.getElementById('targetUse');
-                const description = document.getElementById('description');
-                const rgbCheckbox = document.getElementById('rgbCheckbox');
-                const statusSelect = document.getElementById('configStatus');
-
-                if (configName) configName.value = formData.configName || '';
-                if (targetUse) targetUse.value = formData.targetUse || '';
-                if (description) description.value = formData.description || '';
-                if (rgbCheckbox) rgbCheckbox.checked = formData.rgb || false;
-                if (statusSelect) statusSelect.value = formData.status || 'draft';
-
-                console.log('Данные формы загружены', formData);
-            } catch (e) {
-                console.error('Ошибка при загрузке данных формы', e);
-            }
-        }
     }
 
     function checkForSelectedComponent() {
         const selectedComponent = localStorage.getItem('selectedComponent');
         if (selectedComponent) {
             try {
+                console.log('Найден выбранный компонент:', selectedComponent);
                 const component = JSON.parse(selectedComponent);
 
-                // Загружаем существующие компоненты
                 let allComponents = {};
                 const savedComponents = localStorage.getItem('allComponents');
                 if (savedComponents) {
                     allComponents = JSON.parse(savedComponents);
                 }
 
-                // Добавляем новый компонент
                 allComponents[component.type] = component;
-
-                // Сохраняем все компоненты
                 localStorage.setItem('allComponents', JSON.stringify(allComponents));
-
-                // Добавляем компонент на страницу
                 addComponentToPage(component);
-
-                // Проверяем совместимость после добавления
                 checkAllCompatibility();
-
-                // Удаляем временный selectedComponent
                 localStorage.removeItem('selectedComponent');
+                console.log('Компонент добавлен на страницу');
             } catch (e) {
                 console.error('Ошибка при парсинге компонента', e);
             }
         }
     }
 
-    function loadSelectedComponents() {
-        const savedComponents = localStorage.getItem('allComponents');
-        if (savedComponents) {
-            try {
-                const allComponents = JSON.parse(savedComponents);
-                Object.values(allComponents).forEach(component => {
-                    addComponentToPage(component);
-                });
-                checkAllCompatibility();
-                updateComponentIdsField(); // Добавляем обновление поля после загрузки
-            } catch (e) {
-                console.error('Ошибка при загрузке компонентов', e);
-            }
-        }
-    }
-
     function addComponentToPage(component) {
         const type = component.type;
+        console.log(`Добавление компонента типа ${type}:`, component);
 
-        // Скрываем placeholder и показываем информацию о компоненте
         const placeholder = document.getElementById(`${type}-placeholder`);
         const info = document.getElementById(`${type}-info`);
         const nameSpan = document.getElementById(`${type}-name`);
@@ -617,10 +631,8 @@
         if (placeholder && info && nameSpan && priceSpan) {
             placeholder.classList.add('d-none');
             info.classList.remove('d-none');
-
             nameSpan.textContent = component.name;
 
-            // Получаем спецификации
             let specs = component.specs || {};
             if (typeof specs === 'string') {
                 try {
@@ -631,9 +643,7 @@
                 }
             }
 
-            // Формируем строку со спецификациями в зависимости от типа
             let specsText = '';
-
             if (type === 'cpu') {
                 specsText = `${specs.socket || '?'} | ${specs.cores || '?'} ядер | ${specs.tdp || '?'}Вт`;
             } else if (type === 'motherboard') {
@@ -649,18 +659,14 @@
             } else if (type === 'case') {
                 specsText = `${specs.formFactor || '?'} | ${specs.size || '?'}`;
             } else if (type === 'cooling') {
-                specsText = `${specs.coolerType || '?'} | ${specs.tdpSupport || '?'}Вт`;
+                specsText = `${specs.coolerType || '?'} | ${specs.tdpSupport || '?'}Вт | ${specs.fanRpm || '?'} RPM`;
             }
 
-            if (specsSpan) {
-                specsSpan.textContent = specsText;
-            }
+            if (specsSpan) specsSpan.textContent = specsText;
 
-            // Проверяем, что price существует и конвертируем в число
             const price = parseFloat(component.price) || 0;
             priceSpan.textContent = `${price.toLocaleString('ru-RU')} ₽`;
 
-            // Сохраняем ID, цену и спецификации компонента в data-атрибут секции
             const section = document.getElementById(`${type}-section`);
             if (section) {
                 section.dataset.componentId = component.id;
@@ -668,26 +674,21 @@
                 section.dataset.specs = JSON.stringify(specs);
             }
 
-            // Пересчитываем общую стоимость
             calculateTotalPrice();
-
-            // Обновляем скрытое поле с ID компонентов
             updateComponentIdsField();
-
-            // Проверяем совместимость после добавления
             setTimeout(checkAllCompatibility, 100);
-
-            // Проверяем доступность статуса "Готовая сборка"
             validateStatusAvailability();
-
-            // Сохраняем данные формы (на всякий случай)
             saveFormData();
+
+            console.log(`Компонент типа ${type} успешно добавлен`);
         } else {
             console.error('Не найдены элементы для типа:', type);
         }
     }
 
     function removeComponent(type) {
+        console.log(`Удаление компонента типа ${type}`);
+
         const placeholder = document.getElementById(`${type}-placeholder`);
         const info = document.getElementById(`${type}-info`);
         const section = document.getElementById(`${type}-section`);
@@ -702,27 +703,22 @@
                 delete section.dataset.specs;
             }
 
-            // Удаляем из localStorage
             const savedComponents = localStorage.getItem('allComponents');
             if (savedComponents) {
                 try {
                     const allComponents = JSON.parse(savedComponents);
                     delete allComponents[type];
                     localStorage.setItem('allComponents', JSON.stringify(allComponents));
+                    console.log(`Компонент типа ${type} удален из localStorage`);
                 } catch (e) {
                     console.error('Ошибка при удалении из localStorage', e);
                 }
             }
 
-            // Пересчитываем общую стоимость и проверяем совместимость
             calculateTotalPrice();
             updateComponentIdsField();
             checkAllCompatibility();
-
-            // Проверяем доступность статуса "Готовая сборка"
             validateStatusAvailability();
-
-            // Сохраняем данные формы
             saveFormData();
         }
     }
@@ -741,20 +737,18 @@
         const componentIdsField = document.getElementById('componentIds');
         if (componentIdsField) {
             componentIdsField.value = componentIds.join(',');
+            console.log('Обновлены ID компонентов:', componentIds.join(','));
         }
     }
 
     function calculateTotalPrice() {
         let total = 0;
-
-        // Список всех типов компонентов
         const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
 
         types.forEach(type => {
             const section = document.getElementById(`${type}-section`);
             if (section && section.dataset.componentPrice) {
-                const price = parseFloat(section.dataset.componentPrice) || 0;
-                total += price;
+                total += parseFloat(section.dataset.componentPrice) || 0;
             }
         });
 
@@ -762,14 +756,15 @@
         if (totalPriceElement) {
             totalPriceElement.textContent = `${total.toLocaleString('ru-RU')} ₽`;
         }
+
+        return total;
     }
 
     function checkAllCompatibility() {
-        // Собираем все выбранные компоненты
         const selectedComponents = {};
         const types = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
 
-        // Сначала собираем все данные
+        // Собираем все выбранные компоненты
         types.forEach(type => {
             const section = document.getElementById(`${type}-section`);
             if (section && section.dataset.componentId) {
@@ -779,7 +774,6 @@
                 } catch (e) {
                     console.error('Ошибка парсинга спецификаций для', type, e);
                 }
-
                 selectedComponents[type] = {
                     id: parseInt(section.dataset.componentId),
                     specs: specs
@@ -796,14 +790,12 @@
             }
         });
 
-        // Проверяем совместимость
         const issues = [];
 
         // CPU ↔ Motherboard (сокет)
         if (selectedComponents.cpu && selectedComponents.motherboard) {
             const cpuSocket = selectedComponents.cpu.specs?.socket;
             const moboSocket = selectedComponents.motherboard.specs?.socket;
-
             if (cpuSocket && moboSocket && cpuSocket !== moboSocket) {
                 issues.push(`❌ Процессор (${cpuSocket}) и материнская плата (${moboSocket}) имеют разные сокеты`);
                 markIncompatible('cpu', 'motherboard');
@@ -814,7 +806,6 @@
         if (selectedComponents.ram && selectedComponents.motherboard) {
             const ramType = selectedComponents.ram.specs?.ramType;
             const moboRamType = selectedComponents.motherboard.specs?.ramType;
-
             if (ramType && moboRamType && ramType !== moboRamType) {
                 issues.push(`❌ Оперативная память (${ramType}) несовместима с материнской платой (${moboRamType})`);
                 markIncompatible('ram', 'motherboard');
@@ -825,7 +816,6 @@
         if (selectedComponents.motherboard && selectedComponents.case) {
             const moboFormFactor = selectedComponents.motherboard.specs?.formFactor;
             const caseFormFactor = selectedComponents.case.specs?.formFactor;
-
             if (moboFormFactor && caseFormFactor && moboFormFactor !== caseFormFactor) {
                 issues.push(`❌ Материнская плата (${moboFormFactor}) не подходит к корпусу (${caseFormFactor})`);
                 markIncompatible('motherboard', 'case');
@@ -851,7 +841,6 @@
         if (selectedComponents.cooling && selectedComponents.cpu) {
             const coolingTdp = selectedComponents.cooling.specs?.tdpSupport;
             const cpuTdp = selectedComponents.cpu.specs?.tdp;
-
             if (coolingTdp && cpuTdp && coolingTdp < cpuTdp) {
                 issues.push(`❌ Охлаждение (${coolingTdp}Вт) не справится с процессором (${cpuTdp}Вт)`);
                 markIncompatible('cooling', 'cpu');
@@ -889,11 +878,10 @@
     function validateStatusAvailability() {
         const statusSelect = document.getElementById('configStatus');
         const statusHelp = document.getElementById('statusHelp');
-
         if (!statusSelect || !statusHelp) return;
 
-        // Проверяем, выбраны ли все компоненты
         const allComponentsSelected = checkAllComponentsSelected();
+        console.log('Проверка статуса:', statusSelect.value, 'Все компоненты выбраны:', allComponentsSelected);
 
         if (statusSelect.value === 'validated' && !allComponentsSelected) {
             statusSelect.value = 'draft';
@@ -903,14 +891,11 @@
         } else {
             statusHelp.innerHTML = 'Для статуса "Готовая сборка" необходимо выбрать все компоненты';
         }
-
-        // Сохраняем статус в localStorage
         saveFormData();
     }
 
     function checkAllComponentsSelected() {
         const requiredTypes = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooling'];
-
         for (let type of requiredTypes) {
             const section = document.getElementById(`${type}-section`);
             if (!section || !section.dataset.componentId) {
@@ -920,15 +905,3 @@
         return true;
     }
 </script>
-
-@if (TempData["ClearLocalStorage"] != null && (bool)TempData["ClearLocalStorage"])
-{
-        <script>
-            // Очищаем localStorage после успешного сохранения
-            localStorage.removeItem('allComponents');
-            localStorage.removeItem('configurationFormData'); // Очищаем данные формы
-
-            // Немедленный переход на страницу профиля пользователя
-            window.location.href = '/UserProfile';
-        </script>
-}

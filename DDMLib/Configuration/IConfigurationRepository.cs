@@ -15,5 +15,8 @@ namespace DDMLib.Configuration
         int CreateConfiguration(Configuration configuration, List<int> componentIds);
 
         ConfigurationDetails GetDetails(int configId);
+
+        bool UpdateConfiguration(Configuration configuration, List<int> componentIds);
+        ConfigurationDto GetConfigurationById(int configId);
     }
 }

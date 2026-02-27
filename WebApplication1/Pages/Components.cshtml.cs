@@ -29,31 +29,45 @@ namespace WebApplication1.Pages
         {
             try
             {
-                // Получаем все компоненты категории
-                var allComponents = _componentService.GetComponentsByCategory(category);
-
                 // Загружаем выбранные компоненты из параметра
                 string componentsJson = Request.Query["components"].FirstOrDefault();
+                ErrorLogger.LogError("OnGet ComponentsModel", $"componentsJson: {componentsJson ?? "null"}");
+
                 if (!string.IsNullOrEmpty(componentsJson))
                 {
                     try
                     {
                         SelectedComponents = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(componentsJson);
+                        ErrorLogger.LogError("OnGet ComponentsModel", $"SelectedComponents count: {SelectedComponents?.Count ?? 0}");
+                        if (SelectedComponents != null)
+                        {
+                            foreach (var kv in SelectedComponents)
+                            {
+                                ErrorLogger.LogError("OnGet ComponentsModel", $"Selected: {kv.Key} = {kv.Value}");
+                            }
+                        }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        ErrorLogger.LogError("OnGet ComponentsModel", $"Deserialize error: {ex.Message}");
+                        SelectedComponents = new Dictionary<string, int>();
+                    }
                 }
 
+                // Получаем все компоненты категории
+                var allComponents = _componentService.GetComponentsByCategory(category);
+                ErrorLogger.LogError("OnGet ComponentsModel", $"allComponents count: {allComponents.Count}");
+
                 // Фильтруем компоненты по совместимости
-                // Если есть выбранные компоненты, показываем только совместимые
                 if (SelectedComponents != null && SelectedComponents.Any())
                 {
                     Components = _compatibilityChecker.FilterCompatibleComponents(category, allComponents, SelectedComponents);
-                    ErrorLogger.LogError("OnGet ComponentsModel", $"Отфильтровано компонентов: {Components.Count} из {allComponents.Count}");
+                    ErrorLogger.LogError("OnGet ComponentsModel", $"Filtered components count: {Components.Count}");
                 }
                 else
                 {
-                    // Если нет выбранных компонентов, показываем все
                     Components = allComponents;
+                    ErrorLogger.LogError("OnGet ComponentsModel", "No selected components, showing all");
                 }
             }
             catch (Exception ex)
