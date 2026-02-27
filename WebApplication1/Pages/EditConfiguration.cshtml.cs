@@ -6,7 +6,6 @@ using DDMLib.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace WebApplication1.Pages
 {
@@ -54,7 +53,7 @@ namespace WebApplication1.Pages
 
         public List<int> ComponentIdList { get; set; } = new List<int>();
 
-        // Для передачи в JavaScript
+        // Для передачи в JavaScript - используем Dictionary для надежности
         public List<ComponentData> Components { get; set; } = new List<ComponentData>();
 
         public string? ErrorMessage { get; set; }
@@ -62,23 +61,15 @@ namespace WebApplication1.Pages
 
         public IActionResult OnGet(int id)
         {
-            // Проверяем авторизацию
             if (!_sessionManager.IsUserAuthenticated())
-            {
                 return RedirectToPage("/Login");
-            }
 
             string userEmail = _sessionManager.GetUserEmailFromSession();
-
             if (string.IsNullOrEmpty(userEmail))
-            {
                 return RedirectToPage("/Login");
-            }
 
-            // Загружаем конфигурацию
             var configDto = _configurationService.GetConfigurationById(id);
-
-            if (configDto == null || configDto.Configuration == null)
+            if (configDto?.Configuration == null)
             {
                 ErrorMessage = "Конфигурация не найдена";
                 return RedirectToPage("/UserProfile");
@@ -99,38 +90,36 @@ namespace WebApplication1.Pages
             Status = configDto.Configuration.Status;
             TotalPrice = configDto.Configuration.TotalPrice;
 
-            // Заполняем список ID компонентов
             ComponentIdList = configDto.Components?.Select(c => c.ComponentId).ToList() ?? new List<int>();
             ComponentIds = string.Join(",", ComponentIdList);
 
-            // Заполняем данные компонентов для JavaScript
+            // Загружаем спецификации для каждого компонента
             if (configDto.Components != null)
             {
                 foreach (var comp in configDto.Components)
                 {
                     try
                     {
-                        var spec = _componentService.GetComponentSpec<object>(comp.ComponentId);
+                        var spec = GetComponentSpecAsDictionary(comp.ComponentId, comp.Type);
                         Components.Add(new ComponentData
                         {
                             Id = comp.ComponentId,
                             Name = comp.Name,
                             Type = comp.Type?.ToLower() ?? "",
                             Price = comp.Price,
-                            Specs = spec ?? new object()
+                            Specs = spec ?? new Dictionary<string, object>()
                         });
                     }
                     catch (Exception ex)
                     {
                         ErrorLogger.LogError("EditConfigurationModel.OnGet", $"Error loading spec for component {comp.ComponentId}: {ex.Message}");
-                        // Добавляем компонент без спецификаций
                         Components.Add(new ComponentData
                         {
                             Id = comp.ComponentId,
                             Name = comp.Name,
                             Type = comp.Type?.ToLower() ?? "",
                             Price = comp.Price,
-                            Specs = new { }
+                            Specs = new Dictionary<string, object>()
                         });
                     }
                 }
@@ -139,17 +128,96 @@ namespace WebApplication1.Pages
             return Page();
         }
 
+        private Dictionary<string, object>? GetComponentSpecAsDictionary(int componentId, string componentType)
+        {
+            switch (componentType?.ToLower())
+            {
+                case "cpu":
+                    var cpuSpec = _componentService.GetComponentSpec<CpuSpec>(componentId);
+                    return cpuSpec != null ? new Dictionary<string, object>
+                    {
+                        ["socket"] = cpuSpec.Socket ?? "",
+                        ["cores"] = cpuSpec.Cores,
+                        ["tdp"] = cpuSpec.Tdp
+                    } : null;
+
+                case "motherboard":
+                    var mbSpec = _componentService.GetComponentSpec<MotherboardSpec>(componentId);
+                    return mbSpec != null ? new Dictionary<string, object>
+                    {
+                        ["socket"] = mbSpec.Socket ?? "",
+                        ["ramType"] = mbSpec.RamType ?? "",
+                        ["formFactor"] = mbSpec.FormFactor ?? "",
+                        ["chipset"] = mbSpec.Chipset ?? "",
+                        ["pcieVersion"] = mbSpec.PcieVersion ?? ""
+                    } : null;
+
+                case "ram":
+                    var ramSpec = _componentService.GetComponentSpec<RamSpec>(componentId);
+                    return ramSpec != null ? new Dictionary<string, object>
+                    {
+                        ["ramType"] = ramSpec.RamType ?? "",
+                        ["capacityGb"] = ramSpec.CapacityGb,
+                        ["speedMhz"] = ramSpec.SpeedMhz,
+                        ["slotsNeeded"] = ramSpec.SlotsNeeded
+                    } : null;
+
+                case "gpu":
+                    var gpuSpec = _componentService.GetComponentSpec<GpuSpec>(componentId);
+                    return gpuSpec != null ? new Dictionary<string, object>
+                    {
+                        ["pcieVersion"] = gpuSpec.PcieVersion ?? "",
+                        ["tdp"] = gpuSpec.Tdp,
+                        ["vramGb"] = gpuSpec.VramGb
+                    } : null;
+
+                case "storage":
+                    var storageSpec = _componentService.GetComponentSpec<StorageSpec>(componentId);
+                    return storageSpec != null ? new Dictionary<string, object>
+                    {
+                        ["interface"] = storageSpec.Interface ?? "",
+                        ["capacityGb"] = storageSpec.CapacityGb
+                    } : null;
+
+                case "psu":
+                    var psuSpec = _componentService.GetComponentSpec<PsuSpec>(componentId);
+                    return psuSpec != null ? new Dictionary<string, object>
+                    {
+                        ["wattage"] = psuSpec.Wattage,
+                        ["efficiencyRating"] = psuSpec.EfficiencyRating ?? ""
+                    } : null;
+
+                case "case":
+                    var caseSpec = _componentService.GetComponentSpec<CaseSpec>(componentId);
+                    return caseSpec != null ? new Dictionary<string, object>
+                    {
+                        ["formFactor"] = caseSpec.FormFactor ?? "",
+                        ["size"] = caseSpec.Size ?? ""
+                    } : null;
+
+                case "cooling":
+                    var coolingSpec = _componentService.GetComponentSpec<CoolingSpec>(componentId);
+                    return coolingSpec != null ? new Dictionary<string, object>
+                    {
+                        ["coolerType"] = coolingSpec.CoolerType ?? "",
+                        ["tdpSupport"] = coolingSpec.TdpSupport,
+                        ["fanRpm"] = coolingSpec.FanRpm,
+                        ["size"] = coolingSpec.Size ?? "",
+                        ["isRgb"] = coolingSpec.IsRgb
+                    } : null;
+
+                default:
+                    return null;
+            }
+        }
+
         public IActionResult OnPost()
         {
-            // Проверяем авторизацию
             if (!_sessionManager.IsUserAuthenticated())
-            {
                 return RedirectToPage("/Login");
-            }
 
             string userEmail = _sessionManager.GetUserEmailFromSession();
 
-            // Валидация
             if (string.IsNullOrWhiteSpace(ConfigName))
             {
                 ErrorMessage = "Введите название конфигурации";
@@ -173,7 +241,6 @@ namespace WebApplication1.Pages
                 var componentIdList = ComponentIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(id => int.Parse(id)).ToList();
 
-                // Проверка статуса validated
                 if (Status == "validated" && !AreAllComponentsSelected(componentIdList))
                 {
                     ErrorMessage = "Для сохранения как готовой сборки необходимо выбрать все компоненты";
@@ -196,7 +263,6 @@ namespace WebApplication1.Pages
                     OtherOptions = ""
                 };
 
-                // Обновляем конфигурацию
                 bool updated = _configurationService.UpdateConfiguration(configuration, componentIdList);
 
                 if (updated)
@@ -256,6 +322,6 @@ namespace WebApplication1.Pages
         public string Name { get; set; }
         public string Type { get; set; }
         public decimal Price { get; set; }
-        public object Specs { get; set; }
+        public Dictionary<string, object> Specs { get; set; }
     }
 }

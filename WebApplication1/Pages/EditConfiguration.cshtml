@@ -1,7 +1,9 @@
 ﻿@page "{id:int}"
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@model WebApplication1.Pages.EditConfigurationModel
 @{
+    ViewData["Title"] = "Редактирование конфигурации";
     var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -9,10 +11,6 @@
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
     var componentsJson = JsonSerializer.Serialize(Model.Components, jsonOptions);
-}
-@model WebApplication1.Pages.EditConfigurationModel
-@{
-    ViewData["Title"] = "Редактирование конфигурации";
 }
 
 <div class="container mt-4">
@@ -446,10 +444,12 @@
 </style>
 
 <script>
-    const componentsJson = '@Html.Raw(componentsJson)';
+    // Данные компонентов, переданные из модели
+    const componentsData = @Html.Raw(componentsJson);
 
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM загружен, начинаем загрузку компонентов...');
+        console.log('Получены компоненты из модели:', componentsData);
 
         // Загружаем существующие компоненты из модели
         loadExistingComponents();
@@ -515,38 +515,17 @@
 
     function loadExistingComponents() {
         try {
-            // Получаем данные о компонентах из модели
-    @{
-        var serializedComponents = System.Text.Json.JsonSerializer.Serialize(Model.Components, new System.Text.Json.JsonSerializerOptions
-            {
-                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
-                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles,
-                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-            });
-    }
-            const componentsJson = '@Html.Raw(serializedComponents)';
-            console.log('Получены компоненты из модели (JSON):', componentsJson);
-
-            if (!componentsJson || componentsJson === '[]' || componentsJson === 'null' || componentsJson === '') {
+            if (!componentsData || componentsData.length === 0) {
                 console.log('Нет компонентов для загрузки');
-                return;
-            }
-
-            const components = JSON.parse(componentsJson);
-            console.log('Распарсенные компоненты:', components);
-
-            if (!components || components.length === 0) {
-                console.log('Компоненты отсутствуют');
                 return;
             }
 
             // Очищаем localStorage и загружаем компоненты
             let allComponents = {};
 
-            components.forEach((comp, index) => {
+            componentsData.forEach((comp, index) => {
                 console.log(`Обработка компонента ${index}:`, comp);
 
-                // Убедимся, что тип в нижнем регистре
                 const type = comp.type ? comp.type.toLowerCase() : '';
                 if (!type) {
                     console.warn('Компонент без типа:', comp);
@@ -633,15 +612,7 @@
             info.classList.remove('d-none');
             nameSpan.textContent = component.name;
 
-            let specs = component.specs || {};
-            if (typeof specs === 'string') {
-                try {
-                    specs = JSON.parse(specs);
-                } catch (e) {
-                    console.error('Ошибка парсинга спецификаций', e);
-                    specs = {};
-                }
-            }
+            const specs = component.specs || {};
 
             let specsText = '';
             if (type === 'cpu') {

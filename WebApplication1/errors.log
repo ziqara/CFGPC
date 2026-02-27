@@ -977,7 +977,403 @@
 2026-02-26 08:45:33 | OnGet ComponentsModel | Загружено компонентов: 2
 2026-02-26 08:59:47 | OnGet ComponentsModel | Загружено компонентов: 3 из 3
 2026-02-26 09:01:29 | OnGet ComponentsModel | Загружено компонентов: 2 из 2
-2026-02-27 02:01:29 | UserProfileModel OnGet | Started
-2026-02-27 02:01:29 | UserProfileModel OnGet | Profile and configurations loaded successfully.
-2026-02-27 02:01:34 | UserProfileModel OnPostUploadAvatarAsync | Started
-2026-02-27 02:01:34 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-26 19:46:12 | GetPresetConfigurations | Unable to connect to any of the specified MySQL hosts
+2026-02-26 19:46:45 | UserProfileModel OnGet | Started
+2026-02-26 19:46:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 19:54:06 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 3
+2026-02-26 19:54:09 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 2
+2026-02-26 19:54:14 | OnGet ComponentsModel | Нет выбранных компонентов, показано всех: 2
+2026-02-26 19:59:45 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 19:59:45 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 19:59:45 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 19:59:48 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 19:59:48 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 19:59:48 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:05:33 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:05:33 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:05:33 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:05:46 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:05:46 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:05:46 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:11:49 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:11:49 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:11:49 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:11:52 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:11:52 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:11:52 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:21 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:21 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:15:21 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:23 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:23 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:15:23 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:31 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:31 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:15:31 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:15:35 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:15:35 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:15:35 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:16 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:16 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:19:16 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:19 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:19 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:19:19 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:22 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:22 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 20:19:22 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:28 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:28 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:19:28 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:31 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:31 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:19:31 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:36 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:36 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 20:19:36 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:40 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:40 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 20:19:40 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:45 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:45 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 20:19:45 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 20:19:52 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 20:19:52 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 20:19:52 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:18:49 | UserProfileModel OnGet | Started
+2026-02-26 22:18:49 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:24:01 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:01 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:24:01 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:04 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:04 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:24:04 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:08 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:08 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:24:08 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:09 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:09 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:24:09 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:10 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:10 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:24:10 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:14 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:14 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:24:14 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:24:38 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:24:38 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:24:38 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:25:39 | UserProfileModel OnGet | Started
+2026-02-26 22:25:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:25:59 | UserProfileModel OnGet | Started
+2026-02-26 22:25:59 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:26:04 | UserProfileModel OnGet | Started
+2026-02-26 22:26:04 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:27:05 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:05 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:05 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:08 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:08 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:27:08 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:17 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:17 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:17 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:20 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:20 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:27:20 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:25 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:25 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:25 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:31 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:31 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:27:31 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:34 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:34 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:34 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:37 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:37 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:37 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:39 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:39 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:27:39 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:41 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:41 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:27:41 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:44 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:44 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:27:44 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:27:47 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:27:47 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:27:47 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:07 | UserProfileModel OnGet | Started
+2026-02-26 22:28:07 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:28:30 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 9
+2026-02-26 22:28:30 | UserProfileModel OnPostDeleteConfiguration | Configuration 9 deleted successfully.
+2026-02-26 22:28:44 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:44 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:28:44 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:48 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:48 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:28:48 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:51 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:51 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:28:51 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:53 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:53 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:28:53 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:56 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:56 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:28:56 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:28:58 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:28:58 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:28:58 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:29:02 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:29:02 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:29:02 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:29:05 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:29:05 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:29:05 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:29:20 | UserProfileModel OnGet | Started
+2026-02-26 22:29:20 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:30:51 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:30:51 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:30:51 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:30:54 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:30:54 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:30:54 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:30:56 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:30:56 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:30:56 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:30:58 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:30:58 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:30:58 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:01 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:31:01 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:31:01 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:03 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:31:03 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:31:03 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:06 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:31:06 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:31:06 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:09 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:31:09 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:31:09 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:20 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:31:20 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:31:20 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:31:36 | UserProfileModel OnGet | Started
+2026-02-26 22:31:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:35:51 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:35:51 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:35:51 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:35:53 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:35:53 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:35:53 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:35:56 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:35:56 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:35:56 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:35:59 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:35:59 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:35:59 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:36:02 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:36:02 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:36:02 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:36:04 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:36:04 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:36:04 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:36:07 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:36:07 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:36:07 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:36:10 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:36:10 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:36:10 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:36:19 | UserProfileModel OnGet | Started
+2026-02-26 22:36:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:36:31 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 12
+2026-02-26 22:36:31 | UserProfileModel OnPostDeleteConfiguration | Configuration 12 deleted successfully.
+2026-02-26 22:36:35 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 11
+2026-02-26 22:36:35 | UserProfileModel OnPostDeleteConfiguration | Configuration 11 deleted successfully.
+2026-02-26 22:38:54 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:38:54 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:38:54 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:21 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:21 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:21 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:39 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:39 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:39 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:43 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:43 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:43 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:46 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:46 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 22:48:46 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:48 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:48 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:48 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:50 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:50 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:50 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:53 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:53 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:48:53 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:55 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:55 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:48:55 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:48:58 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:48:58 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:48:58 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:49:00 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:49:00 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 22:49:00 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:49:15 | UserProfileModel OnGet | Started
+2026-02-26 22:49:15 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:50:27 | UserProfileModel OnGet | Started
+2026-02-26 22:50:27 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:50:36 | UserProfileModel OnGet | Started
+2026-02-26 22:50:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:50:38 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-26 22:50:38 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-26 22:52:23 | UserProfileModel OnGet | Started
+2026-02-26 22:52:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:52:39 | UserProfileModel OnGet | Started
+2026-02-26 22:52:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:52:41 | UserProfileModel OnGet | Started
+2026-02-26 22:52:41 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:16 | UserProfileModel OnGet | Started
+2026-02-26 22:57:16 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:19 | UserProfileModel OnGet | Started
+2026-02-26 22:57:19 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:21 | UserProfileModel OnGet | Started
+2026-02-26 22:57:21 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:23 | UserProfileModel OnGet | Started
+2026-02-26 22:57:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:27 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 22:57:27 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 22:57:27 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 22:57:36 | UserProfileModel OnGet | Started
+2026-02-26 22:57:36 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:40 | UserProfileModel OnGet | Started
+2026-02-26 22:57:40 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:42 | UserProfileModel OnGet | Started
+2026-02-26 22:57:42 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:57:45 | UserProfileModel OnGet | Started
+2026-02-26 22:57:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 22:58:09 | UserProfileModel OnPostUploadAvatarAsync | Started
+2026-02-26 22:58:09 | UserProfileModel OnPostUploadAvatarAsync | Avatar updated successfully.
+2026-02-26 22:58:22 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-26 22:58:22 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-26 22:58:26 | UserProfileModel OnPostUpdateProfile | Started
+2026-02-26 22:58:26 | UserProfileModel OnPostUpdateProfile | Profile updated successfully.
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:58:44 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:58:52 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:59:00 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Started
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Session email retrieved: 'egor@gmail.com'
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | ModelState is valid for password change. Calling AccountService.
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | AccountService returned: 'Пароль обновлён'
+2026-02-26 22:59:09 | UserProfileModel OnPostChangePassword | Password changed successfully.
+2026-02-26 23:00:40 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:40 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:40 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:42 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:42 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 23:00:42 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:44 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:44 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:44 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:47 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:47 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:47 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:49 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:49 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:49 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:52 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:52 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:52 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:56 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:56 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:00:56 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:00:59 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:00:59 | OnGet ComponentsModel | allComponents count: 5
+2026-02-26 23:00:59 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:01:06 | UserProfileModel OnGet | Started
+2026-02-26 23:01:07 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:02:16 | UserProfileModel OnGet | Started
+2026-02-26 23:02:16 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:03:02 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:03:02 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:03:02 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:03:05 | UserProfileModel OnGet | Started
+2026-02-26 23:03:05 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:03:12 | UserProfileModel OnPostDeleteConfiguration | Started for configId: 16
+2026-02-26 23:03:12 | UserProfileModel OnPostDeleteConfiguration | Configuration 16 deleted successfully.
+2026-02-26 23:07:09 | UserProfileModel OnGet | Started
+2026-02-26 23:07:09 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:06 | UserProfileModel OnGet | Started
+2026-02-26 23:41:06 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:07 | UserProfileModel OnPostLogout | Logout initiated.
+2026-02-26 23:41:07 | UserProfileModel OnPostLogout | Logout process completed, redirecting to Login.
+2026-02-26 23:41:14 | UserProfileModel OnGet | Started
+2026-02-26 23:41:14 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:41:23 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:41:23 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:41:23 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:41:28 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:41:28 | OnGet ComponentsModel | allComponents count: 2
+2026-02-26 23:41:28 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:49:48 | UserProfileModel OnGet | Started
+2026-02-26 23:49:48 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:58:39 | UserProfileModel OnGet | Started
+2026-02-26 23:58:39 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-26 23:58:50 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:58:50 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:58:50 | OnGet ComponentsModel | No selected components, showing all
+2026-02-26 23:58:55 | OnGet ComponentsModel | componentsJson: null
+2026-02-26 23:58:55 | OnGet ComponentsModel | allComponents count: 3
+2026-02-26 23:58:55 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 00:00:01 | UserProfileModel OnGet | Started
+2026-02-27 00:00:01 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 16:57:51 | GetPresetConfigurations | Unable to connect to any of the specified MySQL hosts
+2026-02-27 16:59:55 | UserProfileModel OnGet | Started
+2026-02-27 16:59:55 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:00:06 | OnGet ComponentsModel | componentsJson: null
+2026-02-27 17:00:06 | OnGet ComponentsModel | allComponents count: 3
+2026-02-27 17:00:06 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 17:00:07 | OnGet ComponentsModel | componentsJson: null
+2026-02-27 17:00:07 | OnGet ComponentsModel | allComponents count: 2
+2026-02-27 17:00:07 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 17:00:12 | OnGet ComponentsModel | componentsJson: null
+2026-02-27 17:00:12 | OnGet ComponentsModel | allComponents count: 3
+2026-02-27 17:00:12 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 17:02:24 | UserProfileModel OnGet | Started
+2026-02-27 17:02:24 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:02:35 | UserProfileModel OnGet | Started
+2026-02-27 17:02:35 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:02:45 | UserProfileModel OnGet | Started
+2026-02-27 17:02:45 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:02:51 | UserProfileModel OnGet | Started
+2026-02-27 17:02:51 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:15:34 | UserProfileModel OnGet | Started
+2026-02-27 17:15:34 | UserProfileModel OnGet | Profile and configurations loaded successfully.
+2026-02-27 17:16:06 | OnGet ComponentsModel | componentsJson: null
+2026-02-27 17:16:06 | OnGet ComponentsModel | allComponents count: 3
+2026-02-27 17:16:06 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 17:16:14 | OnGet ComponentsModel | componentsJson: null
+2026-02-27 17:16:14 | OnGet ComponentsModel | allComponents count: 3
+2026-02-27 17:16:14 | OnGet ComponentsModel | No selected components, showing all
+2026-02-27 17:16:23 | UserProfileModel OnGet | Started
+2026-02-27 17:16:23 | UserProfileModel OnGet | Profile and configurations loaded successfully.
