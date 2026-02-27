@@ -28,7 +28,7 @@ namespace DDMLib
         [DisplayName("Доступен")]
         public bool IsAvailable { get; set; }
 
-        [DisplayName("Фото URL")]
+        [DisplayName("Путь к фото")]
         public string PhotoUrl { get; set; }
 
         [DisplayName("ИНН поставщика")]

@@ -24,6 +24,33 @@ namespace WindowsFormsApp1.Orders
             WireEvents();
         }
 
+        private void ApplyTheme()
+        {
+            // Применяем стиль для кнопок
+            btnEdit.BackColor = ThemeColor.PrimaryColor;
+            btnEdit.ForeColor = Color.White;
+            btnEdit.FlatStyle = FlatStyle.Flat;
+            btnEdit.FlatAppearance.BorderColor = ThemeColor.SecondaryColor;
+            btnEdit.FlatAppearance.BorderSize = 1;
+
+            // Кнопка "Открыть конфиг"
+            lnkConfig.LinkColor = ThemeColor.PrimaryColor;
+
+            // Стиль для текста
+            lblOrderId.Font = new Font("Segoe UI", 12f, FontStyle.Bold);
+            lblDate.Font = new Font("Segoe UI", 9f);
+            lblStatus.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            lblPrice.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+
+            // Выделение статуса с помощью цветов
+            if (Order.Status == OrderStatus.Cancelled)
+                lblStatus.ForeColor = Color.Firebrick;
+            else if (Order.Status == OrderStatus.Delivered)
+                lblStatus.ForeColor = Color.SeaGreen;
+            else
+                lblStatus.ForeColor = Color.FromArgb(52, 58, 64);
+        }
+
         public OrderCardControl(Order order) : this()
         {
             Bind(order);
@@ -70,6 +97,8 @@ namespace WindowsFormsApp1.Orders
                 lblStatus.ForeColor = Color.SeaGreen;
             else
                 lblStatus.ForeColor = Color.FromArgb(52, 58, 64);
+
+            ApplyTheme();
         }
     }
 }

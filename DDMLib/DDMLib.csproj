@@ -204,6 +204,16 @@
     <Compile Include="Component\RamSpec.cs" />
     <Compile Include="Component\StorageSpec.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="ConfigForAdmin\BuildCard.cs" />
+    <Compile Include="ConfigForAdmin\BuildDraft.cs" />
+    <Compile Include="ConfigForAdmin\BuildService.cs" />
+    <Compile Include="ConfigForAdmin\BuildValidator.cs" />
+    <Compile Include="ConfigForAdmin\ComponentItem.cs" />
+    <Compile Include="ConfigForAdmin\ComponentServiceAdmin.cs" />
+    <Compile Include="ConfigForAdmin\IBuildRepository.cs" />
+    <Compile Include="ConfigForAdmin\IComponentRepositoryAdmin.cs" />
+    <Compile Include="ConfigForAdmin\MySqlBuildRepository.cs" />
+    <Compile Include="ConfigForAdmin\MySqlComponentRepository.cs" />
     <Compile Include="Configuration\ConfigComponentInfo.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationComponent.cs" />

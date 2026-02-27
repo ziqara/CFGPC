@@ -24,13 +24,11 @@ namespace WindowsFormsApp1.UserOrder
 
             service_ = new AdminUserService(new UserRepository());
 
-            this.Shown += UsersCardsForm_Shown;
             ThemeColor.ThemeChanged += ApplyTheme;
         }
 
         private void UsersCardsForm_Load(object sender, EventArgs e)
         {
-            LoadUsers();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -50,15 +48,21 @@ namespace WindowsFormsApp1.UserOrder
 
         private void UsersCardsForm_Shown(object sender, EventArgs e)
         {
+            LoadUsers();
             ApplyTheme();
         }
 
-        private void LoadUsers()
+        private async void LoadUsers()
         {
             try
             {
-                allUsers_ = service_.GetAllUsers() ?? new List<User>();
-                activeMap_ = service_.GetActiveOrdersFlags() ?? new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+                var usersTask = Task.Run(() => service_.GetAllUsers() ?? new List<User>());
+                var activeOrdersTask = Task.Run(() => service_.GetActiveOrdersFlags() ?? new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase));
+
+                await Task.WhenAll(usersTask, activeOrdersTask);
+
+                allUsers_ = usersTask.Result;
+                activeMap_ = activeOrdersTask.Result;
 
                 flpUsers.Controls.Clear();
 
@@ -88,8 +92,7 @@ namespace WindowsFormsApp1.UserOrder
 
             string search = txtSearch.Text?.Trim() ?? "";
             bool onlyActive = cbxActiveOrders.Checked;
-
-            IEnumerable<User> query = allUsers_;
+            IEnumerable<User> query = allUsers_.Where(u => u.Email != null && !u.Email.Equals("admin", StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -98,7 +101,9 @@ namespace WindowsFormsApp1.UserOrder
                     (!string.IsNullOrEmpty(u.FullName) && u.FullName.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0));
             }
 
-            foreach (var u in query)
+            // Ленивая загрузка: добавляем пользователей частями
+            var batch = query.Take(50); // добавляем 10 пользователей за раз (можно изменить)
+            foreach (var u in batch)
             {
                 bool hasActive = activeMap_.TryGetValue(u.Email, out var a) && a;
                 if (onlyActive && !hasActive) continue;

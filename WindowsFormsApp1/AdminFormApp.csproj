@@ -46,6 +46,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigForms\BuildCardControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigForms\BuildCardControl.Designer.cs">
+      <DependentUpon>BuildCardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigForms\BuildDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigForms\BuildDetailsForm.Designer.cs">
+      <DependentUpon>BuildDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigForms\BuildsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigForms\BuildsForm.Designer.cs">
+      <DependentUpon>BuildsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigForms\ConfiguratorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigForms\ConfiguratorForm.Designer.cs">
+      <DependentUpon>ConfiguratorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Orders\AllOrdersCardsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -335,6 +359,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\StorageForms\EditStorageForm.resx">
       <DependentUpon>EditStorageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigForms\BuildCardControl.resx">
+      <DependentUpon>BuildCardControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigForms\BuildDetailsForm.resx">
+      <DependentUpon>BuildDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigForms\BuildsForm.resx">
+      <DependentUpon>BuildsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigForms\ConfiguratorForm.resx">
+      <DependentUpon>ConfiguratorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Orders\AllOrdersCardsForm.resx">
       <DependentUpon>AllOrdersCardsForm.cs</DependentUpon>

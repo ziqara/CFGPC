@@ -36,7 +36,7 @@ namespace WindowsFormsApp1
 
         private void BuildUi()
         {
-            Width = 360;
+            Width = 340;
             Height = 110;
             Margin = new Padding(10);
             BorderStyle = BorderStyle.FixedSingle;

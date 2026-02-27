@@ -80,7 +80,7 @@
             // 
             this.lnkConfig.AutoEllipsis = true;
             this.lnkConfig.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Underline);
-            this.lnkConfig.Location = new System.Drawing.Point(13, 58);
+            this.lnkConfig.Location = new System.Drawing.Point(13, 48);
             this.lnkConfig.Name = "lnkConfig";
             this.lnkConfig.Size = new System.Drawing.Size(195, 18);
             this.lnkConfig.TabIndex = 3;
@@ -89,9 +89,10 @@
             // 
             // lblPaid
             // 
+            this.lblPaid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPaid.AutoSize = true;
             this.lblPaid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPaid.Location = new System.Drawing.Point(13, 150);
+            this.lblPaid.Location = new System.Drawing.Point(224, 110);
             this.lblPaid.Name = "lblPaid";
             this.lblPaid.Size = new System.Drawing.Size(75, 15);
             this.lblPaid.TabIndex = 9;
@@ -101,7 +102,7 @@
             // 
             this.lblPayment.AutoSize = true;
             this.lblPayment.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblPayment.Location = new System.Drawing.Point(13, 132);
+            this.lblPayment.Location = new System.Drawing.Point(13, 110);
             this.lblPayment.Name = "lblPayment";
             this.lblPayment.Size = new System.Drawing.Size(49, 15);
             this.lblPayment.TabIndex = 8;
@@ -111,7 +112,7 @@
             // 
             this.lblAddress.AutoEllipsis = true;
             this.lblAddress.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblAddress.Location = new System.Drawing.Point(13, 114);
+            this.lblAddress.Location = new System.Drawing.Point(13, 93);
             this.lblAddress.Name = "lblAddress";
             this.lblAddress.Size = new System.Drawing.Size(195, 15);
             this.lblAddress.TabIndex = 7;
@@ -121,7 +122,7 @@
             // 
             this.lblDelivery.AutoSize = true;
             this.lblDelivery.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblDelivery.Location = new System.Drawing.Point(13, 96);
+            this.lblDelivery.Location = new System.Drawing.Point(13, 76);
             this.lblDelivery.Name = "lblDelivery";
             this.lblDelivery.Size = new System.Drawing.Size(59, 15);
             this.lblDelivery.TabIndex = 6;
@@ -129,9 +130,10 @@
             // 
             // lblPrice
             // 
+            this.lblPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPrice.AutoSize = true;
             this.lblPrice.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPrice.Location = new System.Drawing.Point(13, 78);
+            this.lblPrice.Location = new System.Drawing.Point(222, 95);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Size = new System.Drawing.Size(41, 15);
             this.lblPrice.TabIndex = 5;
@@ -139,9 +141,10 @@
             // 
             // lblStatus
             // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
             this.lblStatus.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.lblStatus.Location = new System.Drawing.Point(13, 40);
+            this.lblStatus.Location = new System.Drawing.Point(13, 143);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(45, 15);
             this.lblStatus.TabIndex = 2;
@@ -151,7 +154,7 @@
             // 
             this.lblEmail.AutoEllipsis = true;
             this.lblEmail.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblEmail.Location = new System.Drawing.Point(13, 22);
+            this.lblEmail.Location = new System.Drawing.Point(13, 23);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(195, 15);
             this.lblEmail.TabIndex = 1;
@@ -162,7 +165,7 @@
             this.lblDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDate.AutoSize = true;
             this.lblDate.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblDate.Location = new System.Drawing.Point(207, 10);
+            this.lblDate.Location = new System.Drawing.Point(236, 4);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(33, 15);
             this.lblDate.TabIndex = 11;
@@ -172,7 +175,7 @@
             // 
             this.lblOrderId.AutoSize = true;
             this.lblOrderId.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            this.lblOrderId.Location = new System.Drawing.Point(13, 4);
+            this.lblOrderId.Location = new System.Drawing.Point(11, 4);
             this.lblOrderId.Name = "lblOrderId";
             this.lblOrderId.Size = new System.Drawing.Size(74, 16);
             this.lblOrderId.TabIndex = 0;

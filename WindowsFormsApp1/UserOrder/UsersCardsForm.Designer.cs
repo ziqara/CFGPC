@@ -86,7 +86,7 @@
             this.flpUsers.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flpUsers.Location = new System.Drawing.Point(0, 93);
             this.flpUsers.Name = "flpUsers";
-            this.flpUsers.Size = new System.Drawing.Size(883, 392);
+            this.flpUsers.Size = new System.Drawing.Size(662, 392);
             this.flpUsers.TabIndex = 4;
             // 
             // UsersCardsForm
@@ -94,7 +94,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(883, 485);
+            this.ClientSize = new System.Drawing.Size(662, 485);
             this.Controls.Add(this.flpUsers);
             this.Controls.Add(this.btnReload);
             this.Controls.Add(this.cbxActiveOrders);
