@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class StorageValidator
     {
-        public List<string> Validate(Storage s)
+        public virtual List<string> Validate(Storage s)
         {
             var errors = new List<string>();
 

@@ -136,12 +136,8 @@ namespace DDMLib.Order
                     using (var cmd = new MySqlCommand(sql, connection))
                     {
                         cmd.Parameters.AddWithValue("@id", orderId);
-
-                        // В БД у тебя обычно lowercase: pending/processing...
                         cmd.Parameters.AddWithValue("@status", status.ToString().ToLower());
-
                         cmd.Parameters.AddWithValue("@paid", isPaid);
-
                         return cmd.ExecuteNonQuery() == 1;
                     }
                 }

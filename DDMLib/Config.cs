@@ -41,7 +41,6 @@ namespace DDMLib
                     $"Ошибка чтения конфигурационного файла: {ex.Message}", ex);
             }
         }
-
         public static bool TestDatabaseConnection()
         {
             try

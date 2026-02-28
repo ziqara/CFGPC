@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class GpuValidator
     {
-        public List<string> Validate(Gpu gpu)
+        public virtual List<string> Validate(Gpu gpu)
         {
             var errors = new List<string>();
 

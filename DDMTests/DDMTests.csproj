@@ -145,12 +145,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admintests\TRamService.cs" />
+    <Compile Include="admintests\TPsuService.cs" />
+    <Compile Include="admintests\TMotherboardService.cs" />
+    <Compile Include="admintests\TGpuService.cs" />
+    <Compile Include="admintests\TCpuService.cs" />
+    <Compile Include="admintests\TCoolingService.cs" />
+    <Compile Include="admintests\TCaseService.cs" />
     <Compile Include="TComponentService.cs" />
     <Compile Include="TConfigurationService.cs" />
-    <Compile Include="TSuppliersService.cs" />
+    <Compile Include="admintests\TSuppliersService.cs" />
     <Compile Include="TAccountService.cs" />
     <Compile Include="TUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="admintests\TStorageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

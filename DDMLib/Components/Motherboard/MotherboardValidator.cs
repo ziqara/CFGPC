@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class MotherboardValidator
     {
-        public List<string> Validate(Motherboard mb)
+        public virtual List<string> Validate(Motherboard mb)
         {
             var errors = new List<string>();
 
