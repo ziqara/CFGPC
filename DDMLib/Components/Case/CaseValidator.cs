@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class CaseValidator
     {
-        public List<string> Validate(Case c)
+        public virtual List<string> Validate(Case c)
         {
             var errors = new List<string>();
 

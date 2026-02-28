@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class CpuValidator
     {
-        public List<string> Validate(Cpu cpu)
+        public virtual List<string> Validate(Cpu cpu)
         {
             var errors = new List<string>();
 

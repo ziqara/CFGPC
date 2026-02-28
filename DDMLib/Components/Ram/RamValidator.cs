@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class RamValidator
     {
-        public List<string> Validate(Ram ram)
+        public virtual List<string> Validate(Ram ram)
         {
             var errors = new List<string>();
 

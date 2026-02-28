@@ -82,7 +82,7 @@ namespace DDMLib.Order
             }
             catch
             {
-                throw; // ошибка пробрасывается в ui
+                throw;
             }
         }
     }

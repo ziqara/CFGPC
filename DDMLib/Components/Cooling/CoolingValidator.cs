@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class CoolingValidator
     {
-        public List<string> Validate(Cooling c)
+        public virtual List<string> Validate(Cooling c)
         {
             var errors = new List<string>();
 

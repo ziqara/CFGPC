@@ -4,7 +4,7 @@ namespace DDMLib
 {
     public class PsuValidator
     {
-        public List<string> Validate(Psu p)
+        public virtual List<string> Validate(Psu p)
         {
             var errors = new List<string>();
 
