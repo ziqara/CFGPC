@@ -21,7 +21,7 @@ namespace WindowsFormsApp1.ConfigForms
         public ConfiguratorForm()
         {
             InitializeComponent();
-
+            InitTargetUse();
             compService_ = new ComponentServiceAdmin(new MySqlComponentRepository());
             buildService_ = new BuildService(new MySqlBuildRepository());
 
@@ -154,6 +154,10 @@ namespace WindowsFormsApp1.ConfigForms
                 ConfigName = txtName.Text?.Trim(),
                 Description = txtDescription.Text?.Trim(),
 
+                TargetUse = cbTargetUse.SelectedValue?.ToString(),
+                Rgb = chbRgb.Checked,
+                OtherOptions = txtOtherOptions.Text?.Trim(),
+
                 MotherboardId = (cbMotherboard.SelectedItem as ComponentItem)?.ComponentId ?? 0,
                 CpuId = (cbCpu.SelectedItem as ComponentItem)?.ComponentId ?? 0,
                 RamId = (cbRam.SelectedItem as ComponentItem)?.ComponentId ?? 0,
@@ -181,8 +185,34 @@ namespace WindowsFormsApp1.ConfigForms
             }
         }
 
+        private class TargetUseItem
+        {
+            public string DisplayName { get; set; } // То, что видит юзер 
+            public string Value { get; set; }       // То, что идет в БД 
+        }
+
+        private void InitTargetUse()
+        {
+            var options = new List<TargetUseItem>
+            {
+                new TargetUseItem { DisplayName = "Игровой", Value = "gaming" },
+                new TargetUseItem { DisplayName = "Профессиональный", Value = "professional" },
+                new TargetUseItem { DisplayName = "Офисный", Value = "office" },
+                new TargetUseItem { DisplayName = "Студенческий", Value = "student" }
+            };
+
+            cbTargetUse.DataSource = options;
+            cbTargetUse.DisplayMember = "DisplayName";
+            cbTargetUse.ValueMember = "Value";
+            cbTargetUse.SelectedIndex = -1;
+        }
+
         private void ApplyTheme()
         {
+            ApplyComboBoxStyle(cbTargetUse);
+            txtOtherOptions.BackColor = Color.White;
+            txtOtherOptions.Font = new Font("Arial", 9f);
+
             // Применяем стиль для заголовков и кнопок
             this.BackColor = Color.FromArgb(245, 245, 245); // Светлый фон
 

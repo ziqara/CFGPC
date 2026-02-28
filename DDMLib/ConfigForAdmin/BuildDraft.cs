@@ -13,5 +13,9 @@
         public int PsuId { get; set; }
         public int CaseId { get; set; }
         public int CoolingId { get; set; }
+
+        public string TargetUse { get; set; }
+        public bool Rgb { get; set; }
+        public string OtherOptions { get; set; }
     }
 }

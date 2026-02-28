@@ -196,13 +196,17 @@ namespace DDMLib
                     {
                         string sqlInsertConfig = @"
                         INSERT INTO configurations 
-                          (configName, description, totalPrice, isPreset, userEmail, status) 
+                          (configName, description, totalPrice, isPreset, userEmail, status, targetUse, rgb, otherOptions) 
                         VALUES 
-                          (@name, @desc, @price, 1, @email, 'validated');";
+                          (@name, @desc, @price, 1, @email, 'validated', @target, @rgb, @others);";
 
                         int newId;
                         using (var cmd = new MySqlCommand(sqlInsertConfig, conn, tx))
                         {
+                            cmd.Parameters.AddWithValue("@target", draft.TargetUse ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@rgb", draft.Rgb ? 1 : 0);
+                            cmd.Parameters.AddWithValue("@others", draft.OtherOptions ?? (object)DBNull.Value);
+
                             cmd.Parameters.AddWithValue("@name", draft.ConfigName);
                             cmd.Parameters.AddWithValue("@desc", (object)draft.Description ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("@price", total);

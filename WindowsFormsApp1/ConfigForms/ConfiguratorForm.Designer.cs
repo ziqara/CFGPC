@@ -53,6 +53,11 @@
             this.lblTotal = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.cbTargetUse = new System.Windows.Forms.ComboBox();
+            this.chbRgb = new System.Windows.Forms.CheckBox();
+            this.txtOtherOptions = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,11 +73,12 @@
             // lblName
             // 
             this.lblName.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblName.Location = new System.Drawing.Point(33, 39);
+            this.lblName.Location = new System.Drawing.Point(38, 39);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(79, 18);
             this.lblName.TabIndex = 1;
             this.lblName.Text = "Название";
+            this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtName
             // 
@@ -84,15 +90,16 @@
             // lblDesc
             // 
             this.lblDesc.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblDesc.Location = new System.Drawing.Point(33, 67);
+            this.lblDesc.Location = new System.Drawing.Point(39, 93);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(79, 18);
             this.lblDesc.TabIndex = 3;
             this.lblDesc.Text = "Описание";
+            this.lblDesc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(118, 67);
+            this.txtDescription.Location = new System.Drawing.Point(118, 93);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -103,6 +110,7 @@
             // 
             this.groupBox1.Controls.Add(this.cbCooling);
             this.groupBox1.Controls.Add(this.cbCase);
+            this.groupBox1.Controls.Add(this.chbRgb);
             this.groupBox1.Controls.Add(this.cbPsu);
             this.groupBox1.Controls.Add(this.cbStorage);
             this.groupBox1.Controls.Add(this.cbGpu);
@@ -118,15 +126,16 @@
             this.groupBox1.Controls.Add(this.lblCpu);
             this.groupBox1.Controls.Add(this.lblMb);
             this.groupBox1.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(15, 133);
+            this.groupBox1.Location = new System.Drawing.Point(15, 228);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(637, 300);
+            this.groupBox1.Size = new System.Drawing.Size(637, 299);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Компоненты";
             // 
             // cbCooling
             // 
+            this.cbCooling.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCooling.FormattingEnabled = true;
             this.cbCooling.Location = new System.Drawing.Point(123, 262);
             this.cbCooling.Name = "cbCooling";
@@ -135,6 +144,7 @@
             // 
             // cbCase
             // 
+            this.cbCase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCase.FormattingEnabled = true;
             this.cbCase.Location = new System.Drawing.Point(123, 231);
             this.cbCase.Name = "cbCase";
@@ -152,6 +162,7 @@
             // 
             // cbStorage
             // 
+            this.cbStorage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStorage.FormattingEnabled = true;
             this.cbStorage.Location = new System.Drawing.Point(123, 169);
             this.cbStorage.Name = "cbStorage";
@@ -160,6 +171,7 @@
             // 
             // cbGpu
             // 
+            this.cbGpu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGpu.FormattingEnabled = true;
             this.cbGpu.Location = new System.Drawing.Point(123, 138);
             this.cbGpu.Name = "cbGpu";
@@ -168,6 +180,7 @@
             // 
             // cbRam
             // 
+            this.cbRam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbRam.FormattingEnabled = true;
             this.cbRam.Location = new System.Drawing.Point(123, 107);
             this.cbRam.Name = "cbRam";
@@ -176,6 +189,7 @@
             // 
             // cbCpu
             // 
+            this.cbCpu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCpu.FormattingEnabled = true;
             this.cbCpu.Location = new System.Drawing.Point(123, 76);
             this.cbCpu.Name = "cbCpu";
@@ -184,6 +198,7 @@
             // 
             // cbMotherboard
             // 
+            this.cbMotherboard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMotherboard.FormattingEnabled = true;
             this.cbMotherboard.Location = new System.Drawing.Point(123, 45);
             this.cbMotherboard.Name = "cbMotherboard";
@@ -257,7 +272,7 @@
             // lblTotal
             // 
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTotal.Location = new System.Drawing.Point(15, 440);
+            this.lblTotal.Location = new System.Drawing.Point(15, 542);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(240, 23);
             this.lblTotal.TabIndex = 6;
@@ -267,7 +282,7 @@
             // 
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSave.Location = new System.Drawing.Point(452, 437);
+            this.btnSave.Location = new System.Drawing.Point(452, 539);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(200, 30);
             this.btnSave.TabIndex = 7;
@@ -279,19 +294,72 @@
             // 
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnCancel.Location = new System.Drawing.Point(246, 437);
+            this.btnCancel.Location = new System.Drawing.Point(246, 539);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(200, 30);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // cbTargetUse
+            // 
+            this.cbTargetUse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTargetUse.FormattingEnabled = true;
+            this.cbTargetUse.Location = new System.Drawing.Point(118, 64);
+            this.cbTargetUse.Name = "cbTargetUse";
+            this.cbTargetUse.Size = new System.Drawing.Size(514, 21);
+            this.cbTargetUse.TabIndex = 9;
+            // 
+            // chbRgb
+            // 
+            this.chbRgb.AutoSize = true;
+            this.chbRgb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chbRgb.Location = new System.Drawing.Point(544, 19);
+            this.chbRgb.Name = "chbRgb";
+            this.chbRgb.Size = new System.Drawing.Size(77, 20);
+            this.chbRgb.TabIndex = 10;
+            this.chbRgb.Text = "Подсветка";
+            this.chbRgb.UseVisualStyleBackColor = true;
+            // 
+            // txtOtherOptions
+            // 
+            this.txtOtherOptions.Location = new System.Drawing.Point(118, 161);
+            this.txtOtherOptions.Multiline = true;
+            this.txtOtherOptions.Name = "txtOtherOptions";
+            this.txtOtherOptions.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtOtherOptions.Size = new System.Drawing.Size(514, 60);
+            this.txtOtherOptions.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(31, 161);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(87, 18);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Доп. опции";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(25, 64);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(91, 18);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Назначение";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // ConfiguratorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(664, 479);
+            this.ClientSize = new System.Drawing.Size(664, 581);
             this.ControlBox = false;
+            this.Controls.Add(this.cbTargetUse);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtOtherOptions);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblTotal);
@@ -301,10 +369,12 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.lblHeader);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ConfiguratorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Shown += new System.EventHandler(this.ConfiguratorForm_Shown);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -337,5 +407,10 @@
         private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chbRgb;
+        private System.Windows.Forms.TextBox txtOtherOptions;
+        private System.Windows.Forms.ComboBox cbTargetUse;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
