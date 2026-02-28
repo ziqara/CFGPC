@@ -45,7 +45,7 @@
             this.flpCards.AutoScroll = true;
             this.flpCards.Location = new System.Drawing.Point(12, 100);
             this.flpCards.Name = "flpCards";
-            this.flpCards.Size = new System.Drawing.Size(860, 528);
+            this.flpCards.Size = new System.Drawing.Size(860, 499);
             this.flpCards.TabIndex = 0;
             // 
             // btnCreate

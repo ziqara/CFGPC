@@ -30,15 +30,15 @@
         {
             this.flowOrders = new System.Windows.Forms.FlowLayoutPanel();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.chkUnpaidOnly = new System.Windows.Forms.CheckBox();
             this.labelCount = new System.Windows.Forms.Label();
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.chkActiveOnly = new System.Windows.Forms.CheckBox();
             this.cbSortDate = new System.Windows.Forms.ComboBox();
             this.cbStatus = new System.Windows.Forms.ComboBox();
             this.btnReload = new System.Windows.Forms.Button();
-            this.labelTitle = new System.Windows.Forms.Label();
             this.btnBack = new System.Windows.Forms.Button();
-            this.chkUnpaidOnly = new System.Windows.Forms.CheckBox();
+            this.labelTitle = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +48,7 @@
             this.flowOrders.Location = new System.Drawing.Point(0, 69);
             this.flowOrders.Name = "flowOrders";
             this.flowOrders.Padding = new System.Windows.Forms.Padding(8);
-            this.flowOrders.Size = new System.Drawing.Size(733, 370);
+            this.flowOrders.Size = new System.Drawing.Size(733, 367);
             this.flowOrders.TabIndex = 1;
             // 
             // panelTop
@@ -68,6 +68,17 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(733, 439);
             this.panelTop.TabIndex = 2;
+            // 
+            // chkUnpaidOnly
+            // 
+            this.chkUnpaidOnly.AutoSize = true;
+            this.chkUnpaidOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.chkUnpaidOnly.Location = new System.Drawing.Point(273, 19);
+            this.chkUnpaidOnly.Name = "chkUnpaidOnly";
+            this.chkUnpaidOnly.Size = new System.Drawing.Size(115, 19);
+            this.chkUnpaidOnly.TabIndex = 8;
+            this.chkUnpaidOnly.Text = "Неоплаченные";
+            this.chkUnpaidOnly.UseVisualStyleBackColor = true;
             // 
             // labelCount
             // 
@@ -131,16 +142,6 @@
             this.btnReload.Text = "Обновить";
             this.btnReload.UseVisualStyleBackColor = true;
             // 
-            // labelTitle
-            // 
-            this.labelTitle.AutoSize = true;
-            this.labelTitle.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-            this.labelTitle.Location = new System.Drawing.Point(12, 12);
-            this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(99, 19);
-            this.labelTitle.TabIndex = 0;
-            this.labelTitle.Text = "Все заказы";
-            // 
             // btnBack
             // 
             this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -154,23 +155,22 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
-            // chkUnpaidOnly
+            // labelTitle
             // 
-            this.chkUnpaidOnly.AutoSize = true;
-            this.chkUnpaidOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.chkUnpaidOnly.Location = new System.Drawing.Point(273, 19);
-            this.chkUnpaidOnly.Name = "chkUnpaidOnly";
-            this.chkUnpaidOnly.Size = new System.Drawing.Size(115, 19);
-            this.chkUnpaidOnly.TabIndex = 8;
-            this.chkUnpaidOnly.Text = "Неоплаченные";
-            this.chkUnpaidOnly.UseVisualStyleBackColor = true;
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
+            this.labelTitle.Location = new System.Drawing.Point(12, 12);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(99, 19);
+            this.labelTitle.TabIndex = 0;
+            this.labelTitle.Text = "Все заказы";
             // 
             // AllOrdersCardsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(733, 560);
+            this.ClientSize = new System.Drawing.Size(733, 443);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "AllOrdersCardsForm";
