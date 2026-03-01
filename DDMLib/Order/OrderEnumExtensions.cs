@@ -29,6 +29,30 @@ namespace DDMLib.Order
             }
         }
 
+        public static PaymentMethod ParsePaymentMethod(string dbValue)
+        {
+            if (string.IsNullOrEmpty(dbValue)) return PaymentMethod.Card;
+
+            switch (dbValue.ToLower().Trim())
+            {
+                case "bank_transfer": return PaymentMethod.BankTransfer;
+                case "cash_on_delivery": return PaymentMethod.CashOnDelivery;
+                case "card": return PaymentMethod.Card;
+                default: return PaymentMethod.Card;
+            }
+        }
+
+        public static string ToDbString(this PaymentMethod method)
+        {
+            switch (method)
+            {
+                case PaymentMethod.BankTransfer: return "bank_transfer";
+                case PaymentMethod.CashOnDelivery: return "cash_on_delivery";
+                case PaymentMethod.Card: return "card";
+                default: return "card";
+            }
+        }
+
         public static string ToRussian(this DeliveryMethod method)
         {
             switch (method)

@@ -80,7 +80,7 @@
             // 
             this.lnkConfig.AutoEllipsis = true;
             this.lnkConfig.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Underline);
-            this.lnkConfig.Location = new System.Drawing.Point(13, 48);
+            this.lnkConfig.Location = new System.Drawing.Point(13, 42);
             this.lnkConfig.Name = "lnkConfig";
             this.lnkConfig.Size = new System.Drawing.Size(195, 18);
             this.lnkConfig.TabIndex = 3;
@@ -102,7 +102,7 @@
             // 
             this.lblPayment.AutoSize = true;
             this.lblPayment.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblPayment.Location = new System.Drawing.Point(13, 110);
+            this.lblPayment.Location = new System.Drawing.Point(13, 75);
             this.lblPayment.Name = "lblPayment";
             this.lblPayment.Size = new System.Drawing.Size(49, 15);
             this.lblPayment.TabIndex = 8;
@@ -112,9 +112,9 @@
             // 
             this.lblAddress.AutoEllipsis = true;
             this.lblAddress.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblAddress.Location = new System.Drawing.Point(13, 93);
+            this.lblAddress.Location = new System.Drawing.Point(13, 98);
             this.lblAddress.Name = "lblAddress";
-            this.lblAddress.Size = new System.Drawing.Size(195, 15);
+            this.lblAddress.Size = new System.Drawing.Size(195, 45);
             this.lblAddress.TabIndex = 7;
             this.lblAddress.Text = "Адрес";
             // 
@@ -122,7 +122,7 @@
             // 
             this.lblDelivery.AutoSize = true;
             this.lblDelivery.Font = new System.Drawing.Font("Arial", 9F);
-            this.lblDelivery.Location = new System.Drawing.Point(13, 76);
+            this.lblDelivery.Location = new System.Drawing.Point(13, 60);
             this.lblDelivery.Name = "lblDelivery";
             this.lblDelivery.Size = new System.Drawing.Size(59, 15);
             this.lblDelivery.TabIndex = 6;

@@ -43,6 +43,14 @@ namespace DDMLib.Order
                     {
                         while (reader.Read())
                         {
+                            PaymentMethod paymentMethod;
+                            // Используем TryParse вместо Parse для безопасного преобразования
+                            if (!Enum.TryParse(reader.GetString(9), true, out paymentMethod))
+                            {
+                                // Если значение не корректно, присваиваем дефолтное значение
+                                paymentMethod = PaymentMethod.Card; // или выберите другое дефолтное значение
+                            }
+
                             orders.Add(new Order
                             {
                                 OrderId = reader.GetInt32(0),
@@ -54,7 +62,7 @@ namespace DDMLib.Order
                                 TotalPrice = reader.GetDecimal(6),
                                 DeliveryAddress = reader.IsDBNull(7) ? null : reader.GetString(7),
                                 DeliveryMethod = (DeliveryMethod)Enum.Parse(typeof(DeliveryMethod), reader.GetString(8), true),
-                                PaymentMethod = (PaymentMethod)Enum.Parse(typeof(PaymentMethod), reader.GetString(9), true),
+                                PaymentMethod = paymentMethod, // Используем безопасное значение
                                 IsPaid = reader.GetBoolean(10)
                             });
                         }
@@ -178,6 +186,14 @@ namespace DDMLib.Order
                 {
                     while (reader.Read())
                     {
+                        PaymentMethod paymentMethod;
+                        // Используем TryParse вместо Parse для безопасного преобразования
+                        if (!Enum.TryParse(reader.GetString(9), true, out paymentMethod))
+                        {
+                            // Если значение не корректно, присваиваем дефолтное значение
+                            paymentMethod = PaymentMethod.Card; // или выберите другое дефолтное значение
+                        }
+
                         orders.Add(new Order
                         {
                             OrderId = reader.GetInt32(0),
@@ -185,11 +201,15 @@ namespace DDMLib.Order
                             ConfigName = reader.IsDBNull(2) ? "" : reader.GetString(2),
                             UserEmail = reader.GetString(3),
                             OrderDate = reader.GetDateTime(4),
+                            // Статус можно оставить через Parse, если в БД он 'pending', 'processing' и т.д.
                             Status = (OrderStatus)Enum.Parse(typeof(OrderStatus), reader.GetString(5), true),
                             TotalPrice = reader.GetDecimal(6),
                             DeliveryAddress = reader.IsDBNull(7) ? null : reader.GetString(7),
                             DeliveryMethod = (DeliveryMethod)Enum.Parse(typeof(DeliveryMethod), reader.GetString(8), true),
-                            PaymentMethod = (PaymentMethod)Enum.Parse(typeof(PaymentMethod), reader.GetString(9), true),
+
+                            // ВОТ ТУТ ИСПОЛЬЗУЕМ НАШ МАППЕР:
+                            PaymentMethod = OrderEnumExtensions.ParsePaymentMethod(reader.GetString(9)),
+
                             IsPaid = reader.GetBoolean(10)
                         });
                     }
