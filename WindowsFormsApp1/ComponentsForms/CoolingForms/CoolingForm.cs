@@ -19,7 +19,7 @@ namespace WindowsFormsApp1.ComponentsForms.CoolingForms
         public CoolingForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new CoolingService(new MySqlCoolingRepository());
 
             coolingDataTable.CellFormatting += Grid_CellFormatting;

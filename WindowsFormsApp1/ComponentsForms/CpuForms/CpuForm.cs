@@ -21,7 +21,7 @@ namespace WindowsFormsApp1.ComponentsForms
         public CpuForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new CpuService(new MySqlCpuRepository());
 
             cpuDataTable.CellFormatting += CpuGridView_CellFormatting;

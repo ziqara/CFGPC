@@ -47,7 +47,7 @@ namespace DDMLib
         [DisplayName("PCIe")]
         public string PcieVersion { get; set; } // 3.0 / 4.0 / 5.0
 
-        [DisplayName("Форм-фактор")]
+        [DisplayName("Тип")]
         public string FormFactor { get; set; } // ATX / mATX / ITX и т.п.
     }
 }

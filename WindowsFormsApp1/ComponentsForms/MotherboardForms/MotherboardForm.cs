@@ -19,7 +19,7 @@ namespace WindowsFormsApp1.ComponentsForms.MotherboardForms
         public MotherboardForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new MotherboardService(new MySqlMotherboardRepository());
 
             mBoardDataTable.CellFormatting += Grid_CellFormatting;

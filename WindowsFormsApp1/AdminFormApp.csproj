@@ -308,6 +308,9 @@
     <EmbeddedResource Include="ComponentsForms\CaseForms\AddCaseForm.resx">
       <DependentUpon>AddCaseForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComponentsForms\CaseForms\CaseForm.resx">
+      <DependentUpon>CaseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComponentsForms\CaseForms\EditCaseForm.resx">
       <DependentUpon>EditCaseForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -19,7 +19,7 @@ namespace WindowsFormsApp1.ComponentsForms.GpuForms
         public GpuForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new GpuService(new MySqlGpuRepository());
 
             gpuDataTable.CellFormatting += Grid_CellFormatting;

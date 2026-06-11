@@ -20,7 +20,7 @@ namespace WindowsFormsApp1.ComponentsForms.PsuForms
         public PsuForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new PsuService(new MySqlPsuRepository());
 
             psuDataTable.CellFormatting += Grid_CellFormatting;

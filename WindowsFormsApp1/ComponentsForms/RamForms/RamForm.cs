@@ -19,7 +19,7 @@ namespace WindowsFormsApp1.ComponentsForms.RamForms
         public RamForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new RamService(new MySqlRamRepository());
 
             ramDataTable.CellFormatting += Grid_CellFormatting;

@@ -19,13 +19,14 @@ namespace WindowsFormsApp1.ComponentsForms.CaseForms
         public CaseForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new CaseService(new MySqlCaseRepository());
 
             caseDataTable.CellFormatting += Grid_CellFormatting;
 
             this.Shown += CaseForm_Shown;
             ThemeColor.ThemeChanged += ApplyTableTheme;
+           
         }
 
         private void CaseForm_Load(object sender, EventArgs e)

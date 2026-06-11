@@ -19,7 +19,7 @@ namespace WindowsFormsApp1.ComponentsForms.StorageForms
         public StorageForm()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             service_ = new StorageService(new MySqlStorageRepository());
 
             storageDataTable.CellFormatting += Grid_CellFormatting;
